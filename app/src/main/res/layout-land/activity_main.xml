@@ -216,6 +216,11 @@
 
             <!-- Your drawer content -->
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="172dp"
+                android:src="@drawable/drawer_header"
+                android:scaleType="centerCrop"/>
         </LinearLayout>
 
     </com.example.javier.NavigationDrawerAllVersions.ScrimInsetsFrameLayout>
