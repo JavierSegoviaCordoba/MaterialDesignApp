@@ -85,11 +85,21 @@ public class MainActivity extends ActionBarActivity {
         }
 
         // Fix landscape issues (only Lollipop)
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && Build.VERSION.SDK_INT >= 21) {
-            TypedValue typedValue = new TypedValue();
-            MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
-            final int color = typedValue.data;
-            mDrawerLayout.setStatusBarBackgroundColor(color);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (Build.VERSION.SDK_INT >= 19){
+                TypedValue typedValue19 = new TypedValue();
+                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
+                final int color = typedValue19.data;
+                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
+                statusBar.setBackgroundColor(color);
+            }
+            if (Build.VERSION.SDK_INT >= 21){
+                TypedValue typedValue = new TypedValue();
+                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+                final int color = typedValue.data;
+                mDrawerLayout.setStatusBarBackgroundColor(color);
+            }
+
         }
     }
 }

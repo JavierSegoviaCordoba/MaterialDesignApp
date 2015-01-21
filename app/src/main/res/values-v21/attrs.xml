@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <bool name="fitsSystemWindows">false</bool>
     <bool name="translucentNavigationBar">true</bool>
     <dimen name="topMargin">25dp</dimen>
     <color name="inset">#4000</color>
