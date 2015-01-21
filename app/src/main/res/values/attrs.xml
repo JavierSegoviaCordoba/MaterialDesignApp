@@ -5,7 +5,5 @@
     </declare-styleable>
     <bool name="fitsSystemWindows">false</bool>
     <dimen name="topMargin">0dp</dimen>
-    <dimen name="topMarginLand">0dp</dimen>
     <color name="inset">#0000</color>
-    <color name="colorPrimaryDark">@color/md_red_500</color>
 </resources>

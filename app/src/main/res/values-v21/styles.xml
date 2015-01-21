@@ -7,13 +7,102 @@
         <item name="android:windowTranslucentNavigation">@bool/translucentNavigationBar</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        ​
+        <item name="colorControlHighlight">@color/md_white_1000_50</item>​        ​
+
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <!-- Overflow Button Style. -->
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+    </style>
+
+    <style name="AppTheme2" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_blue_500</item>
+        <item name="colorPrimaryDark">@color/md_blue_700</item>
+        <item name="android:windowTranslucentNavigation">@bool/translucentNavigationBar</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorControlHighlight">@color/md_white_1000_50</item>​        ​
+
+        <!-- Navigation Drawer Arrow Style. -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <!-- Overflow Button Style. -->
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+    </style>
+
+    <style name="AppTheme3" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_green_500</item>
+        <item name="colorPrimaryDark">@color/md_green_700</item>
+        <item name="android:windowTranslucentNavigation">@bool/translucentNavigationBar</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorControlHighlight">@color/md_white_1000_50</item>​        ​
+
+        <!-- Navigation Drawer Arrow Style. -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <!-- Overflow Button Style. -->
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+    </style>
+
+    <style name="AppTheme4" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_orange_500</item>
+        <item name="colorPrimaryDark">@color/md_orange_700</item>
+        <item name="android:windowTranslucentNavigation">@bool/translucentNavigationBar</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorControlHighlight">@color/md_white_1000_50</item>​        ​
+
+        <!-- Navigation Drawer Arrow Style. -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <!-- Overflow Button Style. -->
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+    </style>
+
+    <style name="AppTheme5" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_pink_500</item>
+        <item name="colorPrimaryDark">@color/md_pink_700</item>
+        <item name="android:windowTranslucentNavigation">@bool/translucentNavigationBar</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorControlHighlight">@color/md_white_1000_50</item>​        ​
+
+        <!-- Navigation Drawer Arrow Style. -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <!-- Overflow Button Style. -->
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+    </style>
+
+    <style name="AppTheme6" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_indigo_500</item>
+        <item name="colorPrimaryDark">@color/md_indigo_700</item>
+        <item name="android:windowTranslucentNavigation">@bool/translucentNavigationBar</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorControlHighlight">@color/md_white_1000_50</item>​        ​
+
+        <!-- Navigation Drawer Arrow Style. -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <!-- Overflow Button Style. -->
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
+    </style>
+
+    <!-- Overflow Button Style. -->
+    <style name="OverflowStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_navigation_more_vert</item>
     </style>
 </resources>

@@ -4,5 +4,4 @@
     <bool name="translucentNavigationBar">true</bool>
     <dimen name="topMargin">25dp</dimen>
     <color name="inset">#4000</color>
-    <color name="colorPrimaryDark">@color/md_red_700</color>
-</resources>
+    </resources>
