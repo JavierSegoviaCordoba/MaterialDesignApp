@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="translucentStatusBar">true</bool>
+    <bool name="translucentNavigationBar">true</bool>
+    <dimen name="topMargin">25dp</dimen>
+    <color name="inset">#0000</color>
+    <color name="colorPrimaryDark">@color/md_red_500</color>
+</resources>

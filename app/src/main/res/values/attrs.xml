@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ScrimInsetsView">
+        <attr name="insetForeground" format="reference|color" />
+    </declare-styleable>
+    <dimen name="topMargin">0dp</dimen>
+    <dimen name="topMarginLand">0dp</dimen>
+    <color name="inset">#0000</color>
+    <color name="colorPrimaryDark">@color/md_red_500</color>
+</resources>
