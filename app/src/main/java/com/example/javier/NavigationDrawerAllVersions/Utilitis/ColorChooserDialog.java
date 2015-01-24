@@ -15,6 +15,7 @@ import android.widget.Button;
 
 import com.example.javier.NavigationDrawerAllVersions.MainActivity;
 import com.example.javier.NavigationDrawerAllVersions.R;
+import com.example.javier.NavigationDrawerAllVersions.Settings;
 
 public class ColorChooserDialog extends DialogFragment implements View.OnClickListener {
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6;
@@ -58,28 +59,28 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.card_view1:
-                ((MainActivity) getActivity()).setThemeFragment(1);
+                ((Settings) getActivity()).setThemeFragment(1);
                 break;
             case R.id.card_view2:
-                ((MainActivity) getActivity()).setThemeFragment(2);
+                ((Settings) getActivity()).setThemeFragment(2);
                 break;
             case R.id.card_view3:
-                ((MainActivity) getActivity()).setThemeFragment(3);
+                ((Settings) getActivity()).setThemeFragment(3);
                 break;
             case R.id.card_view4:
-                ((MainActivity) getActivity()).setThemeFragment(4);
+                ((Settings) getActivity()).setThemeFragment(4);
                 break;
             case R.id.card_view5:
-                ((MainActivity) getActivity()).setThemeFragment(5);
+                ((Settings) getActivity()).setThemeFragment(5);
                 break;
             case R.id.card_view6:
-                ((MainActivity) getActivity()).setThemeFragment(6);
+                ((Settings) getActivity()).setThemeFragment(6);
                 break;
             case R.id.buttonDisagree:
-                ((MainActivity) getActivity()).setThemeFragment(currentTheme);
+                ((Settings) getActivity()).setThemeFragment(currentTheme);
                 getDialog().dismiss();
             case R.id.buttonAgree:
-                intent = new Intent(getActivity(),MainActivity.class);
+                intent = new Intent(getActivity(),Settings.class);
                 startActivity(intent);
                 break;
         }

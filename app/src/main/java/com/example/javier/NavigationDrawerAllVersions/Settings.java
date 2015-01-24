@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,9 +39,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
-// You can check the methods that I use inside onCreate below menu methods
+public class Settings extends ActionBarActivity {
 
-public class MainActivity extends ActionBarActivity {
     Toolbar toolbar;
     DrawerLayout mDrawerLayout;
     SharedPreferences sharedPreferences;
@@ -71,32 +71,16 @@ public class MainActivity extends ActionBarActivity {
         theme();
 
         // Set content to the view
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_settings);
 
         //Setup Status Bar and Toolbar
         toolbarStatusBar();
-
-        //Setup Navigation Drawer
-        navigationDrawer();
 
         // Fix issues for each version and modes (check method at end of this file)
         navigationBarStatusBar();
 
         // Advanced Settings, setup Choose App Theme button (really is relative layout)
         chooseAppThemeButton();
-
-        // Setup drawer accounts toggle.
-        toogleButtonDrawer();
-
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayoutInbox);
-        relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent = new Intent(MainActivity.this, Settings.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     @Override
@@ -117,6 +101,10 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(Settings.this);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -134,29 +122,8 @@ public class MainActivity extends ActionBarActivity {
 
         // Get support to the toolbar and change its title
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Main Activity");
-    }
-
-    public void navigationDrawer(){
-
-        // Fix right margin to 56dp
-        View drawer = findViewById(R.id.scrimInsetsFrameLayout);
-        ViewGroup.LayoutParams layoutParams = drawer.getLayoutParams();
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        layoutParams.width = displayMetrics.widthPixels - (56 * Math.round(displayMetrics.density));
-
-        // Cast drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-
-        // Get facebook items (name, username, picture, cover)
-        new AsyncTaskParseJson().execute();
-
-        // Setup Drawer Icon
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setTitle("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        mDrawerToggle.syncState();
     }
 
     public void chooseAppThemeButton(){
@@ -171,52 +138,6 @@ public class MainActivity extends ActionBarActivity {
                 dialog.show(fm, "fragment_color_chooser");
             }
         });
-    }
-
-    public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
-
-        // facebook urls
-        @Override
-        protected void onPreExecute() {
-            urlName = "javiersegoviacordoba";
-            urlProfile = "https://graph.facebook.com/" + urlName;
-            urlPicture = "https://graph.facebook.com/" + urlName + "/picture?type=large&redirect=false";
-            urlCover = "https://graph.facebook.com/" + urlName + "/?fields=cover";
-        }
-
-        // get JSON Object
-        @Override
-        protected String doInBackground(String... arg0) {
-            JSONObject jsonObjectProfile, jsonObjectPicture, jsonObjectCover;
-            try {
-                jsonObjectProfile = JsonParser.readJsonFromUrl(urlProfile);
-                jsonObjectPicture = JsonParser.readJsonFromUrl(urlPicture);
-                jsonObjectCover = JsonParser.readJsonFromUrl(urlCover);
-
-                // Storing each json item in variable
-                name = jsonObjectProfile.getString("name");
-                link = jsonObjectProfile.getString("link");
-                picture = jsonObjectPicture.getJSONObject("data").getString("url");
-                cover = jsonObjectCover.getJSONObject("cover").getString("source");
-
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        // Set facebook items to the textviews and imageviews
-        @Override
-        protected void onPostExecute(String strFromDoInBg) {
-            textViewName = (TextView) findViewById(R.id.textViewName);
-            textViewName.setText(name);
-            textViewLink = (TextView) findViewById(R.id.textViewLink);
-            textViewLink.setText(link);
-            imageViewPicture = (ImageView) findViewById(R.id.imageViewPicture);
-            Picasso.with(context).load(picture).transform(new CircleTransform()).into(imageViewPicture);
-            imageViewCover = (ImageView) findViewById(R.id.imageViewCover);
-            Picasso.with(context).load(cover).into(imageViewCover);
-        }
     }
 
     public void setThemeFragment(int theme) {
@@ -255,7 +176,7 @@ public class MainActivity extends ActionBarActivity {
             // Fix issues for KitKat setting Status Bar color primary
             if (Build.VERSION.SDK_INT >= 19) {
                 TypedValue typedValue19 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
+                Settings.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
                 final int color = typedValue19.data;
                 FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
                 statusBar.setBackgroundColor(color);
@@ -264,7 +185,7 @@ public class MainActivity extends ActionBarActivity {
             // Fix issues for Lollipop, setting Status Bar color primary dark
             if (Build.VERSION.SDK_INT >= 21) {
                 TypedValue typedValue21 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue21, true);
+                Settings.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue21, true);
                 final int color = typedValue21.data;
                 FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
                 statusBar.setBackgroundColor(color);
@@ -275,14 +196,14 @@ public class MainActivity extends ActionBarActivity {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (Build.VERSION.SDK_INT >= 19) {
                 TypedValue typedValue19 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
+                Settings.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
                 final int color = typedValue19.data;
                 FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
                 statusBar.setBackgroundColor(color);
             }
             if (Build.VERSION.SDK_INT >= 21) {
                 TypedValue typedValue = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+                Settings.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
                 final int color = typedValue.data;
                 mDrawerLayout.setStatusBarBackgroundColor(color);
             }
@@ -314,29 +235,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
     }
-    public void toogleButtonDrawer() {
-        imageViewToogle = (ImageView) findViewById(R.id.imageViewToggle);
-        toggleButtonDrawer = (ToggleButton) findViewById(R.id.toggleButtonDrawer);
-        linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayoutMain);
-        linearLayoutSecond = (LinearLayout) findViewById(R.id.linearLayoutSecond);
-        toggleButtonDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!toggleButtonDrawer.isChecked()) {
-                    toggleButtonDrawer.setChecked(false);
-                    imageViewToogle.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_drop_down));
-                    linearLayoutMain.setVisibility(View.VISIBLE);
-                    linearLayoutSecond.setVisibility(View.GONE);
-                }
-                if (toggleButtonDrawer.isChecked()) {
-                    toggleButtonDrawer.setChecked(true);
-                    imageViewToogle.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_drop_up));
-                    linearLayoutMain.setVisibility(View.GONE);
-                    linearLayoutSecond.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-    }
+
 
     /*public void settingTransition() {
         new Handler().postDelayed(new Runnable() {
