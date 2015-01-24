@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageViewCoverPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/drawer_header" />
+
+        <ImageView
+            android:id="@+id/imageViewImage"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="41dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_contact_icon" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_alignLeft="@+id/imageViewImage"
+            android:layout_alignStart="@+id/imageViewImage"
+            android:layout_below="@+id/imageViewImage">
+
+            <TextView
+                android:id="@+id/textViewDisplayName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="sans-serif-medium"
+                android:text="Display Name"
+                android:textColor="@color/md_text_white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textViewTagline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/textViewDisplayName"
+                android:layout_marginRight="16dp"
+                android:fontFamily="sans-serif"
+                android:text="Tagline"
+                android:textColor="@color/md_secondary_text_icons_white"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -4,7 +4,11 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/md_red_500</item>
         <item name="colorPrimaryDark">@color/md_red_700</item>
-        <item name="colorControlHighlight">@color/md_white_1000_50</item>​        ​
+        <item name="colorAccent">@color/md_blue_A200</item>
+        <item name="colorControlHighlight">@color/md_black_1000_25</item>​
+        <item name="colorControlNormal">@color/md_black_1000_50</item>
+        <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
+        <item name="android:colorForeground">@color/md_black_1000_75</item>    ​
 
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
@@ -18,8 +22,10 @@
         <item name="colorPrimary">@color/md_blue_500</item>
         <item name="colorPrimaryDark">@color/md_blue_700</item>
         <item name="colorAccent">@color/md_red_A200</item>
-        <item name="colorControlHighlight">@color/md_black_1000_25</item>​  ​
-
+        <item name="colorControlHighlight">@color/md_black_1000_25</item>​
+        <item name="colorControlNormal">@color/md_black_1000_50</item>
+        <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
+        <item name="android:colorForeground">@color/md_black_1000_75</item>
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -32,8 +38,10 @@
         <item name="colorPrimary">@color/md_green_500</item>
         <item name="colorPrimaryDark">@color/md_green_700</item>
         <item name="colorAccent">@color/md_blue_A200</item>
-        <item name="colorControlHighlight">@color/md_black_1000_25</item>​     ​
-
+        <item name="colorControlHighlight">@color/md_black_1000_25</item>​
+        <item name="colorControlNormal">@color/md_black_1000_50</item>
+        <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
+        <item name="android:colorForeground">@color/md_black_1000_75</item>
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -46,8 +54,10 @@
         <item name="colorPrimary">@color/md_orange_500</item>
         <item name="colorPrimaryDark">@color/md_orange_700</item>
         <item name="colorAccent">@color/md_red_A200</item>
-        <item name="colorControlHighlight">@color/md_black_1000_25</item>​   ​
-
+        <item name="colorControlHighlight">@color/md_black_1000_25</item>​
+        <item name="colorControlNormal">@color/md_black_1000_50</item>
+        <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
+        <item name="android:colorForeground">@color/md_black_1000_75</item>
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -60,8 +70,10 @@
         <item name="colorPrimary">@color/md_pink_500</item>
         <item name="colorPrimaryDark">@color/md_pink_700</item>
         <item name="colorAccent">@color/md_indigo_A200</item>
-        <item name="colorControlHighlight">@color/md_black_1000_25</item>​    ​
-
+        <item name="colorControlHighlight">@color/md_black_1000_25</item>​
+        <item name="colorControlNormal">@color/md_black_1000_50</item>
+        <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
+        <item name="android:colorForeground">@color/md_black_1000_75</item>
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -74,8 +86,10 @@
         <item name="colorPrimary">@color/md_indigo_500</item>
         <item name="colorPrimaryDark">@color/md_indigo_700</item>
         <item name="colorAccent">@color/md_pink_A200</item>
-        <item name="colorControlHighlight">@color/md_black_1000_25</item>​  ​
-
+        <item name="colorControlHighlight">@color/md_black_1000_25</item>​
+        <item name="colorControlNormal">@color/md_black_1000_50</item>
+        <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
+        <item name="android:colorForeground">@color/md_black_1000_75</item>
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 

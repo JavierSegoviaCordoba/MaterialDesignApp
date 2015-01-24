@@ -1,35 +1,43 @@
 package com.example.javier.NavigationDrawerAllVersions;
 
 import android.app.ActivityOptions;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.AsyncTask;
+
+import com.example.javier.NavigationDrawerAllVersions.Utilitis.CircleTransform;
+import com.example.javier.NavigationDrawerAllVersions.Utilitis.ColorChooserDialog;
+import com.example.javier.NavigationDrawerAllVersions.Utilitis.JsonParser;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 public class MainActivity extends ActionBarActivity {
     Toolbar toolbar;
     DrawerLayout mDrawerLayout;
     SharedPreferences sharedPreferences;
-    CardView cardView, cardView1, cardView2, cardView3, cardView4, cardView5, cardView6;
     ScrollView scrollView;
     int theme, scrollPositionX = 0, scrollPositionY = -100;
     Intent intent;
@@ -37,6 +45,11 @@ public class MainActivity extends ActionBarActivity {
     SharedPreferences.Editor editor;
     ActivityOptions options;
     final Context context = this;
+    TextView textViewDisplayName, textViewTagline;
+    ImageView imageViewCoverPhoto, imageViewImage;
+    String urlName = "";
+    String url = "https://www.googleapis.com/plus/v1/people/%2B" + urlName + "?key=AIzaSyANa7wXqlgXNYHydN7AXdxQkEpbC3QejEw";
+    String displayName, tagline, givenName, familyName, coverPhoto, image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +57,7 @@ public class MainActivity extends ActionBarActivity {
 
         // Select theme saved by user
         sharedPreferences = getSharedPreferences("THEMES", Context.MODE_PRIVATE);
-        sharedPreferences = getSharedPreferences("POSITIONS", Context.MODE_PRIVATE);
         theme = sharedPreferences.getInt("THEME", 0);
-        scrollPositionY = sharedPreferences.getInt("POSITION", 0);
         settingTheme(theme);
 
         // Set content to the view
@@ -60,6 +71,7 @@ public class MainActivity extends ActionBarActivity {
 
         //Setup Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        new AsyncTaskParseJson().execute();
 
         // Fix issues for each version and modes (check method at end of this file)
         setNavigationStatusBar();
@@ -71,108 +83,17 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
 
-        // Setup Scroll View
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
-        ViewTreeObserver vto = scrollView.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            public void onGlobalLayout() {
-                scrollView.scrollTo(scrollPositionX, scrollPositionY);
+        // Advanced Settings
+        RelativeLayout chooseTheme = (RelativeLayout) findViewById(R.id.chooseTheme);
+        chooseTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                ColorChooserDialog dialog = new ColorChooserDialog();
+                dialog.show(fm, "fragment_color_chooser");
             }
         });
 
-        // Save one theme pressing a button (check style to see five themes)
-        editor = sharedPreferences.edit();
-        intent = new Intent(MainActivity.this, MainActivity.class);
-        cardView1 = (CardView) findViewById(R.id.card_view1);
-        cardView1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrollView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return (event.getAction() == MotionEvent.ACTION_MOVE);
-                    }
-                });
-                editor.putInt("THEME", 1).apply();
-                editor.putInt("POSITION", scrollView.getScrollY()).apply();
-                settingTransition(1);
-            }
-        });
-        cardView2 = (CardView) findViewById(R.id.card_view2);
-        cardView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrollView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return (event.getAction() == MotionEvent.ACTION_MOVE);
-                    }
-                });
-                editor.putInt("THEME", 2).apply();
-                editor.putInt("POSITION", scrollView.getScrollY()).apply();
-                settingTransition(2);
-            }
-        });
-        cardView3 = (CardView) findViewById(R.id.card_view3);
-        cardView3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrollView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return (event.getAction() == MotionEvent.ACTION_MOVE);
-                    }
-                });
-                editor.putInt("THEME", 3).apply();
-                editor.putInt("POSITION", scrollView.getScrollY()).apply();
-                settingTransition(3);
-            }
-        });
-        cardView4 = (CardView) findViewById(R.id.card_view4);
-        cardView4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrollView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return (event.getAction() == MotionEvent.ACTION_MOVE);
-                    }
-                });
-                editor.putInt("THEME", 4).apply();
-                editor.putInt("POSITION", scrollView.getScrollY()).apply();
-                settingTransition(4);
-            }
-        });
-        cardView5 = (CardView) findViewById(R.id.card_view5);
-        cardView5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrollView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return (event.getAction() == MotionEvent.ACTION_MOVE);
-                    }
-                });
-                editor.putInt("THEME", 5).apply();
-                editor.putInt("POSITION", scrollView.getScrollY()).apply();
-                settingTransition(5);
-            }
-        });
-        cardView6 = (CardView) findViewById(R.id.card_view6);
-        cardView6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrollView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return (event.getAction() == MotionEvent.ACTION_MOVE);
-                    }
-                });
-                editor.putInt("THEME", 6).apply();
-                editor.putInt("POSITION", scrollView.getScrollY()).apply();
-                settingTransition(6);
-            }
-        });
     }
 
     @Override
@@ -191,14 +112,82 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            final Dialog dialog = new Dialog(context);
+            /*final Dialog dialog = new Dialog(context);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.theme_dialog);
-            dialog.show();
+            dialog.show();*/
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            urlName = "javiersegoviacordoba";
+            url = "https://www.googleapis.com/plus/v1/people/%2B" + urlName + "?key=AIzaSyANa7wXqlgXNYHydN7AXdxQkEpbC3QejEw";
+        }
+
+        @Override
+        protected String doInBackground(String... arg0) {
+            JSONObject json;
+            try {
+                json = JsonParser.readJsonFromUrl(url);
+
+                // Storing each json item in variable
+                givenName = json.getJSONObject("name").getString("givenName");
+                familyName = json.getJSONObject("name").getString("familyName");
+                image = json.getJSONObject("image").getString("url");
+                image = image.replace("?sz=50", "");
+                coverPhoto = json.getJSONObject("cover").getJSONObject("coverPhoto").getString("url");
+
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String strFromDoInBg) {
+            textViewDisplayName = (TextView) findViewById(R.id.textViewDisplayName);
+            textViewDisplayName.setText(givenName);
+            textViewTagline = (TextView) findViewById(R.id.textViewTagline);
+            textViewTagline.setText(familyName);
+            imageViewImage = (ImageView) findViewById(R.id.imageViewImage);
+            Picasso.with(context).load(image).transform(new CircleTransform()).into(imageViewImage);
+            imageViewCoverPhoto = (ImageView) findViewById(R.id.imageViewCoverPhoto);
+            Picasso.with(context).load(coverPhoto).into(imageViewCoverPhoto);
+        }
+    }
+
+    public void setThemeFragment(int theme) {
+        switch (theme) {
+            case 1:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 1).apply();
+                break;
+            case 2:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 2).apply();
+                break;
+            case 3:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 3).apply();
+                break;
+            case 4:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 4).apply();
+                break;
+            case 5:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 5).apply();
+                break;
+            case 6:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 6).apply();
+                break;
+        }
     }
 
     public void setNavigationStatusBar() {
@@ -268,55 +257,23 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public void settingTransition(final int card) {
+    /*public void settingTransition() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (Build.VERSION.SDK_INT >= 21) {
-                    switch (card) {
-                        case 1:
-                            cardView1.setTransitionName("CARD_VIEW1");
-                            options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                                    Pair.create(findViewById(R.id.card_view1), "CARD_VIEW1"));
-                            startActivity(intent, options.toBundle());
-                            break;
-                        case 2:
-                            cardView2.setTransitionName("CARD_VIEW2");
-                            options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                                    Pair.create(findViewById(R.id.card_view2), "CARD_VIEW2"));
-                            startActivity(intent, options.toBundle());
-                            break;
-                        case 3:
-                            cardView3.setTransitionName("CARD_VIEW3");
-                            options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                                    Pair.create(findViewById(R.id.card_view3), "CARD_VIEW3"));
-                            startActivity(intent, options.toBundle());
-                            break;
-                        case 4:
-                            cardView4.setTransitionName("CARD_VIEW4");
-                            options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                                    Pair.create(findViewById(R.id.card_view4), "CARD_VIEW4"));
-                            startActivity(intent, options.toBundle());
-                            break;
-                        case 5:
-                            cardView5.setTransitionName("CARD_VIEW5");
-                            options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                                    Pair.create(findViewById(R.id.card_view5), "CARD_VIEW5"));
-                            startActivity(intent, options.toBundle());
-                            break;
-                        case 6:
-                            cardView6.setTransitionName("CARD_VIEW6");
-                            options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                                    Pair.create(findViewById(R.id.card_view6), "CARD_VIEW6"));
-                            startActivity(intent, options.toBundle());
-                            break;
-                    }
+                    LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
+                    contentLayout.setTransitionName("LAYOUT");
+                    options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
+                            Pair.create(findViewById(R.id.contentLayout), "LAYOUT"));
+                    startActivity(intent, options.toBundle());
+
                 } else {
                     startActivity(intent);
                 }
             }
         }, 300);
-    }
+    }/*
 
 
 
@@ -343,7 +300,7 @@ public class MainActivity extends ActionBarActivity {
     @Override protected void onRestart() {
         super.onRestart();
         Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
-    }*/
+    }
 
     @Override
     protected void onDestroy() {
@@ -351,5 +308,5 @@ public class MainActivity extends ActionBarActivity {
         //Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
         editor.putInt("POSITION", 0).apply();
 
-    }
+    }*/
 }
