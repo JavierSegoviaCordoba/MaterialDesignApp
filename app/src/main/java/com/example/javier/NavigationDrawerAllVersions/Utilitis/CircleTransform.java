@@ -3,6 +3,7 @@ package com.example.javier.NavigationDrawerAllVersions.Utilitis;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.squareup.picasso.Transformation;
@@ -28,8 +29,15 @@ public class CircleTransform implements Transformation {
         paint.setShader(shader);
         paint.setAntiAlias(true);
 
+        Paint paintBorder = new Paint();
+        paintBorder.setColor(Color.WHITE);
+        paintBorder.setStyle(Paint.Style.STROKE);
+        paintBorder.setAntiAlias(true);
+        paintBorder.setStrokeWidth(7);
+
         float r = size/2f;
         canvas.drawCircle(r, r, r, paint);
+        canvas.drawCircle(r, r, r-3, paintBorder);
 
         squaredBitmap.recycle();
         return bitmap;

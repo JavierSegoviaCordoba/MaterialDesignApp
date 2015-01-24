@@ -150,10 +150,10 @@
                     </RelativeLayout>
 
                     <FrameLayout
-                        android:layout_marginTop="8dp"
-                        android:background="@color/md_divider"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/md_divider" />
 
                     <TextView
                         android:id="@+id/textViewAdvancedSetting"
@@ -168,35 +168,55 @@
                         android:textSize="14sp" />
 
                     <RelativeLayout
-                        android:background="?attr/selectableItemBackground"
                         android:id="@+id/chooseTheme"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground">
 
-                        <TextView
-                            android:id="@+id/textViewTheme"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <ImageView
+                            android:id="@+id/imageViewPhone"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
-                            android:paddingTop="16dp"
-                            android:text="Choose App Theme"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
-                            android:textColor="@color/md_text"
-                            android:textSize="16sp" />
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/ic_hardware_phone_android"
+                            android:tint="?attr/colorPrimary" />
 
-                        <TextView
-                            android:id="@+id/textViewThemeDescription"
+                        <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/textViewTheme"
-                            android:paddingBottom="16dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:paddingTop="4dp"
-                            android:text="Choose the theme to change the Color Primary,  Color Primary Dark, Color Control Highlight..."
-                            android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
-                            android:textColor="@color/md_secondary_text_icons"
-                            android:textSize="14sp" />
+                            android:layout_toEndOf="@+id/imageViewPhone"
+                            android:layout_toRightOf="@+id/imageViewPhone">
+
+                            <TextView
+                                android:id="@+id/textViewTheme"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:paddingTop="16dp"
+                                android:text="Choose App Theme"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                                android:textColor="@color/md_text"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/textViewThemeDescription"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignLeft="@+id/textViewTheme"
+                                android:layout_alignStart="@+id/textViewTheme"
+                                android:layout_below="@+id/textViewTheme"
+                                android:paddingBottom="16dp"
+                                android:text="Choose the theme to change the Color Primary,  Color Primary Dark, Color Control Highlight..."
+                                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                                android:textColor="@color/md_secondary_text_icons"
+                                android:textSize="14sp" />
+
+                        </RelativeLayout>
 
                     </RelativeLayout>
                 </LinearLayout>
@@ -209,7 +229,7 @@
 
     <com.example.javier.NavigationDrawerAllVersions.Utilitis.ScrimInsetsFrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/scrimInsetsFrameLayout"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@android:color/white"

@@ -601,9 +601,15 @@
     <color name="md_grey_500_50">#809e9e9e</color>
     <color name="md_grey_500_75">#c09e9e9e</color>
     <color name="md_white_1000">#ffffff</color>
+    <color name="md_white_1000_10">#1affffff</color>
+    <color name="md_white_1000_15">#22ffffff</color>
+    <color name="md_white_1000_20">#33ffffff</color>
     <color name="md_white_1000_25">#40ffffff</color>
     <color name="md_white_1000_50">#80ffffff</color>
     <color name="md_white_1000_75">#c0ffffff</color>
+    <color name="md_black_1000_10">#1a000000</color>
+    <color name="md_black_1000_15">#26000000</color>
+    <color name="md_black_1000_20">#33000000</color>
     <color name="md_black_1000_25">#40000000</color>
     <color name="md_black_1000_50">#80000000</color>
     <color name="md_black_1000_75">#c0000000</color>

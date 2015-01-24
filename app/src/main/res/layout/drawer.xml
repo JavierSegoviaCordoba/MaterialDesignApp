@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_white_1000"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -9,53 +10,219 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageViewCoverPhoto"
+            android:id="@+id/imageViewCover"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="172dp"
             android:scaleType="centerCrop"
             android:src="@drawable/drawer_header" />
 
-        <ImageView
-            android:id="@+id/imageViewImage"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="41dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_contact_icon" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="172dp"
+            android:background="@color/md_black_1000_10" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:layout_alignLeft="@+id/imageViewImage"
-            android:layout_alignStart="@+id/imageViewImage"
-            android:layout_below="@+id/imageViewImage">
+            android:id="@+id/relativeLayoutDrawerTexts"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:layout_alignBottom="@id/imageViewCover"
+            android:clickable="true">
 
-            <TextView
-                android:id="@+id/textViewDisplayName"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:fontFamily="sans-serif-medium"
-                android:text="Display Name"
-                android:textColor="@color/md_text_white"
-                android:textSize="14sp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp">
 
-            <TextView
-                android:id="@+id/textViewTagline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/textViewDisplayName"
+                <TextView
+                    android:id="@+id/textViewName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginEnd="72dp"
+                    android:layout_marginRight="72dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:singleLine="true"
+                    android:text="Name"
+                    android:textColor="@color/md_text_white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textViewUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/textViewName"
+                    android:layout_marginEnd="72dp"
+                    android:layout_marginRight="72dp"
+                    android:fontFamily="sans-serif"
+                    android:singleLine="true"
+                    android:text="User Name"
+                    android:textColor="@color/md_secondary_text_icons_white"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/imageViewToggle"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:fontFamily="sans-serif"
-                android:text="Tagline"
-                android:textColor="@color/md_secondary_text_icons_white"
-                android:textSize="14sp" />
+                android:background="@drawable/ic_action_navigation_arrow_drop_down" />
+
 
         </RelativeLayout>
 
+        <ToggleButton
+            android:id="@+id/toggleButtonDrawer"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="172dp"
+            android:background="?attr/selectableItemBackground"
+            android:checked="false"
+            android:textOff=""
+            android:textOn="" />
+
+        <ImageView
+            android:id="@+id/imageViewPicture"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_contact_icon" />
+
     </RelativeLayout>
+
+    <!-- Set visibility to visible to edit -->
+    <LinearLayout
+        android:id="@+id/linearLayoutSecond"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="@color/md_white_1000"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <RelativeLayout
+            style="?android:attr/borderlessButtonStyle"
+            android:gravity="start"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/imageViewAddAccount"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_action_content_add" />
+
+            <TextView
+                android:id="@+id/textViewAddAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="72dp"
+                android:singleLine="true"
+                android:text="Add account"
+                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                android:textColor="@color/md_text"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="?android:attr/borderlessButtonStyle"
+            android:gravity="start"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/imageViewManageAccount"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_action_action_settings" />
+
+            <TextView
+                android:id="@+id/textViewManageAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="72dp"
+                android:singleLine="true"
+                android:text="Manage accounts"
+                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                android:textColor="@color/md_text"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutMain"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="@color/md_white_1000"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <RelativeLayout
+            style="?android:attr/borderlessButtonStyle"
+            android:gravity="start"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/imageViewInbox"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_action_content_inbox" />
+
+            <TextView
+                android:id="@+id/textViewInbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="72dp"
+                android:singleLine="true"
+                android:text="Inbox (TODO ListView)"
+                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                android:textColor="@color/md_text"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

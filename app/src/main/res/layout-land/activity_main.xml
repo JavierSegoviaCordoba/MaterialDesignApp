@@ -33,9 +33,12 @@
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbarThumbVertical="@drawable/scrollbar"
+            android:scrollbars="vertical">
 
             <LinearLayout
+                android:id="@+id/contentLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
@@ -53,9 +56,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:layout_marginLeft="16dp"
+                        android:fontFamily="sans-serif-medium"
                         android:gravity="center_vertical"
-                        android:text="New Text"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse" />
+                        android:text="Text View Title"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
+                        android:textColor="?attr/colorAccent"
+                        android:textSize="14sp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -71,7 +77,9 @@
                             android:layout_marginLeft="16dp"
                             android:gravity="center"
                             android:text="Switch Widget Title"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Inverse" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                            android:textColor="@color/md_text"
+                            android:textSize="16sp" />
 
                         <android.support.v7.widget.SwitchCompat
                             android:id="@+id/switchWidget"
@@ -80,7 +88,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="16dp"/>
+                            android:layout_marginRight="16dp" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -96,7 +104,9 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="CheckBox Widget Title"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Inverse" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                            android:textColor="@color/md_text"
+                            android:textSize="16sp" />
 
                         <CheckBox
                             android:id="@+id/checkBox"
@@ -107,6 +117,106 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="16dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp">
+
+                        <TextView
+                            android:id="@+id/textViewRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:text="RadioButton Widget Title"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                            android:textColor="@color/md_text"
+                            android:textSize="16sp" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton"
+                            style="@android:style/Widget.CompoundButton.RadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp" />
+                    </RelativeLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/md_divider" />
+
+                    <TextView
+                        android:id="@+id/textViewAdvancedSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="16dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center_vertical"
+                        android:text="Advanced Settings"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
+                        android:textColor="?attr/colorAccent"
+                        android:textSize="14sp" />
+
+                    <RelativeLayout
+                        android:id="@+id/chooseTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground">
+
+                        <ImageView
+                            android:id="@+id/imageViewPhone"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/ic_hardware_phone_android"
+                            android:tint="?attr/colorPrimary" />
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_toEndOf="@+id/imageViewPhone"
+                            android:layout_toRightOf="@+id/imageViewPhone">
+
+                            <TextView
+                                android:id="@+id/textViewTheme"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:paddingTop="16dp"
+                                android:text="Choose App Theme"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                                android:textColor="@color/md_text"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/textViewThemeDescription"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignLeft="@+id/textViewTheme"
+                                android:layout_alignStart="@+id/textViewTheme"
+                                android:layout_below="@+id/textViewTheme"
+                                android:paddingBottom="16dp"
+                                android:text="Choose the theme to change the Color Primary,  Color Primary Dark, Color Control Highlight..."
+                                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                                android:textColor="@color/md_secondary_text_icons"
+                                android:textSize="14sp" />
+
+                        </RelativeLayout>
+
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

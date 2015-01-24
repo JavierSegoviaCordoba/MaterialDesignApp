@@ -12,12 +12,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.widget.ToggleButton;
 
 import com.example.javier.NavigationDrawerAllVersions.Utilitis.CircleTransform;
 import com.example.javier.NavigationDrawerAllVersions.Utilitis.ColorChooserDialog;
@@ -34,66 +38,55 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
+// You can check the methods that I use inside onCreate below menu methods
+
 public class MainActivity extends ActionBarActivity {
     Toolbar toolbar;
     DrawerLayout mDrawerLayout;
     SharedPreferences sharedPreferences;
     ScrollView scrollView;
+    ActionBarDrawerToggle mDrawerToggle;
     int theme, scrollPositionX = 0, scrollPositionY = -100;
     Intent intent;
     FrameLayout statusBar;
     SharedPreferences.Editor editor;
     ActivityOptions options;
     final Context context = this;
-    TextView textViewDisplayName, textViewTagline;
-    ImageView imageViewCoverPhoto, imageViewImage;
-    String urlName = "";
-    String url = "https://www.googleapis.com/plus/v1/people/%2B" + urlName + "?key=AIzaSyANa7wXqlgXNYHydN7AXdxQkEpbC3QejEw";
-    String displayName, tagline, givenName, familyName, coverPhoto, image;
+    TextView textViewName, textViewUserName;
+    ImageView imageViewToogle, imageViewCover, imageViewPicture;
+    ToggleButton toggleButtonDrawer;
+    RelativeLayout relativeLayoutDrawerTexts, relativeLayoutChooseTheme;
+    LinearLayout linearLayoutMain, linearLayoutSecond;
+    String urlName = "javiersegoviacordoba";
+    String urlProfile = "https://graph.facebook.com/" + urlName;
+    String urlPicture = "https://graph.facebook.com/" + urlName + "picture?type=large&redirect=false";
+    String urlCover = "https://graph.facebook.com/" + urlName + "cover";
+    String name, userName, cover, picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Select theme saved by user
-        sharedPreferences = getSharedPreferences("THEMES", Context.MODE_PRIVATE);
-        theme = sharedPreferences.getInt("THEME", 0);
-        settingTheme(theme);
+        // Select theme saved by user (always before setContentView)
+        theme();
 
         // Set content to the view
         setContentView(R.layout.activity_main);
 
         //Setup Status Bar and Toolbar
-        statusBar = (FrameLayout) findViewById(R.id.statusBar);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Main Activity");
+        toolbarStatusBar();
 
         //Setup Navigation Drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        new AsyncTaskParseJson().execute();
+        navigationDrawer();
 
         // Fix issues for each version and modes (check method at end of this file)
-        setNavigationStatusBar();
+        navigationBarStatusBar();
 
-        // Setup Navigation Drawer icon
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        mDrawerToggle.syncState();
+        // Advanced Settings, setup Choose App Theme button (really is relative layout)
+        chooseAppThemeButton();
 
-        // Advanced Settings
-        RelativeLayout chooseTheme = (RelativeLayout) findViewById(R.id.chooseTheme);
-        chooseTheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                ColorChooserDialog dialog = new ColorChooserDialog();
-                dialog.show(fm, "fragment_color_chooser");
-            }
-        });
-
+        // Setup drawer accounts toggle.
+        toogleButtonDrawer();
     }
 
     @Override
@@ -112,35 +105,89 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            /*final Dialog dialog = new Dialog(context);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.theme_dialog);
-            dialog.show();*/
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    public void theme(){
+        sharedPreferences = getSharedPreferences("THEMES", Context.MODE_PRIVATE);
+        theme = sharedPreferences.getInt("THEME", 0);
+        settingTheme(theme);
+    }
+
+    public void toolbarStatusBar(){
+
+        // Cast toolbar and status bar
+        statusBar = (FrameLayout) findViewById(R.id.statusBar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // Get support to the toolbar and change its title
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Main Activity");
+    }
+
+    public void navigationDrawer(){
+
+        // Fix right margin to 56dp
+        View drawer = findViewById(R.id.scrimInsetsFrameLayout);
+        ViewGroup.LayoutParams layoutParams = drawer.getLayoutParams();
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        layoutParams.width = displayMetrics.widthPixels - (56 * Math.round(displayMetrics.density));
+
+        // Cast drawer
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+        // Get facebook items (name, username, picture, cover)
+        new AsyncTaskParseJson().execute();
+
+        // Setup Drawer Icon
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
+    }
+
+    public void chooseAppThemeButton(){
+
+        // Setup choose app theme button
+        relativeLayoutChooseTheme = (RelativeLayout) findViewById(R.id.chooseTheme);
+        relativeLayoutChooseTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                ColorChooserDialog dialog = new ColorChooserDialog();
+                dialog.show(fm, "fragment_color_chooser");
+            }
+        });
+    }
+
     public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
+
+        // facebook urls
         @Override
         protected void onPreExecute() {
             urlName = "javiersegoviacordoba";
-            url = "https://www.googleapis.com/plus/v1/people/%2B" + urlName + "?key=AIzaSyANa7wXqlgXNYHydN7AXdxQkEpbC3QejEw";
+            urlProfile = "https://graph.facebook.com/" + urlName;
+            urlPicture = "https://graph.facebook.com/" + urlName + "/picture?type=large&redirect=false";
+            urlCover = "https://graph.facebook.com/" + urlName + "/?fields=cover";
         }
 
+        // get JSON Object
         @Override
         protected String doInBackground(String... arg0) {
-            JSONObject json;
+            JSONObject jsonObjectProfile, jsonObjectPicture, jsonObjectCover;
             try {
-                json = JsonParser.readJsonFromUrl(url);
+                jsonObjectProfile = JsonParser.readJsonFromUrl(urlProfile);
+                jsonObjectPicture = JsonParser.readJsonFromUrl(urlPicture);
+                jsonObjectCover = JsonParser.readJsonFromUrl(urlCover);
 
                 // Storing each json item in variable
-                givenName = json.getJSONObject("name").getString("givenName");
-                familyName = json.getJSONObject("name").getString("familyName");
-                image = json.getJSONObject("image").getString("url");
-                image = image.replace("?sz=50", "");
-                coverPhoto = json.getJSONObject("cover").getJSONObject("coverPhoto").getString("url");
+                name = jsonObjectProfile.getString("name");
+                userName = jsonObjectProfile.getString("username");
+                picture = jsonObjectPicture.getJSONObject("data").getString("url");
+                cover = jsonObjectCover.getJSONObject("cover").getString("source");
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -148,16 +195,17 @@ public class MainActivity extends ActionBarActivity {
             return null;
         }
 
+        // Set facebook items to the textviews and imageviews
         @Override
         protected void onPostExecute(String strFromDoInBg) {
-            textViewDisplayName = (TextView) findViewById(R.id.textViewDisplayName);
-            textViewDisplayName.setText(givenName);
-            textViewTagline = (TextView) findViewById(R.id.textViewTagline);
-            textViewTagline.setText(familyName);
-            imageViewImage = (ImageView) findViewById(R.id.imageViewImage);
-            Picasso.with(context).load(image).transform(new CircleTransform()).into(imageViewImage);
-            imageViewCoverPhoto = (ImageView) findViewById(R.id.imageViewCoverPhoto);
-            Picasso.with(context).load(coverPhoto).into(imageViewCoverPhoto);
+            textViewName = (TextView) findViewById(R.id.textViewName);
+            textViewName.setText(name);
+            textViewUserName = (TextView) findViewById(R.id.textViewUserName);
+            textViewUserName.setText(userName);
+            imageViewPicture = (ImageView) findViewById(R.id.imageViewPicture);
+            Picasso.with(context).load(picture).transform(new CircleTransform()).into(imageViewPicture);
+            imageViewCover = (ImageView) findViewById(R.id.imageViewCover);
+            Picasso.with(context).load(cover).into(imageViewCover);
         }
     }
 
@@ -190,7 +238,7 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public void setNavigationStatusBar() {
+    public void navigationBarStatusBar() {
 
         // Fix portrait issues
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -255,6 +303,29 @@ public class MainActivity extends ActionBarActivity {
                 setTheme(R.style.AppTheme);
                 break;
         }
+    }
+    public void toogleButtonDrawer() {
+        imageViewToogle = (ImageView) findViewById(R.id.imageViewToggle);
+        toggleButtonDrawer = (ToggleButton) findViewById(R.id.toggleButtonDrawer);
+        linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayoutMain);
+        linearLayoutSecond = (LinearLayout) findViewById(R.id.linearLayoutSecond);
+        toggleButtonDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!toggleButtonDrawer.isChecked()) {
+                    toggleButtonDrawer.setChecked(false);
+                    imageViewToogle.setBackground(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_drop_down));
+                    linearLayoutMain.setVisibility(View.VISIBLE);
+                    linearLayoutSecond.setVisibility(View.GONE);
+                }
+                if (toggleButtonDrawer.isChecked()) {
+                    toggleButtonDrawer.setChecked(true);
+                    imageViewToogle.setBackground(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_drop_up));
+                    linearLayoutMain.setVisibility(View.GONE);
+                    linearLayoutSecond.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     /*public void settingTransition() {
