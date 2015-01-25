@@ -1,13 +1,19 @@
 package com.example.javier.NavigationDrawerAllVersions;
 
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,24 +24,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import com.example.javier.NavigationDrawerAllVersions.Utilitis.CircleTransform;
+import com.example.javier.NavigationDrawerAllVersions.Utilitis.JsonParser;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
-import android.widget.ToggleButton;
-
-import com.example.javier.NavigationDrawerAllVersions.Utilitis.CircleTransform;
-import com.example.javier.NavigationDrawerAllVersions.Utilitis.ColorChooserDialog;
-import com.example.javier.NavigationDrawerAllVersions.Utilitis.JsonParser;
-import com.squareup.picasso.Picasso;
-
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 // You can check the methods that I use inside onCreate below menu methods
@@ -55,13 +62,16 @@ public class MainActivity extends ActionBarActivity {
     TextView textViewName, textViewLink;
     ImageView imageViewToogle, imageViewCover, imageViewPicture;
     ToggleButton toggleButtonDrawer;
-    RelativeLayout relativeLayoutDrawerTexts, relativeLayoutChooseTheme;
+    RelativeLayout relativeLayoutDrawerTexts, relativeLayoutChooseTheme, relativeLayoutSettings;
     LinearLayout linearLayoutMain, linearLayoutSecond;
-    String urlName = "javiersegoviacordoba";
+    String urlName = "";
     String urlProfile = "https://graph.facebook.com/" + urlName;
     String urlPicture = "https://graph.facebook.com/" + urlName + "picture?type=large&redirect=false";
     String urlCover = "https://graph.facebook.com/" + urlName + "cover";
-    String name, link, cover, picture;
+    String facebookID, name, link, cover, picture;
+    Bitmap bitmapPicture, bitmapCover;
+    Drawable drawablePicture, drawableCover;
+    File file, folder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,26 +87,24 @@ public class MainActivity extends ActionBarActivity {
         toolbarStatusBar();
 
         //Setup Navigation Drawer
-        navigationDrawer();
+        facebookID = "javiersegoviacordoba";
+        navigationDrawer(facebookID);
 
         // Fix issues for each version and modes (check method at end of this file)
         navigationBarStatusBar();
 
-        // Advanced Settings, setup Choose App Theme button (really is relative layout)
-        chooseAppThemeButton();
 
         // Setup drawer accounts toggle.
         toogleButtonDrawer();
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayoutInbox);
-        relativeLayout.setOnClickListener(new View.OnClickListener() {
+        relativeLayoutSettings = (RelativeLayout) findViewById(R.id.relativeLayoutSettings);
+        relativeLayoutSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this, Settings.class);
                 startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -114,19 +122,31 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            Dialog dialog = new Dialog(MainActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.about_dialog);
+            dialog.show();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void theme(){
+    @Override
+    public void onBackPressed() {
+        intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void theme() {
         sharedPreferences = getSharedPreferences("THEMES", Context.MODE_PRIVATE);
         theme = sharedPreferences.getInt("THEME", 0);
         settingTheme(theme);
     }
 
-    public void toolbarStatusBar(){
+    public void toolbarStatusBar() {
 
         // Cast toolbar and status bar
         statusBar = (FrameLayout) findViewById(R.id.statusBar);
@@ -137,19 +157,48 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Main Activity");
     }
 
-    public void navigationDrawer(){
+    public void navigationDrawer(String urlName) {
 
-        // Fix right margin to 56dp
+        // Fix right margin to 56dp (portrait)
         View drawer = findViewById(R.id.scrimInsetsFrameLayout);
         ViewGroup.LayoutParams layoutParams = drawer.getLayoutParams();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        layoutParams.width = displayMetrics.widthPixels - (56 * Math.round(displayMetrics.density));
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layoutParams.width = displayMetrics.widthPixels - (56 * Math.round(displayMetrics.density));
+        }
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            layoutParams.width = displayMetrics.widthPixels + (20 * Math.round(displayMetrics.density)) - displayMetrics.widthPixels / 2;
+        }
+
+        sharedPreferences = getSharedPreferences("STRINGS", Context.MODE_PRIVATE);
+        name = sharedPreferences.getString("NAME", "");
+        if (!name.isEmpty()) {
+            textViewName = (TextView) findViewById(R.id.textViewName);
+            textViewName.setText(name);
+        }
+        link = sharedPreferences.getString("LINK", "");
+        if (!link.equals("")){
+            textViewLink = (TextView) findViewById(R.id.textViewLink);
+            textViewLink.setText(link);
+        }
+
+        file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/picture.png");
+        if (file.length() != 0) {
+            imageViewPicture = (ImageView) findViewById(R.id.imageViewPicture);
+            imageViewPicture.setImageDrawable(Drawable.createFromPath(file.toString()));
+        }
+        file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/cover.png");
+        if (file.length() != 0) {
+            imageViewCover = (ImageView) findViewById(R.id.imageViewCover);
+            imageViewCover.setImageDrawable(Drawable.createFromPath(file.toString()));
+        }
 
         // Cast drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
         // Get facebook items (name, username, picture, cover)
-        new AsyncTaskParseJson().execute();
+        this.urlName = urlName;
+        new AsyncTaskParseJson().execute(urlName);
 
         // Setup Drawer Icon
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
@@ -159,34 +208,22 @@ public class MainActivity extends ActionBarActivity {
         mDrawerToggle.syncState();
     }
 
-    public void chooseAppThemeButton(){
-
-        // Setup choose app theme button
-        relativeLayoutChooseTheme = (RelativeLayout) findViewById(R.id.chooseTheme);
-        relativeLayoutChooseTheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                ColorChooserDialog dialog = new ColorChooserDialog();
-                dialog.show(fm, "fragment_color_chooser");
-            }
-        });
-    }
-
     public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
 
         // facebook urls
         @Override
         protected void onPreExecute() {
-            urlName = "javiersegoviacordoba";
-            urlProfile = "https://graph.facebook.com/" + urlName;
-            urlPicture = "https://graph.facebook.com/" + urlName + "/picture?type=large&redirect=false";
-            urlCover = "https://graph.facebook.com/" + urlName + "/?fields=cover";
         }
 
         // get JSON Object
         @Override
-        protected String doInBackground(String... arg0) {
+        protected String doInBackground(String... url) {
+
+            urlName = url[0];
+            urlProfile = "https://graph.facebook.com/" + urlName;
+            urlPicture = "https://graph.facebook.com/" + urlName + "/picture?type=large&redirect=false";
+            urlCover = "https://graph.facebook.com/" + urlName + "/?fields=cover";
+
             JSONObject jsonObjectProfile, jsonObjectPicture, jsonObjectCover;
             try {
                 jsonObjectProfile = JsonParser.readJsonFromUrl(urlProfile);
@@ -202,6 +239,7 @@ public class MainActivity extends ActionBarActivity {
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
+
             return null;
         }
 
@@ -213,38 +251,84 @@ public class MainActivity extends ActionBarActivity {
             textViewLink = (TextView) findViewById(R.id.textViewLink);
             textViewLink.setText(link);
             imageViewPicture = (ImageView) findViewById(R.id.imageViewPicture);
-            Picasso.with(context).load(picture).transform(new CircleTransform()).into(imageViewPicture);
             imageViewCover = (ImageView) findViewById(R.id.imageViewCover);
-            Picasso.with(context).load(cover).into(imageViewCover);
-        }
-    }
 
-    public void setThemeFragment(int theme) {
-        switch (theme) {
-            case 1:
-                editor = sharedPreferences.edit();
-                editor.putInt("THEME", 1).apply();
-                break;
-            case 2:
-                editor = sharedPreferences.edit();
-                editor.putInt("THEME", 2).apply();
-                break;
-            case 3:
-                editor = sharedPreferences.edit();
-                editor.putInt("THEME", 3).apply();
-                break;
-            case 4:
-                editor = sharedPreferences.edit();
-                editor.putInt("THEME", 4).apply();
-                break;
-            case 5:
-                editor = sharedPreferences.edit();
-                editor.putInt("THEME", 5).apply();
-                break;
-            case 6:
-                editor = sharedPreferences.edit();
-                editor.putInt("THEME", 6).apply();
-                break;
+            sharedPreferences = getSharedPreferences("STRINGS", Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+            editor.putString("NAME", name);
+            editor.putString("LINK", link);
+            editor.apply();
+
+            Target targetProfile = new Target() {
+                @Override
+                public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            folder = new File(Environment.getExternalStorageDirectory() + "/MaterialDesignApp");
+                            if (!folder.exists()) {
+                                folder.mkdirs();
+                            }
+                            file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/picture.png");
+                            drawablePicture = Drawable.createFromPath(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/picture.png");
+                            try {
+                                file.createNewFile();
+                                FileOutputStream ostream = new FileOutputStream(file);
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+                                ostream.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                }
+            };
+            Target targetCover = new Target() {
+                @Override
+                public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            folder = new File(Environment.getExternalStorageDirectory() + "/MaterialDesignApp");
+                            if (!folder.exists()) {
+                                folder.mkdirs();
+                            }
+                            File file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/cover.png");
+                            try {
+                                file.createNewFile();
+                                FileOutputStream ostream = new FileOutputStream(file);
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+                                ostream.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }).start();
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                }
+            };
+
+            Picasso.with(context).load(picture).transform(new CircleTransform()).into(targetProfile);
+            Picasso.with(context).load(cover).into(targetCover);
+
+            Picasso.with(context).load(picture).placeholder(imageViewPicture.getDrawable()).transform(new CircleTransform()).into(imageViewPicture);
+            Picasso.with(context).load(cover).placeholder(imageViewCover.getDrawable()).into(imageViewCover);
         }
     }
 
@@ -314,6 +398,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
     }
+
     public void toogleButtonDrawer() {
         imageViewToogle = (ImageView) findViewById(R.id.imageViewToggle);
         toggleButtonDrawer = (ToggleButton) findViewById(R.id.toggleButtonDrawer);
@@ -337,6 +422,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
+
 
     /*public void settingTransition() {
         new Handler().postDelayed(new Runnable() {

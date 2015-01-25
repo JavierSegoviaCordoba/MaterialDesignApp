@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="@bool/fitsSystemWindows"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -10,16 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/topMargin"
         android:background="?colorPrimaryDark"
-        android:translationZ="8dp" />
+        android:translationZ="4dp" />
 
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:translationZ="8dp" />
+        android:translationZ="4dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -47,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center_vertical"
                     android:text="Text View Title"
@@ -150,6 +152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center_vertical"
                     android:text="Advanced Settings"
@@ -209,6 +212,7 @@
                     </RelativeLayout>
 
                 </RelativeLayout>
+
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="16dp" />

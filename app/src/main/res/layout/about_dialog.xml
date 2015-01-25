@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/md_white_1000"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewAboutDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="About"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/md_text" />
+
+    <TextView
+        android:id="@+id/textViewAboutDialogDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:text="@string/about"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/md_secondary_text_icons" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_row="2"
+        android:autoLink="web"
+        android:text="@string/github"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="?attr/colorAccent"
+        android:textColorLink="?attr/colorAccent" />
+
+</LinearLayout>

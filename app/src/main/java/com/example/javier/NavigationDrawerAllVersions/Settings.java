@@ -1,6 +1,7 @@
 package com.example.javier.NavigationDrawerAllVersions;
 
 import android.app.ActivityOptions;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,31 +14,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.os.AsyncTask;
 import android.widget.ToggleButton;
 
-import com.example.javier.NavigationDrawerAllVersions.Utilitis.CircleTransform;
 import com.example.javier.NavigationDrawerAllVersions.Utilitis.ColorChooserDialog;
-import com.example.javier.NavigationDrawerAllVersions.Utilitis.JsonParser;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 public class Settings extends ActionBarActivity {
 
@@ -62,6 +52,7 @@ public class Settings extends ActionBarActivity {
     String urlPicture = "https://graph.facebook.com/" + urlName + "picture?type=large&redirect=false";
     String urlCover = "https://graph.facebook.com/" + urlName + "cover";
     String name, link, cover, picture;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,23 +89,33 @@ public class Settings extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            Dialog dialog = new Dialog(Settings.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.about_dialog);
+            dialog.show();
             return true;
         }
-        if (id == android.R.id.home){
+        if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(Settings.this);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void theme(){
+    @Override
+    public void onBackPressed() {
+        intent = new Intent(Settings.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void theme() {
         sharedPreferences = getSharedPreferences("THEMES", Context.MODE_PRIVATE);
         theme = sharedPreferences.getInt("THEME", 0);
         settingTheme(theme);
     }
 
-    public void toolbarStatusBar(){
+    public void toolbarStatusBar() {
 
         // Cast toolbar and status bar
         statusBar = (FrameLayout) findViewById(R.id.statusBar);
@@ -126,16 +127,16 @@ public class Settings extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void chooseAppThemeButton(){
+    public void chooseAppThemeButton() {
 
         // Setup choose app theme button
         relativeLayoutChooseTheme = (RelativeLayout) findViewById(R.id.chooseTheme);
         relativeLayoutChooseTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
+                FragmentManager fragmentManager = getSupportFragmentManager();
                 ColorChooserDialog dialog = new ColorChooserDialog();
-                dialog.show(fm, "fragment_color_chooser");
+                dialog.show(fragmentManager, "fragment_color_chooser");
             }
         });
     }
@@ -205,7 +206,7 @@ public class Settings extends ActionBarActivity {
                 TypedValue typedValue = new TypedValue();
                 Settings.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
                 final int color = typedValue.data;
-                mDrawerLayout.setStatusBarBackgroundColor(color);
+                getWindow().setStatusBarColor(color);
             }
         }
     }

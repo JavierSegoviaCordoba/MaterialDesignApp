@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textViewDialog"
+        android:id="@+id/textViewThemeDialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
@@ -167,12 +167,13 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_column="1"
-            android:layout_row="4"/>
+            android:layout_row="4" />
+
         <Space
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_column="3"
-            android:layout_row="1"/>
+            android:layout_row="1" />
 
     </GridLayout>
 
@@ -206,13 +207,11 @@
             android:layout_gravity="center"
             android:background="@drawable/dialog_button"
             android:clickable="true"
+            android:paddingRight="16dp"
             android:text="AGREE"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textColor="?attr/colorAccent" />
 
-        <Space
-            android:layout_width="16dp"
-            android:layout_height="match_parent" />
     </LinearLayout>
 
     <Space

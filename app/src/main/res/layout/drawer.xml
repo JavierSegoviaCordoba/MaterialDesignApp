@@ -114,11 +114,11 @@
 
         <RelativeLayout
             style="?android:attr/borderlessButtonStyle"
-            android:gravity="start"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
-            android:background="?attr/selectableItemBackground">
+            android:background="?attr/selectableItemBackground"
+            android:gravity="start">
 
             <ImageView
                 android:id="@+id/imageViewAddAccount"
@@ -148,10 +148,10 @@
 
         <RelativeLayout
             style="?android:attr/borderlessButtonStyle"
-            android:gravity="start"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="?attr/selectableItemBackground">
+            android:background="?attr/selectableItemBackground"
+            android:gravity="start">
 
             <ImageView
                 android:id="@+id/imageViewManageAccount"
@@ -183,8 +183,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutMain"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:background="@color/md_white_1000"
         android:orientation="vertical"
@@ -193,11 +193,11 @@
         <RelativeLayout
             android:id="@+id/relativeLayoutInbox"
             style="?android:attr/borderlessButtonStyle"
-            android:gravity="start"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
-            android:background="?attr/selectableItemBackground">
+            android:background="?attr/selectableItemBackground"
+            android:gravity="start">
 
             <ImageView
                 android:id="@+id/imageViewInbox"
@@ -218,7 +218,48 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="72dp"
                 android:singleLine="true"
-                android:text="Inbox (TODO ListView)"
+                android:text="Inbox (TODO Drawer ListView)"
+                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                android:textColor="@color/md_text"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/md_divider" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutSettings"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="start">
+
+            <ImageView
+                android:id="@+id/imageViewSettings"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_action_action_settings" />
+
+            <TextView
+                android:id="@+id/textViewSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="72dp"
+                android:singleLine="true"
+                android:text="Settings"
                 android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                 android:textColor="@color/md_text"
                 android:textSize="16sp" />
