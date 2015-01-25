@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.javier.NavigationDrawerAllVersions.Utilitis.CircleTransform;
@@ -72,6 +73,7 @@ public class MainActivity extends ActionBarActivity {
     Bitmap bitmapPicture, bitmapCover;
     Drawable drawablePicture, drawableCover;
     File file, folder;
+    Boolean downloaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +136,11 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
+        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putBoolean("DOWNLOAD", false);
+        editor.apply();
+
         intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -141,7 +148,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void theme() {
-        sharedPreferences = getSharedPreferences("THEMES", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
         theme = sharedPreferences.getInt("THEME", 0);
         settingTheme(theme);
     }
@@ -159,6 +166,13 @@ public class MainActivity extends ActionBarActivity {
 
     public void navigationDrawer(String urlName) {
 
+        // Cast drawer
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+        // Get preferences
+        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+        Boolean downloaded = sharedPreferences.getBoolean("DOWNLOAD", false);
+
         // Fix right margin to 56dp (portrait)
         View drawer = findViewById(R.id.scrimInsetsFrameLayout);
         ViewGroup.LayoutParams layoutParams = drawer.getLayoutParams();
@@ -170,18 +184,16 @@ public class MainActivity extends ActionBarActivity {
             layoutParams.width = displayMetrics.widthPixels + (20 * Math.round(displayMetrics.density)) - displayMetrics.widthPixels / 2;
         }
 
-        sharedPreferences = getSharedPreferences("STRINGS", Context.MODE_PRIVATE);
         name = sharedPreferences.getString("NAME", "");
-        if (!name.isEmpty()) {
+        if (!name.isEmpty() && name != null) {
             textViewName = (TextView) findViewById(R.id.textViewName);
             textViewName.setText(name);
         }
         link = sharedPreferences.getString("LINK", "");
-        if (!link.equals("")){
+        if (!link.equals("")) {
             textViewLink = (TextView) findViewById(R.id.textViewLink);
             textViewLink.setText(link);
         }
-
         file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/picture.png");
         if (file.length() != 0) {
             imageViewPicture = (ImageView) findViewById(R.id.imageViewPicture);
@@ -193,12 +205,21 @@ public class MainActivity extends ActionBarActivity {
             imageViewCover.setImageDrawable(Drawable.createFromPath(file.toString()));
         }
 
-        // Cast drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        if (!downloaded) {
 
-        // Get facebook items (name, username, picture, cover)
-        this.urlName = urlName;
-        new AsyncTaskParseJson().execute(urlName);
+            // Get facebook items (name, username, picture, cover)
+            this.urlName = urlName;
+            new AsyncTaskParseJson().execute(urlName);
+
+            Toast.makeText(MainActivity.this, downloaded.toString(), Toast.LENGTH_SHORT).show();
+
+            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+            editor.putBoolean("DOWNLOAD", true);
+            editor.apply();
+        } else {
+            Toast.makeText(MainActivity.this, downloaded.toString(), Toast.LENGTH_SHORT).show();
+        }
 
         // Setup Drawer Icon
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
@@ -253,7 +274,7 @@ public class MainActivity extends ActionBarActivity {
             imageViewPicture = (ImageView) findViewById(R.id.imageViewPicture);
             imageViewCover = (ImageView) findViewById(R.id.imageViewCover);
 
-            sharedPreferences = getSharedPreferences("STRINGS", Context.MODE_PRIVATE);
+            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
             editor = sharedPreferences.edit();
             editor.putString("NAME", name);
             editor.putString("LINK", link);
@@ -423,7 +444,6 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-
     /*public void settingTransition() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -440,9 +460,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         }, 300);
-    }/*
-
-
+    }*/
 
     /*@Override protected void onStart() {
         super.onStart();
@@ -467,13 +485,18 @@ public class MainActivity extends ActionBarActivity {
     @Override protected void onRestart() {
         super.onRestart();
         Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
-        editor.putInt("POSITION", 0).apply();
+        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        //editor.putInt("POSITION", 0).apply();
+        editor.putBoolean("DOWNLOAD", false);
+        editor.apply();
 
-    }*/
+        Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
+        Toast.makeText(this, "Destroy " + prueba.toString(), Toast.LENGTH_SHORT).show();
+    }
 }

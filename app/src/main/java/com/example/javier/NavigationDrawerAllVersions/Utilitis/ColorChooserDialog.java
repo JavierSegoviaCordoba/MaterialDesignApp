@@ -29,8 +29,8 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        sharedPreferences = getActivity().getSharedPreferences("THEMES",Context.MODE_PRIVATE);
-        currentTheme =  sharedPreferences.getInt("THEME", 0);
+        sharedPreferences = getActivity().getSharedPreferences("THEMES", Context.MODE_PRIVATE);
+        currentTheme = sharedPreferences.getInt("THEME", 0);
 
         view = inflater.inflate(R.layout.theme_dialog, container);
         cardView1 = (CardView) view.findViewById(R.id.card_view1);
@@ -80,7 +80,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
                 ((Settings) getActivity()).setThemeFragment(currentTheme);
                 getDialog().dismiss();
             case R.id.buttonAgree:
-                intent = new Intent(getActivity(),Settings.class);
+                intent = new Intent(getActivity(), Settings.class);
                 startActivity(intent);
                 break;
         }

@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.javier.NavigationDrawerAllVersions.Utilitis.ColorChooserDialog;
@@ -34,12 +35,12 @@ public class Settings extends ActionBarActivity {
     Toolbar toolbar;
     DrawerLayout mDrawerLayout;
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     ScrollView scrollView;
     ActionBarDrawerToggle mDrawerToggle;
     int theme, scrollPositionX = 0, scrollPositionY = -100;
     Intent intent;
     FrameLayout statusBar;
-    SharedPreferences.Editor editor;
     ActivityOptions options;
     final Context context = this;
     TextView textViewName, textViewLink;
@@ -110,7 +111,7 @@ public class Settings extends ActionBarActivity {
     }
 
     public void theme() {
-        sharedPreferences = getSharedPreferences("THEMES", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
         theme = sharedPreferences.getInt("THEME", 0);
         settingTheme(theme);
     }
@@ -286,8 +287,9 @@ public class Settings extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
-        editor.putInt("POSITION", 0).apply();
+        //sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+        //editor = sharedPreferences.edit();
+        //editor.putInt("POSITION", 0).apply();
 
     }*/
 }
