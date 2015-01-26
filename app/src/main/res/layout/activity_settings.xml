@@ -1,9 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fitsSystemWindows="@bool/fitsSystemWindows"
+    android:id="@+id/linearLayoutSettings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+    android:fitsSystemWindows="@bool/fitsSystemWindows"
     android:orientation="vertical">
 
     <FrameLayout
@@ -44,21 +45,29 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:layout_marginTop="16dp"
                     android:id="@+id/textView"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center_vertical"
-                    android:text="Text View Title"
+                    android:text="Some widgets to check theme colors"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
                     android:textColor="?attr/colorAccent"
                     android:textSize="14sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp">
+                    android:layout_height="56dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/md_divider" />
 
                     <TextView
                         android:id="@+id/textViewSwitch"
@@ -86,7 +95,14 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp">
+                    android:layout_height="56dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/md_divider" />
 
                     <TextView
                         android:id="@+id/textViewCheckBox"
@@ -114,7 +130,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp">
+                    android:layout_height="56dp">
 
                     <TextView
                         android:id="@+id/textViewRadioButton"
@@ -141,18 +157,13 @@
                         android:layout_marginRight="16dp" />
                 </RelativeLayout>
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/md_divider" />
-
                 <TextView
                     android:id="@+id/textViewAdvancedSetting"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center_vertical"
                     android:text="Advanced Settings"
@@ -161,36 +172,33 @@
                     android:textSize="14sp" />
 
                 <RelativeLayout
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:id="@+id/chooseTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="88dp"
                     android:background="?attr/selectableItemBackground">
 
                     <ImageView
                         android:id="@+id/imageViewPhone"
-                        android:layout_width="56dp"
+                        android:layout_width="30dp"
                         android:layout_height="56dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="16dp"
+                        android:padding="-12dp"
                         android:src="@drawable/ic_hardware_phone_android"
                         android:tint="?attr/colorPrimary" />
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_toEndOf="@+id/imageViewPhone"
-                        android:layout_toRightOf="@+id/imageViewPhone">
+                    <LinearLayout
+                        android:layout_marginLeft="56dp"
+                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="88dp"
+                        android:orientation="vertical">
 
-                        <TextView
+                            <TextView
                             android:id="@+id/textViewTheme"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:paddingTop="16dp"
                             android:text="Choose App Theme"
                             android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                             android:textColor="@color/md_text"
@@ -200,16 +208,48 @@
                             android:id="@+id/textViewThemeDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/textViewTheme"
-                            android:layout_alignStart="@+id/textViewTheme"
-                            android:layout_below="@+id/textViewTheme"
-                            android:paddingBottom="16dp"
-                            android:text="Choose the theme to change the Color Primary,  Color Primary Dark, Color Control Highlight..."
+                            android:text="Press to change the primary, primary dark and accent colors"
                             android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                             android:textColor="@color/md_secondary_text_icons"
                             android:textSize="14sp" />
 
-                    </RelativeLayout>
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:id="@+id/frameLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/md_divider" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp">
+
+                    <EditText
+                        android:id="@+id/editText"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="70dp"
+                        android:layout_marginRight="70dp"
+                        android:gravity="center_vertical"
+                        android:hint="Facebook ID"
+                        android:textColor="@color/md_text"
+                        android:textColorHint="@color/md_disabled_hint_text" />
+
+                    <ImageView
+                        android:id="@+id/imageViewFacebook"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/ic_facebook_icon_2013"
+                        android:tint="?attr/colorAccent" />
 
                 </RelativeLayout>
 

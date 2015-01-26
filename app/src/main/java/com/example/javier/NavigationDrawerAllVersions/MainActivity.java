@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -105,6 +106,14 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this, Settings.class);
                 startActivity(intent);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after some time
+                        mDrawerLayout.closeDrawers();
+                    }
+                }, 1000);
             }
         });
     }
@@ -280,7 +289,7 @@ public class MainActivity extends ActionBarActivity {
             editor.putString("LINK", link);
             editor.apply();
 
-            Target targetProfile = new Target() {
+            Target targetPicture = new Target() {
                 @Override
                 public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                     new Thread(new Runnable() {
@@ -291,7 +300,6 @@ public class MainActivity extends ActionBarActivity {
                                 folder.mkdirs();
                             }
                             file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/picture.png");
-                            drawablePicture = Drawable.createFromPath(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/picture.png");
                             try {
                                 file.createNewFile();
                                 FileOutputStream ostream = new FileOutputStream(file);
@@ -331,7 +339,6 @@ public class MainActivity extends ActionBarActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
                         }
                     }).start();
                 }
@@ -345,7 +352,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             };
 
-            Picasso.with(context).load(picture).transform(new CircleTransform()).into(targetProfile);
+            Picasso.with(context).load(picture).transform(new CircleTransform()).into(targetPicture);
             Picasso.with(context).load(cover).into(targetCover);
 
             Picasso.with(context).load(picture).placeholder(imageViewPicture.getDrawable()).transform(new CircleTransform()).into(imageViewPicture);

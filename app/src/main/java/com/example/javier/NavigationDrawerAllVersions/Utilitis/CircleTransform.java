@@ -37,7 +37,7 @@ public class CircleTransform implements Transformation {
 
         float r = size / 2f;
         canvas.drawCircle(r, r, r, paint);
-        canvas.drawCircle(r, r, r - 3, paintBorder);
+        canvas.drawCircle(r, r, r - 4, paintBorder);
 
         squaredBitmap.recycle();
         return bitmap;
