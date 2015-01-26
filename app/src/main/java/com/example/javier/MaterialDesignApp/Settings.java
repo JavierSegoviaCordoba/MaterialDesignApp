@@ -1,4 +1,4 @@
-package com.example.javier.NavigationDrawerAllVersions;
+package com.example.javier.MaterialDesignApp;
 
 import android.app.ActivityOptions;
 import android.app.Dialog;
@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,10 +28,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.example.javier.NavigationDrawerAllVersions.Utilitis.ColorChooserDialog;
+import com.example.javier.MaterialDesignApp.Utilitis.ColorChooserDialog;
 
 public class Settings extends ActionBarActivity {
 
+    final Context context = this;
     Toolbar toolbar;
     DrawerLayout mDrawerLayout;
     SharedPreferences sharedPreferences;
@@ -43,7 +43,6 @@ public class Settings extends ActionBarActivity {
     Intent intent;
     FrameLayout statusBar;
     ActivityOptions options;
-    final Context context = this;
     TextView textViewName, textViewLink;
     EditText editTextFacebookID;
     ImageView imageViewToogle, imageViewCover, imageViewPicture;
@@ -75,6 +74,9 @@ public class Settings extends ActionBarActivity {
 
         // Advanced Settings, setup Choose App Theme button (really is relative layout)
         chooseAppThemeButton();
+
+        // Fix speed/download for setting navigation drawer on back to main activity.
+        fixBooleanDownload();
     }
 
     @Override
@@ -142,6 +144,15 @@ public class Settings extends ActionBarActivity {
                 dialog.show(fragmentManager, "fragment_color_chooser");
             }
         });
+    }
+
+    public void fixBooleanDownload() {
+
+        // Fix download boolean value
+        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putBoolean("DOWNLOAD", true);
+        editor.apply();
     }
 
     public void setThemeFragment(int theme) {

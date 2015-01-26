@@ -128,7 +128,7 @@
 
     <!-- The navigation drawer -->
 
-    <com.example.javier.NavigationDrawerAllVersions.Utilitis.ScrimInsetsFrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.example.javier.MaterialDesignApp.Utilitis.ScrimInsetsFrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/scrimInsetsFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -151,5 +151,5 @@
 
         </LinearLayout>
 
-    </com.example.javier.NavigationDrawerAllVersions.Utilitis.ScrimInsetsFrameLayout>
+    </com.example.javier.MaterialDesignApp.Utilitis.ScrimInsetsFrameLayout>
 </android.support.v4.widget.DrawerLayout>

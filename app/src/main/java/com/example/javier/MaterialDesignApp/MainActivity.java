@@ -1,10 +1,8 @@
-package com.example.javier.NavigationDrawerAllVersions;
+package com.example.javier.MaterialDesignApp;
 
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -35,8 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.javier.NavigationDrawerAllVersions.Utilitis.CircleTransform;
-import com.example.javier.NavigationDrawerAllVersions.Utilitis.JsonParser;
+import com.example.javier.MaterialDesignApp.Utilitis.CircleTransform;
+import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -50,6 +48,7 @@ import java.io.IOException;
 // You can check the methods that I use inside onCreate below menu methods
 
 public class MainActivity extends ActionBarActivity {
+    final Context context = this;
     Toolbar toolbar;
     DrawerLayout mDrawerLayout;
     SharedPreferences sharedPreferences;
@@ -60,7 +59,6 @@ public class MainActivity extends ActionBarActivity {
     FrameLayout statusBar;
     SharedPreferences.Editor editor;
     ActivityOptions options;
-    final Context context = this;
     TextView textViewName, textViewLink;
     ImageView imageViewToogle, imageViewCover, imageViewPicture;
     ToggleButton toggleButtonDrawer;
@@ -113,7 +111,7 @@ public class MainActivity extends ActionBarActivity {
                         // Do something after some time
                         mDrawerLayout.closeDrawers();
                     }
-                }, 1000);
+                }, 500);
             }
         });
     }
@@ -155,6 +153,7 @@ public class MainActivity extends ActionBarActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
 
     public void theme() {
         sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
@@ -236,6 +235,164 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
+    }
+
+    public void navigationBarStatusBar() {
+
+        // Fix portrait issues
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Fix issues for KitKat setting Status Bar color primary
+            if (Build.VERSION.SDK_INT >= 19) {
+                TypedValue typedValue19 = new TypedValue();
+                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
+                final int color = typedValue19.data;
+                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
+                statusBar.setBackgroundColor(color);
+            }
+
+            // Fix issues for Lollipop, setting Status Bar color primary dark
+            if (Build.VERSION.SDK_INT >= 21) {
+                TypedValue typedValue21 = new TypedValue();
+                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue21, true);
+                final int color = typedValue21.data;
+                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
+                statusBar.setBackgroundColor(color);
+            }
+        }
+
+        // Fix landscape issues (only Lollipop)
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (Build.VERSION.SDK_INT >= 19) {
+                TypedValue typedValue19 = new TypedValue();
+                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
+                final int color = typedValue19.data;
+                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
+                statusBar.setBackgroundColor(color);
+            }
+            if (Build.VERSION.SDK_INT >= 21) {
+                TypedValue typedValue = new TypedValue();
+                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+                final int color = typedValue.data;
+                mDrawerLayout.setStatusBarBackgroundColor(color);
+            }
+        }
+    }
+
+    public void settingTheme(int theme) {
+        switch (theme) {
+            case 1:
+                setTheme(R.style.AppTheme);
+                break;
+            case 2:
+                setTheme(R.style.AppTheme2);
+                break;
+            case 3:
+                setTheme(R.style.AppTheme3);
+                break;
+            case 4:
+                setTheme(R.style.AppTheme4);
+                break;
+            case 5:
+                setTheme(R.style.AppTheme5);
+                break;
+            case 6:
+                setTheme(R.style.AppTheme6);
+                break;
+            default:
+                setTheme(R.style.AppTheme);
+                break;
+        }
+    }
+
+    public void toogleButtonDrawer() {
+        imageViewToogle = (ImageView) findViewById(R.id.imageViewToggle);
+        toggleButtonDrawer = (ToggleButton) findViewById(R.id.toggleButtonDrawer);
+        linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayoutMain);
+        linearLayoutSecond = (LinearLayout) findViewById(R.id.linearLayoutSecond);
+        toggleButtonDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!toggleButtonDrawer.isChecked()) {
+                    toggleButtonDrawer.setChecked(false);
+                    imageViewToogle.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_drop_down));
+                    linearLayoutMain.setVisibility(View.VISIBLE);
+                    linearLayoutSecond.setVisibility(View.GONE);
+                }
+                if (toggleButtonDrawer.isChecked()) {
+                    toggleButtonDrawer.setChecked(true);
+                    imageViewToogle.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_drop_up));
+                    linearLayoutMain.setVisibility(View.GONE);
+                    linearLayoutSecond.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+            //editor.putInt("POSITION", 0).apply();
+            editor.putBoolean("DOWNLOAD", false);
+            editor.apply();
+
+            Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
+            Toast.makeText(this, "Destroy " + prueba.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*public void settingTransition() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
+                    contentLayout.setTransitionName("LAYOUT");
+                    options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
+                            Pair.create(findViewById(R.id.contentLayout), "LAYOUT"));
+                    startActivity(intent, options.toBundle());
+
+                } else {
+                    startActivity(intent);
+                }
+            }
+        }, 300);
+    }*/
+
+    /*@Override protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override protected void onPause() {
+        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+        super.onPause();
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override protected void onRestart() {
+        super.onRestart();
+        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+    }*/
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putBoolean("DOWNLOAD", false);
+        editor.apply();
     }
 
     public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
@@ -357,155 +514,6 @@ public class MainActivity extends ActionBarActivity {
 
             Picasso.with(context).load(picture).placeholder(imageViewPicture.getDrawable()).transform(new CircleTransform()).into(imageViewPicture);
             Picasso.with(context).load(cover).placeholder(imageViewCover.getDrawable()).into(imageViewCover);
-        }
-    }
-
-    public void navigationBarStatusBar() {
-
-        // Fix portrait issues
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            // Fix issues for KitKat setting Status Bar color primary
-            if (Build.VERSION.SDK_INT >= 19) {
-                TypedValue typedValue19 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
-                final int color = typedValue19.data;
-                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
-                statusBar.setBackgroundColor(color);
-            }
-
-            // Fix issues for Lollipop, setting Status Bar color primary dark
-            if (Build.VERSION.SDK_INT >= 21) {
-                TypedValue typedValue21 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue21, true);
-                final int color = typedValue21.data;
-                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
-                statusBar.setBackgroundColor(color);
-            }
-        }
-
-        // Fix landscape issues (only Lollipop)
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (Build.VERSION.SDK_INT >= 19) {
-                TypedValue typedValue19 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
-                final int color = typedValue19.data;
-                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
-                statusBar.setBackgroundColor(color);
-            }
-            if (Build.VERSION.SDK_INT >= 21) {
-                TypedValue typedValue = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
-                final int color = typedValue.data;
-                mDrawerLayout.setStatusBarBackgroundColor(color);
-            }
-        }
-    }
-
-    public void settingTheme(int theme) {
-        switch (theme) {
-            case 1:
-                setTheme(R.style.AppTheme);
-                break;
-            case 2:
-                setTheme(R.style.AppTheme2);
-                break;
-            case 3:
-                setTheme(R.style.AppTheme3);
-                break;
-            case 4:
-                setTheme(R.style.AppTheme4);
-                break;
-            case 5:
-                setTheme(R.style.AppTheme5);
-                break;
-            case 6:
-                setTheme(R.style.AppTheme6);
-                break;
-            default:
-                setTheme(R.style.AppTheme);
-                break;
-        }
-    }
-
-    public void toogleButtonDrawer() {
-        imageViewToogle = (ImageView) findViewById(R.id.imageViewToggle);
-        toggleButtonDrawer = (ToggleButton) findViewById(R.id.toggleButtonDrawer);
-        linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayoutMain);
-        linearLayoutSecond = (LinearLayout) findViewById(R.id.linearLayoutSecond);
-        toggleButtonDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!toggleButtonDrawer.isChecked()) {
-                    toggleButtonDrawer.setChecked(false);
-                    imageViewToogle.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_drop_down));
-                    linearLayoutMain.setVisibility(View.VISIBLE);
-                    linearLayoutSecond.setVisibility(View.GONE);
-                }
-                if (toggleButtonDrawer.isChecked()) {
-                    toggleButtonDrawer.setChecked(true);
-                    imageViewToogle.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_drop_up));
-                    linearLayoutMain.setVisibility(View.GONE);
-                    linearLayoutSecond.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-    }
-
-    /*public void settingTransition() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT >= 21) {
-                    LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
-                    contentLayout.setTransitionName("LAYOUT");
-                    options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                            Pair.create(findViewById(R.id.contentLayout), "LAYOUT"));
-                    startActivity(intent, options.toBundle());
-
-                } else {
-                    startActivity(intent);
-                }
-            }
-        }, 300);
-    }*/
-
-    /*@Override protected void onStart() {
-        super.onStart();
-        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override protected void onResume() {
-        super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override protected void onPause() {
-        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
-        super.onPause();
-    }
-
-    @Override protected void onStop() {
-        super.onStop();
-        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override protected void onRestart() {
-        super.onRestart();
-        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
-    }*/
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-            //editor.putInt("POSITION", 0).apply();
-            editor.putBoolean("DOWNLOAD", false);
-            editor.apply();
-
-            Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
-            Toast.makeText(this, "Destroy " + prueba.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 }

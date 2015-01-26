@@ -1,4 +1,4 @@
-package com.example.javier.NavigationDrawerAllVersions;
+package com.example.javier.MaterialDesignApp;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

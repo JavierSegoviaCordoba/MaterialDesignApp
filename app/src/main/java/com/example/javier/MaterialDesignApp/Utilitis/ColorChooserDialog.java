@@ -1,4 +1,4 @@
-package com.example.javier.NavigationDrawerAllVersions.Utilitis;
+package com.example.javier.MaterialDesignApp.Utilitis;
 
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -13,9 +13,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 
-import com.example.javier.NavigationDrawerAllVersions.MainActivity;
-import com.example.javier.NavigationDrawerAllVersions.R;
-import com.example.javier.NavigationDrawerAllVersions.Settings;
+import com.example.javier.MaterialDesignApp.R;
+import com.example.javier.MaterialDesignApp.Settings;
 
 public class ColorChooserDialog extends DialogFragment implements View.OnClickListener {
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6;

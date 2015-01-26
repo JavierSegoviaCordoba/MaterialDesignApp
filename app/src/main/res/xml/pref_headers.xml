@@ -3,15 +3,15 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.example.javier.NavigationDrawerAllVersions.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="com.example.javier.MaterialDesignApp.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.example.javier.NavigationDrawerAllVersions.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="com.example.javier.MaterialDesignApp.SettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="com.example.javier.NavigationDrawerAllVersions.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="com.example.javier.MaterialDesignApp.SettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
 
 </preference-headers>
