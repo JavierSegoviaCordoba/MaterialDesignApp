@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
     FrameLayout statusBar;
     SharedPreferences.Editor editor;
     ActivityOptions options;
-    TextView textViewName, textViewLink;
+    TextView textViewName, textViewUsername;
     ImageView imageViewToogle, imageViewCover, imageViewPicture;
     ToggleButton toggleButtonDrawer;
     RelativeLayout relativeLayoutDrawerTexts, relativeLayoutChooseTheme, relativeLayoutSettings;
@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
     String urlProfile = "https://graph.facebook.com/" + urlName;
     String urlPicture = "https://graph.facebook.com/" + urlName + "picture?type=large&redirect=false";
     String urlCover = "https://graph.facebook.com/" + urlName + "cover";
-    String facebookID, name, link, cover, picture;
+    String facebookID, name, username, cover, picture;
     Bitmap bitmapPicture, bitmapCover;
     Drawable drawablePicture, drawableCover;
     File file, folder;
@@ -88,7 +88,8 @@ public class MainActivity extends ActionBarActivity {
         toolbarStatusBar();
 
         //Setup Navigation Drawer
-        facebookID = "javiersegoviacordoba";
+        sharedPreferences = getSharedPreferences("VALUES",MODE_PRIVATE);
+        facebookID = sharedPreferences.getString("FACEBOOKID","javiersegoviacordoba");
         navigationDrawer(facebookID);
 
         // Fix issues for each version and modes (check method at end of this file)
@@ -179,7 +180,7 @@ public class MainActivity extends ActionBarActivity {
 
         // Get preferences
         sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
-        Boolean downloaded = sharedPreferences.getBoolean("DOWNLOAD", false);
+        downloaded = sharedPreferences.getBoolean("DOWNLOAD", false);
 
         // Fix right margin to 56dp (portrait)
         View drawer = findViewById(R.id.scrimInsetsFrameLayout);
@@ -193,14 +194,14 @@ public class MainActivity extends ActionBarActivity {
         }
 
         name = sharedPreferences.getString("NAME", "");
-        if (!name.isEmpty() && name != null) {
+        if (!name.equals("")) {
             textViewName = (TextView) findViewById(R.id.textViewName);
             textViewName.setText(name);
         }
-        link = sharedPreferences.getString("LINK", "");
-        if (!link.equals("")) {
-            textViewLink = (TextView) findViewById(R.id.textViewLink);
-            textViewLink.setText(link);
+        username = sharedPreferences.getString("USERNAME", "");
+        if (!username.equals("")) {
+            textViewUsername = (TextView) findViewById(R.id.textViewUsername);
+            textViewUsername.setText(username);
         }
         file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/picture.png");
         if (file.length() != 0) {
@@ -219,12 +220,6 @@ public class MainActivity extends ActionBarActivity {
             this.urlName = urlName;
             new AsyncTaskParseJson().execute(urlName);
 
-            Toast.makeText(MainActivity.this, downloaded.toString(), Toast.LENGTH_SHORT).show();
-
-            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-            editor.putBoolean("DOWNLOAD", true);
-            editor.apply();
         } else {
             Toast.makeText(MainActivity.this, downloaded.toString(), Toast.LENGTH_SHORT).show();
         }
@@ -328,10 +323,10 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         super.onDestroy();
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
             editor = sharedPreferences.edit();
             //editor.putInt("POSITION", 0).apply();
@@ -341,24 +336,6 @@ public class MainActivity extends ActionBarActivity {
             Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
             Toast.makeText(this, "Destroy " + prueba.toString(), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    /*public void settingTransition() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT >= 21) {
-                    LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
-                    contentLayout.setTransitionName("LAYOUT");
-                    options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                            Pair.create(findViewById(R.id.contentLayout), "LAYOUT"));
-                    startActivity(intent, options.toBundle());
-
-                } else {
-                    startActivity(intent);
-                }
-            }
-        }, 300);
     }*/
 
     /*@Override protected void onStart() {
@@ -386,13 +363,35 @@ public class MainActivity extends ActionBarActivity {
         Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
     }*/
 
+    /*public void settingTransition() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
+                    contentLayout.setTransitionName("LAYOUT");
+                    options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
+                            Pair.create(findViewById(R.id.contentLayout), "LAYOUT"));
+                    startActivity(intent, options.toBundle());
+
+                } else {
+                    startActivity(intent);
+                }
+            }
+        }, 300);
+    }*/
+
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
         sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        //editor.putInt("POSITION", 0).apply();
         editor.putBoolean("DOWNLOAD", false);
         editor.apply();
+
+        Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
+        Toast.makeText(this, "Leave " + prueba.toString(), Toast.LENGTH_SHORT).show();
     }
 
     public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
@@ -419,7 +418,7 @@ public class MainActivity extends ActionBarActivity {
 
                 // Storing each json item in variable
                 name = jsonObjectProfile.getString("name");
-                link = jsonObjectProfile.getString("link");
+                username ="Facebook ID: " + jsonObjectProfile.getString("username");
                 picture = jsonObjectPicture.getJSONObject("data").getString("url");
                 cover = jsonObjectCover.getJSONObject("cover").getString("source");
 
@@ -435,16 +434,21 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(String strFromDoInBg) {
             textViewName = (TextView) findViewById(R.id.textViewName);
             textViewName.setText(name);
-            textViewLink = (TextView) findViewById(R.id.textViewLink);
-            textViewLink.setText(link);
+            textViewUsername = (TextView) findViewById(R.id.textViewUsername);
+            textViewUsername.setText(username);
             imageViewPicture = (ImageView) findViewById(R.id.imageViewPicture);
             imageViewCover = (ImageView) findViewById(R.id.imageViewCover);
 
             sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
             editor = sharedPreferences.edit();
             editor.putString("NAME", name);
-            editor.putString("LINK", link);
+            editor.putString("USERNAME", username);
             editor.apply();
+
+            folder = new File(Environment.getExternalStorageDirectory() + "/MaterialDesignApp");
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
 
             Target targetPicture = new Target() {
                 @Override
@@ -452,10 +456,6 @@ public class MainActivity extends ActionBarActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            folder = new File(Environment.getExternalStorageDirectory() + "/MaterialDesignApp");
-                            if (!folder.exists()) {
-                                folder.mkdirs();
-                            }
                             file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/picture.png");
                             try {
                                 file.createNewFile();
@@ -467,6 +467,7 @@ public class MainActivity extends ActionBarActivity {
                             }
                         }
                     }).start();
+                    Toast.makeText(MainActivity.this,"Creating Picture",Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -483,10 +484,6 @@ public class MainActivity extends ActionBarActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            folder = new File(Environment.getExternalStorageDirectory() + "/MaterialDesignApp");
-                            if (!folder.exists()) {
-                                folder.mkdirs();
-                            }
                             File file = new File(Environment.getExternalStorageDirectory().getPath() + "/MaterialDesignApp/cover.png");
                             try {
                                 file.createNewFile();
@@ -512,8 +509,16 @@ public class MainActivity extends ActionBarActivity {
             Picasso.with(context).load(picture).transform(new CircleTransform()).into(targetPicture);
             Picasso.with(context).load(cover).into(targetCover);
 
+            imageViewPicture.setTag(targetPicture);
+            imageViewCover.setTag(targetCover);
+
             Picasso.with(context).load(picture).placeholder(imageViewPicture.getDrawable()).transform(new CircleTransform()).into(imageViewPicture);
             Picasso.with(context).load(cover).placeholder(imageViewCover.getDrawable()).into(imageViewCover);
+
+            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+            editor.putBoolean("DOWNLOAD", true);
+            editor.apply();
         }
     }
 }

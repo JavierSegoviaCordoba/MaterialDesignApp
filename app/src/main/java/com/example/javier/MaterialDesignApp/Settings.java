@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,9 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.javier.MaterialDesignApp.Utilitis.ColorChooserDialog;
+
+import java.text.Normalizer;
 
 public class Settings extends ActionBarActivity {
 
@@ -55,6 +59,7 @@ public class Settings extends ActionBarActivity {
     String urlCover = "https://graph.facebook.com/" + urlName + "cover";
     String name, link, cover, picture;
     Dialog dialog;
+    Boolean homeButton = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,29 @@ public class Settings extends ActionBarActivity {
 
         // Fix speed/download for setting navigation drawer on back to main activity.
         fixBooleanDownload();
+
+        editTextFacebookID = (EditText) findViewById(R.id.editTextFacebookID);
+        Button buttonTemp = (Button) findViewById(R.id.button);
+        buttonTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String facebookID = editTextFacebookID.getText().toString();
+                facebookID = Normalizer.normalize(facebookID, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").replaceAll(" ","");
+                sharedPreferences = getSharedPreferences("VALUES",MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putString("FACEBOOKID", facebookID);
+                editor.apply();
+
+                Toast.makeText(Settings.this, facebookID, Toast.LENGTH_SHORT).show();
+
+                sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("DOWNLOAD", false);
+                editor.apply();
+
+                homeButton = false;
+            }
+        });
     }
 
     @Override
@@ -102,7 +130,17 @@ public class Settings extends ActionBarActivity {
             return true;
         }
         if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(Settings.this);
+            if (homeButton) {
+                NavUtils.navigateUpFromSameTask(Settings.this);
+            }
+            if (!homeButton){
+                sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("DOWNLOAD", homeButton);
+                editor.apply();
+                intent = new Intent(Settings.this,MainActivity.class);
+                startActivity(intent);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

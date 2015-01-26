@@ -40,10 +40,10 @@
             <!-- The main content view -->
 
             <LinearLayout
-                android:clickable="true"
-                android:focusableInTouchMode="true"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical">
 
                 <TextView
@@ -287,6 +287,13 @@
                         android:tint="?attr/colorAccent" />
 
                 </RelativeLayout>
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Temp Save ID Button" />
 
                 <Space
                     android:layout_width="match_parent"
