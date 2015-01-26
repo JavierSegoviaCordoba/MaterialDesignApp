@@ -88,33 +88,16 @@ public class MainActivity extends ActionBarActivity {
         toolbarStatusBar();
 
         //Setup Navigation Drawer
-        sharedPreferences = getSharedPreferences("VALUES",MODE_PRIVATE);
-        facebookID = sharedPreferences.getString("FACEBOOKID","javiersegoviacordoba");
-        navigationDrawer(facebookID);
+        navigationDrawer();
 
         // Fix issues for each version and modes (check method at end of this file)
         navigationBarStatusBar();
 
-
         // Setup drawer accounts toggle.
         toogleButtonDrawer();
 
-        relativeLayoutSettings = (RelativeLayout) findViewById(R.id.relativeLayoutSettings);
-        relativeLayoutSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent = new Intent(MainActivity.this, Settings.class);
-                startActivity(intent);
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Do something after some time
-                        mDrawerLayout.closeDrawers();
-                    }
-                }, 500);
-            }
-        });
+        // Open settings method
+        openSettings();
     }
 
     @Override
@@ -173,7 +156,11 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Main Activity");
     }
 
-    public void navigationDrawer(String urlName) {
+    public void navigationDrawer() {
+
+        // Get ID saved in settings
+        sharedPreferences = getSharedPreferences("VALUES",MODE_PRIVATE);
+        facebookID = sharedPreferences.getString("FACEBOOKID","javiersegoviacordoba");
 
         // Cast drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -217,8 +204,7 @@ public class MainActivity extends ActionBarActivity {
         if (!downloaded) {
 
             // Get facebook items (name, username, picture, cover)
-            this.urlName = urlName;
-            new AsyncTaskParseJson().execute(urlName);
+            new AsyncTaskParseJson().execute(facebookID);
 
         } else {
             Toast.makeText(MainActivity.this, downloaded.toString(), Toast.LENGTH_SHORT).show();
@@ -392,6 +378,25 @@ public class MainActivity extends ActionBarActivity {
 
         Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
         Toast.makeText(this, "Leave " + prueba.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void openSettings() {
+        relativeLayoutSettings = (RelativeLayout) findViewById(R.id.relativeLayoutSettings);
+        relativeLayoutSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, Settings.class);
+                startActivity(intent);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after some time
+                        mDrawerLayout.closeDrawers();
+                    }
+                }, 500);
+            }
+        });
     }
 
     public class AsyncTaskParseJson extends AsyncTask<String, String, String> {

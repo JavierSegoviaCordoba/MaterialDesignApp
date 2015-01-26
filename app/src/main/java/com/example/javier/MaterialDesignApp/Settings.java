@@ -83,28 +83,9 @@ public class Settings extends ActionBarActivity {
         // Fix speed/download for setting navigation drawer on back to main activity.
         fixBooleanDownload();
 
-        editTextFacebookID = (EditText) findViewById(R.id.editTextFacebookID);
-        Button buttonTemp = (Button) findViewById(R.id.button);
-        buttonTemp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String facebookID = editTextFacebookID.getText().toString();
-                facebookID = Normalizer.normalize(facebookID, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").replaceAll(" ","");
-                sharedPreferences = getSharedPreferences("VALUES",MODE_PRIVATE);
-                editor = sharedPreferences.edit();
-                editor.putString("FACEBOOKID", facebookID);
-                editor.apply();
+        // Save Facebook ID from editText
 
-                Toast.makeText(Settings.this, facebookID, Toast.LENGTH_SHORT).show();
-
-                sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
-                editor = sharedPreferences.edit();
-                editor.putBoolean("DOWNLOAD", false);
-                editor.apply();
-
-                homeButton = false;
-            }
-        });
+        saveFacebookID();
     }
 
     @Override
@@ -287,6 +268,31 @@ public class Settings extends ActionBarActivity {
                 setTheme(R.style.AppTheme);
                 break;
         }
+    }
+
+    private void saveFacebookID() {
+        editTextFacebookID = (EditText) findViewById(R.id.editTextFacebookID);
+        Button buttonTemp = (Button) findViewById(R.id.button);
+        buttonTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String facebookID = editTextFacebookID.getText().toString();
+                facebookID = Normalizer.normalize(facebookID, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").replaceAll(" ","");
+                sharedPreferences = getSharedPreferences("VALUES",MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putString("FACEBOOKID", facebookID);
+                editor.apply();
+
+                Toast.makeText(Settings.this, facebookID, Toast.LENGTH_SHORT).show();
+
+                sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("DOWNLOAD", false);
+                editor.apply();
+
+                homeButton = false;
+            }
+        });
     }
 
 
