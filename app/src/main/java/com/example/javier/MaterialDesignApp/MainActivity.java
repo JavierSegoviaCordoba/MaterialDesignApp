@@ -430,7 +430,6 @@ public class MainActivity extends ActionBarActivity {
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
