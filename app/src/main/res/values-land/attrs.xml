@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ScrimInsetsView">
-        <attr name="insetForeground" format="reference|color" />
-    </declare-styleable>
     <bool name="fitsSystemWindows">false</bool>
     <dimen name="topMargin">0dp</dimen>
-    <dimen name="space">64dp</dimen>
+    <dimen name="space">16dp</dimen>
     <color name="inset">#0000</color>
 </resources>

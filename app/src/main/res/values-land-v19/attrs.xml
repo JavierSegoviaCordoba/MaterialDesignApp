@@ -4,5 +4,6 @@
     <bool name="translucentStatusBar">true</bool>
     <bool name="translucentNavigationBar">false</bool>
     <dimen name="topMargin">25dp</dimen>
+    <dimen name="space">16dp</dimen>
     <color name="inset">#0000</color>
 </resources>

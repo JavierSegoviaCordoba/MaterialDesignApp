@@ -19,14 +19,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.javier.NavigationDrawerAllVersions.Utilitis.ColorChooserDialog;
@@ -45,6 +45,7 @@ public class Settings extends ActionBarActivity {
     ActivityOptions options;
     final Context context = this;
     TextView textViewName, textViewLink;
+    EditText editTextFacebookID;
     ImageView imageViewToogle, imageViewCover, imageViewPicture;
     ToggleButton toggleButtonDrawer;
     RelativeLayout relativeLayoutDrawerTexts, relativeLayoutChooseTheme;

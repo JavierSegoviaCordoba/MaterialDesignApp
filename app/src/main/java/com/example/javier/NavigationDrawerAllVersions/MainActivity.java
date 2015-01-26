@@ -497,13 +497,15 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        //editor.putInt("POSITION", 0).apply();
-        editor.putBoolean("DOWNLOAD", false);
-        editor.apply();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+            //editor.putInt("POSITION", 0).apply();
+            editor.putBoolean("DOWNLOAD", false);
+            editor.apply();
 
-        Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
-        Toast.makeText(this, "Destroy " + prueba.toString(), Toast.LENGTH_SHORT).show();
+            Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
+            Toast.makeText(this, "Destroy " + prueba.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
