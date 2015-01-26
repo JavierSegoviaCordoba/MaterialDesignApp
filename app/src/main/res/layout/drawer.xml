@@ -195,7 +195,6 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackground"
             android:gravity="start">
 
@@ -218,7 +217,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="72dp"
                 android:singleLine="true"
-                android:text="Inbox (TODO Drawer ListView)"
+                android:text="Inbox (TODO fragments-listView)"
                 android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                 android:textColor="@color/md_text"
                 android:textSize="16sp" />
