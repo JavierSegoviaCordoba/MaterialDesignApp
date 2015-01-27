@@ -201,6 +201,26 @@
                     android:background="?attr/selectableItemBackground">
 
                     <ImageView
+                        android:id="@+id/imageViewPhone3"
+                        android:layout_width="24dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:padding="-6dp"
+                        android:src="@drawable/ic_hardware_phone_android_3"
+                        android:tint="?attr/colorAccent" />
+
+                    <ImageView
+                        android:id="@+id/imageViewPhone2"
+                        android:layout_width="24dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:padding="-6dp"
+                        android:src="@drawable/ic_hardware_phone_android_2"
+                        android:tint="?attr/colorPrimary" />
+
+                    <ImageView
                         android:id="@+id/imageViewPhone"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
@@ -208,7 +228,7 @@
                         android:layout_marginLeft="8dp"
                         android:padding="-6dp"
                         android:src="@drawable/ic_hardware_phone_android"
-                        android:tint="?attr/colorPrimary" />
+                        android:tint="?attr/colorAccent"/>
 
                     <LinearLayout
                         android:id="@+id/linearLayout2"
