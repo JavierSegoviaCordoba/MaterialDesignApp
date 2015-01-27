@@ -117,7 +117,7 @@
                         android:text="CheckBox Widget Title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                         android:textColor="@color/md_text"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                 </RelativeLayout>
 
@@ -142,7 +142,7 @@
                         android:text="RadioButton Widget Title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                         android:textColor="@color/md_text"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </RelativeLayout>
 
                 <TextView
@@ -195,7 +195,7 @@
                         android:layout_marginLeft="8dp"
                         android:padding="-6dp"
                         android:src="@drawable/ic_hardware_phone_android"
-                        android:tint="?attr/colorAccent"/>
+                        android:tint="?attr/colorAccent" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout2"
