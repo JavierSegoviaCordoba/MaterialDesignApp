@@ -87,6 +87,13 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                         android:textColor="@color/md_text"
                         android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:id="@+id/frameLayoutSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -119,6 +126,13 @@
                         android:textColor="@color/md_text"
                         android:textSize="16sp" />
 
+                    <FrameLayout
+                        android:id="@+id/frameLayoutCheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"/>
+
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -143,6 +157,12 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                         android:textColor="@color/md_text"
                         android:textSize="16sp" />
+                    <FrameLayout
+                        android:id="@+id/frameLayoutRadioButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"/>
                 </RelativeLayout>
 
                 <TextView
@@ -160,7 +180,7 @@
                     android:textSize="14sp" />
 
                 <RelativeLayout
-                    android:id="@+id/chooseTheme"
+                    android:id="@+id/relativeLayoutChooseTheme"
                     android:layout_width="match_parent"
                     android:layout_height="88dp"
                     android:layout_marginLeft="16dp"

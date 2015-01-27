@@ -13,6 +13,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -35,7 +36,7 @@ import com.example.javier.MaterialDesignApp.Utilitis.ColorChooserDialog;
 
 import java.text.Normalizer;
 
-public class Settings extends ActionBarActivity {
+public class Settings extends ActionBarActivity implements View.OnClickListener {
 
     final Context context = this;
     Toolbar toolbar;
@@ -46,21 +47,22 @@ public class Settings extends ActionBarActivity {
     ActionBarDrawerToggle mDrawerToggle;
     int theme, scrollPositionX = 0, scrollPositionY = -100;
     Intent intent;
-    FrameLayout statusBar;
     ActivityOptions options;
     TextView textViewName, textViewLink;
     EditText editTextFacebookID;
     ImageView imageViewToogle, imageViewCover, imageViewPicture;
     ToggleButton toggleButtonDrawer;
+    FrameLayout statusBar, frameLayoutSwitch, frameLayoutCheckBox, frameLayoutRadioButton;
     RelativeLayout relativeLayoutDrawerTexts, relativeLayoutChooseTheme;
     LinearLayout linearLayoutMain, linearLayoutSecond;
     String urlName = "javiersegoviacordoba";
     String urlProfile = "https://graph.facebook.com/" + urlName;
     String urlPicture = "https://graph.facebook.com/" + urlName + "picture?type=large&redirect=false";
     String urlCover = "https://graph.facebook.com/" + urlName + "cover";
-    String name, link, cover, picture;
+    String name, link, cover, picture, facebookID;
     Dialog dialog;
-    Boolean homeButton = true;
+    Boolean homeButton = false;
+    SwitchCompat switchCompat;
     CheckedTextView checkBox, radioButton;
 
     @Override
@@ -79,34 +81,37 @@ public class Settings extends ActionBarActivity {
         // Fix issues for each version and modes (check method at end of this file)
         navigationBarStatusBar();
 
-        // Advanced Settings, setup Choose App Theme button (really is relative layout)
-        chooseAppThemeButton();
+        // Declare settings buttons.
+        settingsButtons();
 
         // Fix speed/download for setting navigation drawer on back to main activity.
         fixBooleanDownload();
 
         // Save Facebook ID from editText
         saveFacebookID();
+    }
 
-        checkBox = (CheckedTextView) findViewById(R.id.checkBox);
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkBox.isChecked())
-                    checkBox.setChecked(false);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.frameLayoutSwitch:
+                if (switchCompat.isChecked()) switchCompat.setChecked(false);
+                else switchCompat.setChecked(true);
+                break;
+            case R.id.frameLayoutCheckBox:
+                if (checkBox.isChecked()) checkBox.setChecked(false);
                 else checkBox.setChecked(true);
-            }
-        });
-
-        radioButton = (CheckedTextView) findViewById(R.id.radioButton);
-        radioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (radioButton.isChecked())
-                    radioButton.setChecked(false);
+                break;
+            case R.id.frameLayoutRadioButton:
+                if (radioButton.isChecked()) radioButton.setChecked(false);
                 else radioButton.setChecked(true);
-            }
-        });
+                break;
+            case R.id.relativeLayoutChooseTheme:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                ColorChooserDialog dialog = new ColorChooserDialog();
+                dialog.show(fragmentManager, "fragment_color_chooser");
+                break;
+        }
     }
 
     @Override
@@ -132,15 +137,15 @@ public class Settings extends ActionBarActivity {
             return true;
         }
         if (id == android.R.id.home) {
-            if (homeButton) {
+            if (!homeButton) {
                 NavUtils.navigateUpFromSameTask(Settings.this);
             }
-            if (!homeButton){
+            if (homeButton) {
                 sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
-                editor.putBoolean("DOWNLOAD", homeButton);
+                editor.putBoolean("DOWNLOAD", false);
                 editor.apply();
-                intent = new Intent(Settings.this,MainActivity.class);
+                intent = new Intent(Settings.this, MainActivity.class);
                 startActivity(intent);
             }
             return true;
@@ -160,6 +165,20 @@ public class Settings extends ActionBarActivity {
         settingTheme(theme);
     }
 
+    private void settingsButtons() {
+        relativeLayoutChooseTheme = (RelativeLayout) findViewById(R.id.relativeLayoutChooseTheme);
+        frameLayoutSwitch = (FrameLayout) findViewById(R.id.frameLayoutSwitch);
+        frameLayoutCheckBox = (FrameLayout) findViewById(R.id.frameLayoutCheckBox);
+        frameLayoutRadioButton = (FrameLayout) findViewById(R.id.frameLayoutRadioButton);
+        switchCompat = (SwitchCompat) findViewById(R.id.switchWidget);
+        checkBox = (CheckedTextView) findViewById(R.id.checkBox);
+        radioButton = (CheckedTextView) findViewById(R.id.radioButton);
+        frameLayoutSwitch.setOnClickListener(this);
+        frameLayoutCheckBox.setOnClickListener(this);
+        frameLayoutRadioButton.setOnClickListener(this);
+        relativeLayoutChooseTheme.setOnClickListener(this);
+    }
+
     public void toolbarStatusBar() {
 
         // Cast toolbar and status bar
@@ -170,20 +189,6 @@ public class Settings extends ActionBarActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    public void chooseAppThemeButton() {
-
-        // Setup choose app theme button
-        relativeLayoutChooseTheme = (RelativeLayout) findViewById(R.id.chooseTheme);
-        relativeLayoutChooseTheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                ColorChooserDialog dialog = new ColorChooserDialog();
-                dialog.show(fragmentManager, "fragment_color_chooser");
-            }
-        });
     }
 
     public void fixBooleanDownload() {
@@ -292,14 +297,16 @@ public class Settings extends ActionBarActivity {
     }
 
     private void saveFacebookID() {
+        sharedPreferences = getSharedPreferences("VALUES", MODE_PRIVATE);
+        facebookID = sharedPreferences.getString("FACEBOOKID", "");
         editTextFacebookID = (EditText) findViewById(R.id.editTextFacebookID);
+        editTextFacebookID.setText(facebookID);
         Button buttonTemp = (Button) findViewById(R.id.button);
         buttonTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String facebookID = editTextFacebookID.getText().toString();
-                facebookID = Normalizer.normalize(facebookID, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").replaceAll(" ","");
-                sharedPreferences = getSharedPreferences("VALUES",MODE_PRIVATE);
+                facebookID = editTextFacebookID.getText().toString();
+                facebookID = Normalizer.normalize(facebookID, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").replaceAll(" ", "").toLowerCase();
                 editor = sharedPreferences.edit();
                 editor.putString("FACEBOOKID", facebookID);
                 editor.apply();
@@ -311,11 +318,11 @@ public class Settings extends ActionBarActivity {
                 editor.putBoolean("DOWNLOAD", false);
                 editor.apply();
 
-                homeButton = false;
+                editTextFacebookID.setText(facebookID);
+                homeButton = true;
             }
         });
     }
-
 
     /*public void settingTransition() {
         new Handler().postDelayed(new Runnable() {

@@ -28,10 +28,24 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        sharedPreferences = getActivity().getSharedPreferences("THEMES", Context.MODE_PRIVATE);
+
+        // Save current theme to use when user press dismiss inside dialog
+        sharedPreferences = getActivity().getSharedPreferences("VALUES", Context.MODE_PRIVATE);
         currentTheme = sharedPreferences.getInt("THEME", 0);
 
+        //inflate theme_dialog.xml
         view = inflater.inflate(R.layout.theme_dialog, container);
+
+        // remove title (already defined in theme_dialog.xml)
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        // Declare buttons and onClick methods
+        dialogButtons();
+
+        return view;
+    }
+
+    private void dialogButtons() {
         cardView1 = (CardView) view.findViewById(R.id.card_view1);
         cardView2 = (CardView) view.findViewById(R.id.card_view2);
         cardView3 = (CardView) view.findViewById(R.id.card_view3);
@@ -49,10 +63,6 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         cardView6.setOnClickListener(this);
         buttonDisagree.setOnClickListener(this);
         buttonAgree.setOnClickListener(this);
-
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        return view;
     }
 
     public void onClick(View v) {
@@ -78,6 +88,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
             case R.id.buttonDisagree:
                 ((Settings) getActivity()).setThemeFragment(currentTheme);
                 getDialog().dismiss();
+                break;
             case R.id.buttonAgree:
                 intent = new Intent(getActivity(), Settings.class);
                 startActivity(intent);
