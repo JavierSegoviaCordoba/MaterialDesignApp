@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -60,6 +61,7 @@ public class Settings extends ActionBarActivity {
     String name, link, cover, picture;
     Dialog dialog;
     Boolean homeButton = true;
+    CheckedTextView checkBox, radioButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +86,27 @@ public class Settings extends ActionBarActivity {
         fixBooleanDownload();
 
         // Save Facebook ID from editText
-
         saveFacebookID();
+
+        checkBox = (CheckedTextView) findViewById(R.id.checkBox);
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkBox.isChecked())
+                    checkBox.setChecked(false);
+                else checkBox.setChecked(true);
+            }
+        });
+
+        radioButton = (CheckedTextView) findViewById(R.id.radioButton);
+        radioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (radioButton.isChecked())
+                    radioButton.setChecked(false);
+                else radioButton.setChecked(true);
+            }
+        });
     }
 
     @Override
