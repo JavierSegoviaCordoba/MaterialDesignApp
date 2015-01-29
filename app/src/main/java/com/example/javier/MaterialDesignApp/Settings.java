@@ -63,7 +63,6 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
     Dialog dialog;
     Boolean homeButton = false;
     SwitchCompat switchCompat;
-
     CheckedTextView checkBox, radioButton;
 
     @Override
