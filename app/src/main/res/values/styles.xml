@@ -28,6 +28,9 @@
         <item name="colorControlNormal">@color/md_black_1000_50</item>
         <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
         <item name="android:colorForeground">@color/md_black_1000_75</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/md_blue_500</item>
+
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -44,6 +47,9 @@
         <item name="colorControlNormal">@color/md_black_1000_50</item>
         <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
         <item name="android:colorForeground">@color/md_black_1000_75</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/md_green_500</item>
+
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -60,6 +66,9 @@
         <item name="colorControlNormal">@color/md_black_1000_50</item>
         <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
         <item name="android:colorForeground">@color/md_black_1000_75</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/md_orange_500</item>
+
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -76,6 +85,9 @@
         <item name="colorControlNormal">@color/md_black_1000_50</item>
         <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
         <item name="android:colorForeground">@color/md_black_1000_75</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/md_pink_500</item>
+
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -92,6 +104,9 @@
         <item name="colorControlNormal">@color/md_black_1000_50</item>
         <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
         <item name="android:colorForeground">@color/md_black_1000_75</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/md_indigo_500</item>
+
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
@@ -117,6 +132,8 @@
         <item name="colorControlNormal">@color/md_black_1000_50</item>
         <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
         <item name="android:colorForeground">@color/md_black_1000_75</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/md_brown_500</item>
 
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
@@ -134,6 +151,9 @@
         <item name="colorControlNormal">@color/md_black_1000_50</item>
         <item name="colorSwitchThumbNormal">@color/md_grey_200</item>
         <item name="android:colorForeground">@color/md_black_1000_75</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/md_blue_grey_500</item>
+
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
