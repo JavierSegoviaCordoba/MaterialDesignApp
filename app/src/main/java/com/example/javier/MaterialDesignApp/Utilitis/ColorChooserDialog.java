@@ -20,7 +20,7 @@ import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.Settings;
 
 public class ColorChooserDialog extends DialogFragment implements View.OnClickListener {
-    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6;
+    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8;
     Button buttonDisagree, buttonAgree;
     View view;
     int currentTheme;
@@ -28,6 +28,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
     SharedPreferences.Editor editor;
     ActivityOptions options;
     Intent intent;
+    Boolean themeChanged = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +56,8 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         cardView4 = (CardView) view.findViewById(R.id.card_view4);
         cardView5 = (CardView) view.findViewById(R.id.card_view5);
         cardView6 = (CardView) view.findViewById(R.id.card_view6);
+        cardView7 = (CardView) view.findViewById(R.id.card_view7);
+        cardView8 = (CardView) view.findViewById(R.id.card_view8);
         buttonDisagree = (Button) view.findViewById(R.id.buttonDisagree);
         buttonAgree = (Button) view.findViewById(R.id.buttonAgree);
 
@@ -64,6 +67,8 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         cardView4.setOnClickListener(this);
         cardView5.setOnClickListener(this);
         cardView6.setOnClickListener(this);
+        cardView7.setOnClickListener(this);
+        cardView8.setOnClickListener(this);
         buttonDisagree.setOnClickListener(this);
         buttonAgree.setOnClickListener(this);
     }
@@ -71,28 +76,44 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.card_view1:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
                 ((Settings) getActivity()).setThemeFragment(1);
                 break;
             case R.id.card_view2:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
                 ((Settings) getActivity()).setThemeFragment(2);
                 break;
             case R.id.card_view3:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
                 ((Settings) getActivity()).setThemeFragment(3);
                 break;
             case R.id.card_view4:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
                 ((Settings) getActivity()).setThemeFragment(4);
                 break;
             case R.id.card_view5:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
                 ((Settings) getActivity()).setThemeFragment(5);
                 break;
             case R.id.card_view6:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
                 ((Settings) getActivity()).setThemeFragment(6);
                 break;
+            case R.id.card_view7:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
+                ((Settings) getActivity()).setThemeFragment(7);
+                break;
+            case R.id.card_view8:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
+                ((Settings) getActivity()).setThemeFragment(8);
+                break;
             case R.id.buttonDisagree:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", false).apply();
                 ((Settings) getActivity()).setThemeFragment(currentTheme);
                 getDialog().dismiss();
                 break;
             case R.id.buttonAgree:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
                 intent = new Intent(getActivity(), Settings.class);
                 startActivity(intent);
                 break;

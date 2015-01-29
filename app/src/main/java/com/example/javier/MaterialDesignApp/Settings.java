@@ -13,6 +13,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -63,7 +64,7 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
     String urlCover = "https://graph.facebook.com/" + urlName + "cover";
     String name, link, cover, picture, facebookID;
     Dialog dialog;
-    Boolean homeButton = false;
+    Boolean homeButton = false, themeChanged;
     SwitchCompat switchCompat;
     CheckedTextView checkBox, radioButton;
 
@@ -91,7 +92,13 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
 
         // Save Facebook ID from editText
         saveFacebookID();
+
+        // Check if theme is changed to start main activity with toolbar back button
+        themeChanged();
+
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -143,10 +150,11 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
                 NavUtils.navigateUpFromSameTask(Settings.this);
             }
             if (homeButton) {
-                sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
-                editor = sharedPreferences.edit();
-                editor.putBoolean("DOWNLOAD", false);
-                editor.apply();
+                if (!themeChanged) {
+                    editor = sharedPreferences.edit();
+                    editor.putBoolean("DOWNLOAD", false);
+                    editor.apply();
+                }
                 intent = new Intent(Settings.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -167,7 +175,13 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
         settingTheme(theme);
     }
 
+    private void themeChanged() {
+        themeChanged = sharedPreferences.getBoolean("THEMECHANGED",false);
+        homeButton = true;
+    }
+
     private void settingsButtons() {
+        editTextFacebookID = (EditText) findViewById(R.id.editTextFacebookID);
         relativeLayoutChooseTheme = (RelativeLayout) findViewById(R.id.relativeLayoutChooseTheme);
         frameLayoutSwitch = (FrameLayout) findViewById(R.id.frameLayoutSwitch);
         frameLayoutCheckBox = (FrameLayout) findViewById(R.id.frameLayoutCheckBox);
@@ -175,6 +189,7 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
         switchCompat = (SwitchCompat) findViewById(R.id.switchWidget);
         checkBox = (CheckedTextView) findViewById(R.id.checkBox);
         radioButton = (CheckedTextView) findViewById(R.id.radioButton);
+        editTextFacebookID.setText(sharedPreferences.getString("FACEBOOKID",""));
         frameLayoutSwitch.setOnClickListener(this);
         frameLayoutCheckBox.setOnClickListener(this);
         frameLayoutRadioButton.setOnClickListener(this);
@@ -196,7 +211,6 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
     public void fixBooleanDownload() {
 
         // Fix download boolean value
-        sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putBoolean("DOWNLOAD", true);
         editor.apply();
@@ -228,6 +242,14 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
                 editor = sharedPreferences.edit();
                 editor.putInt("THEME", 6).apply();
                 break;
+            case 7:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 7).apply();
+                break;
+            case 8:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 8).apply();
+                break;
         }
     }
 
@@ -251,6 +273,7 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
                 final int color = typedValue21.data;
                 FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
                 statusBar.setBackgroundColor(color);
+                getWindow().setStatusBarColor(color);
             }
         }
 
@@ -292,6 +315,12 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
             case 6:
                 setTheme(R.style.AppTheme6);
                 break;
+            case 7:
+                setTheme(R.style.AppTheme7);
+                break;
+            case 8:
+                setTheme(R.style.AppTheme8);
+                break;
             default:
                 setTheme(R.style.AppTheme);
                 break;
@@ -299,7 +328,6 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
     }
 
     private void saveFacebookID() {
-        sharedPreferences = getSharedPreferences("VALUES", MODE_PRIVATE);
         facebookID = sharedPreferences.getString("FACEBOOKID", "");
         editTextFacebookID = (EditText) findViewById(R.id.editTextFacebookID);
         editTextFacebookID.setText(facebookID);
