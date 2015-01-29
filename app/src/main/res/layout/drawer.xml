@@ -22,30 +22,31 @@
             android:background="@color/md_black_1000_15" />
 
         <RelativeLayout
-            android:id="@+id/relativeLayoutDrawerTexts"
             android:layout_width="match_parent"
-            android:layout_height="68dp"
-            android:layout_alignBottom="@id/imageViewCover"
+            android:layout_height="172dp"
             android:clickable="true">
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/linearLayoutHeaderTexts"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
+                android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp">
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textViewName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginRight="32dp"
-                    android:fontFamily="sans-serif-medium"
                     android:singleLine="true"
                     android:text="Name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionMode.Title.Inverse"
                     android:textColor="@color/md_text_white"
                     android:textSize="14sp" />
 
@@ -53,37 +54,29 @@
                     android:id="@+id/textViewUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/textViewName"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginRight="32dp"
-                    android:fontFamily="sans-serif"
                     android:singleLine="true"
                     android:text="User Name"
                     android:textColor="@color/md_secondary_text_icons_white"
                     android:textSize="14sp" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/imageViewToggle"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginRight="24dp"
                 android:background="@drawable/ic_action_navigation_arrow_drop_down" />
-
 
         </RelativeLayout>
 
         <ToggleButton
             android:id="@+id/toggleButtonDrawer"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
+            android:layout_width="10dp"
             android:layout_height="172dp"
             android:background="?attr/selectableItemBackground"
             android:checked="false"
