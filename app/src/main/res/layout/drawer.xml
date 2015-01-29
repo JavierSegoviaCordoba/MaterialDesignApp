@@ -256,6 +256,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                 android:textColor="@color/md_text"
                 android:textSize="16sp" />
+
         </RelativeLayout>
 
     </LinearLayout>
