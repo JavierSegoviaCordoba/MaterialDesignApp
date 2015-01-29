@@ -76,7 +76,7 @@
         <ToggleButton
             android:id="@+id/toggleButtonDrawer"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="10dp"
+            android:layout_width="match_parent"
             android:layout_height="172dp"
             android:background="?attr/selectableItemBackground"
             android:checked="false"
