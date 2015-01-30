@@ -21,8 +21,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
@@ -53,11 +55,11 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
     ActivityOptions options;
     TextView textViewName, textViewLink;
     EditText editTextFacebookID;
-    ImageView imageViewToogle, imageViewCover, imageViewPicture;
+    ImageView imageViewToogle, imageViewCover, imageViewPicture, imageViewSend;
     ToggleButton toggleButtonDrawer;
     FrameLayout statusBar, frameLayoutSwitch, frameLayoutCheckBox, frameLayoutRadioButton;
     RelativeLayout relativeLayoutDrawerTexts, relativeLayoutChooseTheme;
-    LinearLayout linearLayoutMain, linearLayoutSecond;
+    LinearLayout linearLayoutMain, linearLayoutSecond, linearLayoutSettings;
     String urlName = "javiersegoviacordoba";
     String urlProfile = "https://graph.facebook.com/" + urlName;
     String urlPicture = "https://graph.facebook.com/" + urlName + "picture?type=large&redirect=false";
@@ -65,6 +67,7 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
     String name, link, cover, picture, facebookID;
     Dialog dialog;
     Boolean homeButton = false, themeChanged;
+    ViewGroup.LayoutParams layoutParamsStatusBar;
     SwitchCompat switchCompat;
     CheckedTextView checkBox, radioButton;
 
@@ -95,10 +98,7 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
 
         // Check if theme is changed to start main activity with toolbar back button
         themeChanged();
-
     }
-
-
 
     @Override
     public void onClick(View v) {
@@ -186,6 +186,7 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
         frameLayoutSwitch = (FrameLayout) findViewById(R.id.frameLayoutSwitch);
         frameLayoutCheckBox = (FrameLayout) findViewById(R.id.frameLayoutCheckBox);
         frameLayoutRadioButton = (FrameLayout) findViewById(R.id.frameLayoutRadioButton);
+        layoutParamsStatusBar = statusBar.getLayoutParams();
         switchCompat = (SwitchCompat) findViewById(R.id.switchWidget);
         checkBox = (CheckedTextView) findViewById(R.id.checkBox);
         radioButton = (CheckedTextView) findViewById(R.id.radioButton);
@@ -331,8 +332,8 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
         facebookID = sharedPreferences.getString("FACEBOOKID", "");
         editTextFacebookID = (EditText) findViewById(R.id.editTextFacebookID);
         editTextFacebookID.setText(facebookID);
-        Button buttonTemp = (Button) findViewById(R.id.button);
-        buttonTemp.setOnClickListener(new View.OnClickListener() {
+        imageViewSend = (ImageView) findViewById(R.id.imageViewSend);
+        imageViewSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 facebookID = editTextFacebookID.getText().toString();

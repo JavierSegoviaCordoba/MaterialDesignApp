@@ -30,12 +30,11 @@
         android:scrollbarThumbVertical="@drawable/scrollbar"
         android:scrollbars="vertical">
 
-        <RelativeLayout
+        <FrameLayout
             android:id="@+id/contentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:orientation="vertical">
+            android:background="@android:color/white">
 
             <!-- The main content view -->
 
@@ -93,7 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true"/>
+                        android:clickable="true" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -131,7 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true"/>
+                        android:clickable="true" />
 
                 </RelativeLayout>
 
@@ -157,12 +156,13 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                         android:textColor="@color/md_text"
                         android:textSize="16sp" />
+
                     <FrameLayout
                         android:id="@+id/frameLayoutRadioButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true"/>
+                        android:clickable="true" />
                 </RelativeLayout>
 
                 <TextView
@@ -259,54 +259,61 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginStart="8dp"
                     android:focusable="true"
-                    android:focusableInTouchMode="true">
-
-                    <EditText
-                        android:id="@+id/editTextFacebookID"
-                        style="@style/Widget.AppCompat.EditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="64dp"
-                        android:layout_marginRight="8dp"
-                        android:gravity="center_vertical"
-                        android:hint="Facebook ID"
-                        android:textColor="@color/md_text"
-                        android:textColorHint="@color/md_disabled_hint_text" />
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical">
 
                     <ImageView
+                        android:layout_weight="0"
                         android:id="@+id/imageViewFacebook"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:src="@drawable/ic_facebook_icon_2013"
                         android:tint="?attr/colorAccent" />
 
-                </RelativeLayout>
+                    <EditText
+                        android:layout_weight="1"
+                        android:id="@+id/editTextFacebookID"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="32dp"
+                        android:gravity="center_vertical"
+                        android:hint="Facebook ID"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:textColor="@color/md_text"
+                        android:textColorHint="@color/md_disabled_hint_text" />
 
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Temp Save ID Button" />
+                    <ImageView
+                        android:clickable="true"
+                        android:padding="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="0"
+                        android:id="@+id/imageViewSend"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/ic_content_send"
+                        android:tint="?attr/colorAccent" />
 
+                </LinearLayout>
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/space" />
             </LinearLayout>
-        </RelativeLayout>
+        </FrameLayout>
     </ScrollView>
 
 </LinearLayout>
