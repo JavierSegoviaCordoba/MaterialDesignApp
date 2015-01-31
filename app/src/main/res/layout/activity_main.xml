@@ -10,9 +10,9 @@
     <!-- The toolbar and main content view -->
 
     <LinearLayout
+        android:background="@color/md_white_1000"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:orientation="vertical">
 
         <FrameLayout
@@ -31,98 +31,13 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        <ScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbarThumbVertical="@drawable/scrollbar"
-            android:scrollbars="vertical">
 
-            <LinearLayout
-                android:id="@+id/contentLayout"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewNews"
+                android:scrollbars="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"/>
 
-                <!-- The main content view -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textViewList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center_vertical"
-                        android:text="TODO Fragments - ListViews"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
-                        android:textColor="?attr/colorAccent"
-                        android:textSize="14sp" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="88dp"
-                        android:background="?attr/selectableItemBackground">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="16dp"
-                            android:src="@drawable/ic_todo" />
-
-                        <LinearLayout
-                            android:id="@+id/linearLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="72dp"
-                            android:layout_marginRight="16dp"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textViewTheme"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Check setting to change theme"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
-                                android:textColor="@color/md_text"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/textViewThemeDescription"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Open settings inside navigation drawer to check app themes and other widgets"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
-                                android:textColor="@color/md_secondary_text_icons"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <FrameLayout
-                        android:id="@+id/frameLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/md_divider" />
-
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/space" />
-            </LinearLayout>
-        </ScrollView>
 
     </LinearLayout>
 

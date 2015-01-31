@@ -298,13 +298,13 @@
 
                     <ImageView
                         android:clickable="true"
-                        android:padding="8dp"
+                        android:padding="16dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_marginRight="8dp"
                         android:layout_weight="0"
                         android:id="@+id/imageViewSend"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:src="@drawable/ic_content_send"
                         android:tint="?attr/colorAccent" />
 

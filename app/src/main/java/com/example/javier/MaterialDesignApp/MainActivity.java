@@ -16,8 +16,12 @@ import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,17 +37,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.javier.MaterialDesignApp.Utilitis.CircleTransform;
+import com.example.javier.MaterialDesignApp.RecyclerViewAdapters.NewsAdapter;
+import com.example.javier.MaterialDesignApp.RecyclerViewClasses.News;
+import com.example.javier.MaterialDesignApp.Utilitis.CircleTransformWhite;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 // You can check the methods that I use inside onCreate below menu methods
 
@@ -64,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
     ToggleButton toggleButtonDrawer;
     RelativeLayout relativeLayoutDrawerTexts, relativeLayoutChooseTheme, relativeLayoutSettings;
     LinearLayout linearLayoutMain, linearLayoutSecond;
-    String urlName = "";
+    String urlName = "", urlPost = "";
     String urlProfile = "https://graph.facebook.com/" + urlName;
     String urlPicture = "https://graph.facebook.com/" + urlName + "picture?type=large&redirect=false";
     String urlCover = "https://graph.facebook.com/" + urlName + "cover";
@@ -73,6 +87,10 @@ public class MainActivity extends ActionBarActivity {
     Drawable drawablePicture, drawableCover;
     File file, folder;
     Boolean downloaded;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    String[] newsTitle, newsContent, newsImage;
+    int postNumber = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +101,9 @@ public class MainActivity extends ActionBarActivity {
 
         // Set content to the view
         setContentView(R.layout.activity_main);
+
+        // Setup RecyclerView News
+        recyclerViewNews();
 
         //Setup Status Bar and Toolbar
         toolbarStatusBar();
@@ -100,6 +121,21 @@ public class MainActivity extends ActionBarActivity {
         openSettings();
     }
 
+    private void recyclerViewNews() {
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewNews);
+
+        // improve performance if you know that changes in content
+        // do not change the size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
+        new AsyncTaskNewsParseJson().execute(urlPost);
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -109,7 +145,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle action bar item_news clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -153,14 +189,13 @@ public class MainActivity extends ActionBarActivity {
 
         // Get support to the toolbar and change its title
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Main Activity");
     }
 
     public void navigationDrawer() {
 
         // Get ID saved in settings
-        sharedPreferences = getSharedPreferences("VALUES",MODE_PRIVATE);
-        facebookID = sharedPreferences.getString("FACEBOOKID","javiersegoviacordoba");
+        sharedPreferences = getSharedPreferences("VALUES", MODE_PRIVATE);
+        facebookID = sharedPreferences.getString("FACEBOOKID", "javiersegoviacordoba");
 
         // Cast drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -204,7 +239,7 @@ public class MainActivity extends ActionBarActivity {
         if (!downloaded) {
 
             // Get facebook items (name, username, picture, cover)
-            new AsyncTaskParseJson().execute(facebookID);
+            new AsyncTaskFacebookParseJson().execute(facebookID);
 
         } else {
             Toast.makeText(MainActivity.this, downloaded.toString(), Toast.LENGTH_SHORT).show();
@@ -405,7 +440,7 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-    public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
+    public class AsyncTaskFacebookParseJson extends AsyncTask<String, String, String> {
 
         // facebook urls
         @Override
@@ -427,9 +462,9 @@ public class MainActivity extends ActionBarActivity {
                 jsonObjectPicture = JsonParser.readJsonFromUrl(urlPicture);
                 jsonObjectCover = JsonParser.readJsonFromUrl(urlCover);
 
-                // Storing each json item in variable
+                // Storing each json item_news in variable
                 name = jsonObjectProfile.getString("name");
-                username ="Facebook ID: " + jsonObjectProfile.getString("username");
+                username = "Facebook ID: " + jsonObjectProfile.getString("username");
                 picture = jsonObjectPicture.getJSONObject("data").getString("url");
                 cover = jsonObjectCover.getJSONObject("cover").getString("source");
 
@@ -477,7 +512,7 @@ public class MainActivity extends ActionBarActivity {
                             }
                         }
                     }).start();
-                    Toast.makeText(MainActivity.this,"Creating Picture",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Creating Picture", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -516,13 +551,13 @@ public class MainActivity extends ActionBarActivity {
                 }
             };
 
-            Picasso.with(context).load(picture).transform(new CircleTransform()).into(targetPicture);
+            Picasso.with(context).load(picture).transform(new CircleTransformWhite()).into(targetPicture);
             Picasso.with(context).load(cover).into(targetCover);
 
             imageViewPicture.setTag(targetPicture);
             imageViewCover.setTag(targetCover);
 
-            Picasso.with(context).load(picture).placeholder(imageViewPicture.getDrawable()).transform(new CircleTransform()).into(imageViewPicture);
+            Picasso.with(context).load(picture).placeholder(imageViewPicture.getDrawable()).transform(new CircleTransformWhite()).into(imageViewPicture);
             Picasso.with(context).load(cover).placeholder(imageViewCover.getDrawable()).into(imageViewCover);
 
             sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
@@ -531,4 +566,55 @@ public class MainActivity extends ActionBarActivity {
             editor.apply();
         }
     }
+
+    public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
+
+        // facebook urls
+        @Override
+        protected void onPreExecute() {
+        }
+
+        // get JSON Object
+        @Override
+        protected String doInBackground(String... url) {
+
+            urlPost = url[0];
+            JSONObject jsonObjectPost;
+
+            try {
+                jsonObjectPost = JsonParser.readJsonFromUrl(urlPost);
+                postNumber = jsonObjectPost.getJSONArray("posts").length();
+                newsTitle = new String[postNumber];
+                newsContent = new String[postNumber];
+                newsImage = new String[postNumber];
+                for (int i = 0; i < postNumber; i++){
+                    newsTitle[i] = Html.fromHtml(jsonObjectPost.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
+                    newsContent[i] = Html.fromHtml(jsonObjectPost.getJSONArray("posts").getJSONObject(i).getString("content")).toString();
+                    newsImage[i] = Html.fromHtml(jsonObjectPost.getJSONArray("posts").getJSONObject(i).getString("thumbnail")).toString();
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        // Set facebook items to the textviews and imageviews
+        @Override
+        protected void onPostExecute(String result) {
+
+            //Data set used by the adapter. This data will be displayed.
+            ArrayList<News> newses = new ArrayList<>();
+
+            for (int i = 0; i < postNumber; i++){
+                newses.add(new News(newsTitle[i], newsContent[i],newsImage[i]));
+            }
+
+            // Create the adapter
+            adapter = new NewsAdapter(MainActivity.this, newses);
+            recyclerView.setAdapter(adapter);
+        }
+    }
+
+
 }
