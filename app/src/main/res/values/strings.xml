@@ -24,35 +24,6 @@
         Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
         Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur,
         vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</string>
-
-    <string-array name="section_1">
-        <item>@string/Inbox</item>
-        <item>@string/Starred</item>
-        <item>@string/Sent_mail</item>
-    </string-array>
-
-    <string name="Inbox">Inbox</string>
-    <string name="Starred">Starred</string>
-    <string name="Sent_mail">Sent mail</string>
-
-    <string-array name="section_2">
-        <item>@string/All_mail</item>
-        <item>@string/Trash</item>
-        <item>@string/Spam</item>
-    </string-array>
-
-    <string name="All_mail">All mail</string>
-    <string name="Trash">Trash</string>
-    <string name="Spam">Spam</string>
-
-    <string-array name="section_3">
-        <item>@string/Seccion31</item>
-        <item>@string/Seccion32</item>
-        <item>@string/Seccion33</item>
-    </string-array>
-
-    <string name="Seccion31">http://www.brrservices.com/wp-content/uploads/2014/09/people-icon.png</string>
-    <string name="Seccion32">http://www.maxdechirurgien.com/pub/people_icon.png</string>
-    <string name="Seccion33">http://icons.iconarchive.com/icons/graphicloads/100-flat-2/256/people-icon.png</string>
+    <string name="title_activity_news_detail">NewsDetail</string>
 
 </resources>

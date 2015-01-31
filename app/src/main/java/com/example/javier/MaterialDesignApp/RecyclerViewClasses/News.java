@@ -4,20 +4,20 @@ package com.example.javier.MaterialDesignApp.RecyclerViewClasses;
 public class News {
 
     String title;
-    String content;
+    String excerpt;
     String image;
 
-    public News(String title, String content, String image) {
+    public News(String title, String excerpt, String image) {
         this.title = title;
-        this.content = content;
+        this.excerpt = excerpt;
         this.image = image;
     }
     public String getTitle() {
         return title;
     }
 
-    public String getContent() {
-        return content;
+    public String getExcerpt() {
+        return excerpt;
     }
 
     public String getImage() {

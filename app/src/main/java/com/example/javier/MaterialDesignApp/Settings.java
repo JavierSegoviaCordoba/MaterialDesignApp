@@ -39,7 +39,11 @@ import android.widget.ToggleButton;
 
 import com.example.javier.MaterialDesignApp.Utilitis.ColorChooserDialog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.Normalizer;
+import java.util.Set;
 
 public class Settings extends ActionBarActivity implements View.OnClickListener {
 
@@ -70,6 +74,7 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
     ViewGroup.LayoutParams layoutParamsStatusBar;
     SwitchCompat switchCompat;
     CheckedTextView checkBox, radioButton;
+    JSONArray jsonArrayNewsPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

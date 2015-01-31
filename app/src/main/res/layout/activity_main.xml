@@ -10,9 +10,9 @@
     <!-- The toolbar and main content view -->
 
     <LinearLayout
-        android:background="@color/md_white_1000"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/md_white_1000"
         android:orientation="vertical">
 
         <FrameLayout
@@ -31,13 +31,27 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminate="true" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerViewNews"
-                android:scrollbars="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewNews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/space"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:scrollbarSize="3dp"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbarThumbVertical="?attr/colorAccent"
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 

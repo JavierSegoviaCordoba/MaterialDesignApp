@@ -51,7 +51,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         final TextView textViewContent = (TextView) holder.view.findViewById(R.id.textViewItemContent);
         final ImageView imageViewImage = (ImageView) holder.view.findViewById(R.id.imageViewImage);
         textViewTitle.setText(news.get(position).getTitle());
-        textViewContent.setText(news.get(position).getContent());
+        textViewContent.setText(news.get(position).getExcerpt());
         Picasso.with(context).load(news.get(position).getImage()).placeholder(holder.view.getResources().getDrawable(R.drawable.ic_contact_icon)).transform(new CircleTransform()).into(imageViewImage);
     }
 

@@ -16,12 +16,12 @@ import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +31,7 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -40,23 +41,18 @@ import android.widget.ToggleButton;
 import com.example.javier.MaterialDesignApp.RecyclerViewAdapters.NewsAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerViewClasses.News;
 import com.example.javier.MaterialDesignApp.Utilitis.CircleTransformWhite;
+import com.example.javier.MaterialDesignApp.Utilitis.DividerItemDecoration;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 // You can check the methods that I use inside onCreate below menu methods
@@ -89,8 +85,10 @@ public class MainActivity extends ActionBarActivity {
     Boolean downloaded;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    String[] newsTitle, newsContent, newsImage;
+    String[] newsTitle, newsExcerpt, newsImage, newsContent;
     int postNumber = 99;
+    JSONObject jsonObjectNewsPosts;
+    JSONArray jsonArrayNewsContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +122,16 @@ public class MainActivity extends ActionBarActivity {
     private void recyclerViewNews() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewNews);
 
+        // Divider
+        recyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(android.R.drawable.divider_horizontal_bright)));
+
         // improve performance if you know that changes in content
         // do not change the size of the RecyclerView
         recyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
         new AsyncTaskNewsParseJson().execute(urlPost);
@@ -569,9 +571,13 @@ public class MainActivity extends ActionBarActivity {
 
     public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
 
-        // facebook urls
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
         @Override
         protected void onPreExecute() {
+
+            progressBar.setVisibility(View.VISIBLE);
+
         }
 
         // get JSON Object
@@ -579,23 +585,23 @@ public class MainActivity extends ActionBarActivity {
         protected String doInBackground(String... url) {
 
             urlPost = url[0];
-            JSONObject jsonObjectPost;
 
             try {
-                jsonObjectPost = JsonParser.readJsonFromUrl(urlPost);
-                postNumber = jsonObjectPost.getJSONArray("posts").length();
+                jsonObjectNewsPosts = JsonParser.readJsonFromUrl(urlPost);
+                postNumber = jsonObjectNewsPosts.getJSONArray("posts").length();
+                jsonArrayNewsContent = jsonObjectNewsPosts.getJSONArray("posts");
+                sharedPreferences.edit().putString("NEWSCONTENT", jsonArrayNewsContent.toString()).apply();
                 newsTitle = new String[postNumber];
-                newsContent = new String[postNumber];
+                newsExcerpt = new String[postNumber];
                 newsImage = new String[postNumber];
                 for (int i = 0; i < postNumber; i++){
-                    newsTitle[i] = Html.fromHtml(jsonObjectPost.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
-                    newsContent[i] = Html.fromHtml(jsonObjectPost.getJSONArray("posts").getJSONObject(i).getString("content")).toString();
-                    newsImage[i] = Html.fromHtml(jsonObjectPost.getJSONArray("posts").getJSONObject(i).getString("thumbnail")).toString();
+                    newsTitle[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
+                    newsExcerpt[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
+                    newsImage[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("thumbnail")).toString();
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
@@ -607,12 +613,14 @@ public class MainActivity extends ActionBarActivity {
             ArrayList<News> newses = new ArrayList<>();
 
             for (int i = 0; i < postNumber; i++){
-                newses.add(new News(newsTitle[i], newsContent[i],newsImage[i]));
+                newses.add(new News(newsTitle[i], newsExcerpt[i], newsImage[i]));
             }
 
             // Create the adapter
             adapter = new NewsAdapter(MainActivity.this, newses);
             recyclerView.setAdapter(adapter);
+
+            progressBar.setVisibility(View.GONE);
         }
     }
 
