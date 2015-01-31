@@ -1,4 +1,4 @@
-package com.example.javier.MaterialDesignApp.Utilitis;
+package com.example.javier.MaterialDesignApp.Dialogs;
 
 import android.app.ActivityOptions;
 import android.content.Context;

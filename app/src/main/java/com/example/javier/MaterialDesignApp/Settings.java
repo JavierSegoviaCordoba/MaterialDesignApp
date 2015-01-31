@@ -13,7 +13,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -21,11 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -37,13 +32,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.javier.MaterialDesignApp.Utilitis.ColorChooserDialog;
+import com.example.javier.MaterialDesignApp.Dialogs.ColorChooserDialog;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.text.Normalizer;
-import java.util.Set;
 
 public class Settings extends ActionBarActivity implements View.OnClickListener {
 

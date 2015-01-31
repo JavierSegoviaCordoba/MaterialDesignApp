@@ -1,4 +1,4 @@
-package com.example.javier.MaterialDesignApp.Utilitis;
+package com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations;
 
 import android.content.Context;
 import android.content.res.TypedArray;

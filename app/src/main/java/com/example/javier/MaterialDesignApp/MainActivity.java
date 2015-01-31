@@ -38,10 +38,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.javier.MaterialDesignApp.RecyclerViewAdapters.NewsAdapter;
-import com.example.javier.MaterialDesignApp.RecyclerViewClasses.News;
-import com.example.javier.MaterialDesignApp.Utilitis.CircleTransformWhite;
-import com.example.javier.MaterialDesignApp.Utilitis.DividerItemDecoration;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.NewsAdapter;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.News;
+import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransformWhite;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -82,13 +82,14 @@ public class MainActivity extends ActionBarActivity {
     Bitmap bitmapPicture, bitmapCover;
     Drawable drawablePicture, drawableCover;
     File file, folder;
-    Boolean downloaded;
+    Boolean downloaded, error = false;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     String[] newsTitle, newsExcerpt, newsImage, newsContent;
     int postNumber = 99;
     JSONObject jsonObjectNewsPosts;
     JSONArray jsonArrayNewsContent;
+    ArrayList<News> newses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,11 +101,11 @@ public class MainActivity extends ActionBarActivity {
         // Set content to the view
         setContentView(R.layout.activity_main);
 
-        // Setup RecyclerView News
-        recyclerViewNews();
-
         //Setup Status Bar and Toolbar
         toolbarStatusBar();
+
+        // Setup RecyclerView News
+        recyclerViewNews();
 
         //Setup Navigation Drawer
         navigationDrawer();
@@ -117,9 +118,19 @@ public class MainActivity extends ActionBarActivity {
 
         // Open settings method
         openSettings();
+
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
+                new AsyncTaskNewsParseJson().execute(urlPost);
+            }
+        });
     }
 
     private void recyclerViewNews() {
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewNews);
 
         // Divider
@@ -135,6 +146,7 @@ public class MainActivity extends ActionBarActivity {
 
         urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
         new AsyncTaskNewsParseJson().execute(urlPost);
+
     }
 
 
@@ -571,13 +583,10 @@ public class MainActivity extends ActionBarActivity {
 
     public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
 
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         @Override
         protected void onPreExecute() {
-
-            progressBar.setVisibility(View.VISIBLE);
-
         }
 
         // get JSON Object
@@ -585,7 +594,6 @@ public class MainActivity extends ActionBarActivity {
         protected String doInBackground(String... url) {
 
             urlPost = url[0];
-
             try {
                 jsonObjectNewsPosts = JsonParser.readJsonFromUrl(urlPost);
                 postNumber = jsonObjectNewsPosts.getJSONArray("posts").length();
@@ -594,13 +602,15 @@ public class MainActivity extends ActionBarActivity {
                 newsTitle = new String[postNumber];
                 newsExcerpt = new String[postNumber];
                 newsImage = new String[postNumber];
-                for (int i = 0; i < postNumber; i++){
+                for (int i = 0; i < postNumber; i++) {
                     newsTitle[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
                     newsExcerpt[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
                     newsImage[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("thumbnail")).toString();
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
+                newsTitle = new String[0];
+                error = true;
             }
             return null;
         }
@@ -609,20 +619,24 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
 
+            newses = new ArrayList<>();
+
             //Data set used by the adapter. This data will be displayed.
-            ArrayList<News> newses = new ArrayList<>();
-
-            for (int i = 0; i < postNumber; i++){
-                newses.add(new News(newsTitle[i], newsExcerpt[i], newsImage[i]));
+            if (newsTitle.length != 0) {
+                for (int i = 0; i < postNumber; i++) {
+                    newses.add(new News(newsTitle[i], newsExcerpt[i], newsImage[i]));
+                }
             }
-
+            if (error) {
+                Toast.makeText(MainActivity.this, "Error de conexión", Toast.LENGTH_LONG).show();
+            }
             // Create the adapter
             adapter = new NewsAdapter(MainActivity.this, newses);
             recyclerView.setAdapter(adapter);
+            swipeRefreshLayout.setRefreshing(false);
 
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.GONE);
         }
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.example.javier.MaterialDesignApp.RecyclerViewClasses;
+package com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses;
 
 
 public class News {

@@ -1,4 +1,4 @@
-package com.example.javier.MaterialDesignApp.RecyclerViewAdapters;
+package com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.javier.MaterialDesignApp.R;
-import com.example.javier.MaterialDesignApp.RecyclerViewClasses.News;
-import com.example.javier.MaterialDesignApp.Utilitis.CircleTransform;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.News;
+import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransform;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
