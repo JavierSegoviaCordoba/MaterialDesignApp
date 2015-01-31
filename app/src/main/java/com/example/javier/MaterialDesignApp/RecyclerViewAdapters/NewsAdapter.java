@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerViewClasses.News;
 import com.example.javier.MaterialDesignApp.Utilitis.CircleTransform;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
