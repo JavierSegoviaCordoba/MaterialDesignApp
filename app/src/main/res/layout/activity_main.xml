@@ -39,11 +39,12 @@
             android:layout_gravity="center_horizontal"
             android:indeterminate="true" />
 
-        <com.example.javier.MaterialDesignApp.Utilitis.SwipeRefresh.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:direction="top">
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewNews"
@@ -58,7 +59,7 @@
                 android:scrollbarThumbVertical="?attr/colorAccent"
                 android:scrollbars="vertical" />
 
-        </com.example.javier.MaterialDesignApp.Utilitis.SwipeRefresh.SwipeRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

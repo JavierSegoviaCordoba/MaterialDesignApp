@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -90,6 +91,7 @@ public class MainActivity extends ActionBarActivity {
     JSONObject jsonObjectNewsPosts;
     JSONArray jsonArrayNewsContent;
     ArrayList<News> newses;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +121,16 @@ public class MainActivity extends ActionBarActivity {
         // Open settings method
         openSettings();
 
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) findViewById(R.id.swipe_container);
+
+        TypedValue typedValueColorPrimary = new TypedValue();
+        TypedValue typedValueColorAccent = new TypedValue();
+        MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValueColorPrimary, true);
+        MainActivity.this.getTheme().resolveAttribute(R.attr.colorAccent, typedValueColorAccent, true);
+        final int colorPrimary = typedValueColorPrimary.data, colorAccent = typedValueColorAccent.data;
+        swipeRefreshLayout.setColorSchemeColors(colorPrimary,colorAccent);
+
+        swipeRefreshLayout.setOnRefreshListener(new android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
@@ -583,7 +593,6 @@ public class MainActivity extends ActionBarActivity {
 
     public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
 
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         @Override
         protected void onPreExecute() {
@@ -633,10 +642,12 @@ public class MainActivity extends ActionBarActivity {
             // Create the adapter
             adapter = new NewsAdapter(MainActivity.this, newses);
             recyclerView.setAdapter(adapter);
-            swipeRefreshLayout.setRefreshing(false);
 
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.GONE);
+
+            swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) findViewById(R.id.swipe_container);
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }
