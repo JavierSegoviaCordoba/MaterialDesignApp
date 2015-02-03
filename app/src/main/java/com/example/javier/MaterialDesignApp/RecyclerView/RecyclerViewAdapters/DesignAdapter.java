@@ -9,14 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.javier.MaterialDesignApp.R;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.News;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransform;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
+public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.ViewHolder>{
 
-    private ArrayList<News> news;
+    private ArrayList<Design> designs;
     Context context;
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -28,14 +28,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
 
 
     // Adapter's Constructor
-    public NewsAdapter(Context context, ArrayList<News> news) {
-        this.news = news;
+    public DesignAdapter(Context context, ArrayList<Design> designs) {
+        this.designs = designs;
         this.context = context;
     }
 
     // Create new views. This is invoked by the layout manager.
     @Override
-    public NewsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DesignAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view by inflating the row item xml.
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news, parent, false);
         v.setOnClickListener(onClickListener);
@@ -50,15 +50,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         final TextView textViewTitle = (TextView) holder.view.findViewById(R.id.textViewItemTitle);
         final TextView textViewContent = (TextView) holder.view.findViewById(R.id.textViewItemContent);
         final ImageView imageViewImage = (ImageView) holder.view.findViewById(R.id.imageViewImage);
-        textViewTitle.setText(news.get(position).getTitle());
-        textViewContent.setText(news.get(position).getExcerpt());
-        Picasso.with(context).load(news.get(position).getImage()).placeholder(holder.view.getResources().getDrawable(R.drawable.ic_contact_icon)).transform(new CircleTransform()).into(imageViewImage);
+        textViewTitle.setText(designs.get(position).getTitle());
+        textViewContent.setText(designs.get(position).getExcerpt());
+        Picasso.with(context).load(designs.get(position).getImage())
+                .placeholder(holder.view.getResources()
+                        .getDrawable(R.drawable.ic_contact_icon)).transform(new CircleTransform()).into(imageViewImage);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return news.size();
+        return designs.size();
     }
 
 

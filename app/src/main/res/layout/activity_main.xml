@@ -32,7 +32,7 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
         <fragment
-            android:name="com.example.javier.MaterialDesignApp.Fragments.FragmentNews"
+            android:name="com.example.javier.MaterialDesignApp.Fragments.FragmentDesign"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/fragmentNews"/>

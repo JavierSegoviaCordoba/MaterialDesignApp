@@ -1,6 +1,5 @@
 package com.example.javier.MaterialDesignApp.Fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -20,8 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.javier.MaterialDesignApp.R;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.NewsAdapter;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.News;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DesignAdapter;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 
@@ -30,17 +28,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class FragmentNews extends Fragment {
+public class FragmentDesign extends Fragment {
 
     String urlPost;
-    JSONObject jsonObjectNewsPosts;
-    JSONArray jsonArrayNewsContent;
-    ArrayList<News> newses;
+    JSONObject jsonObjectDesignPosts;
+    JSONArray jsonArrayDesignContent;
+    ArrayList<Design> designs;
     SwipeRefreshLayout swipeRefreshLayout;
-    String[] newsTitle, newsExcerpt, newsImage, newsContent;
+    String[] designTitle, designExcerpt, designImage, designImageFull;
     int postNumber = 99;
     SharedPreferences sharedPreferences;
     Boolean error = false;
@@ -52,7 +49,7 @@ public class FragmentNews extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_news, container, false);
+        view = inflater.inflate(R.layout.fragment_design, container, false);
         sharedPreferences = getActivity().getSharedPreferences("VALUES", Context.MODE_PRIVATE);
 
         // Setup RecyclerView News
@@ -66,7 +63,7 @@ public class FragmentNews extends Fragment {
 
     private void recyclerViewNews(View view) {
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewNews);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewDesign);
 
         // Divider
         recyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(android.R.drawable.divider_horizontal_bright)));
@@ -79,7 +76,7 @@ public class FragmentNews extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
+        urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/diseno?json=1";
         new AsyncTaskNewsParseJson().execute(urlPost);
 
     }
@@ -97,21 +94,23 @@ public class FragmentNews extends Fragment {
 
             urlPost = url[0];
             try {
-                jsonObjectNewsPosts = JsonParser.readJsonFromUrl(urlPost);
-                postNumber = jsonObjectNewsPosts.getJSONArray("posts").length();
-                jsonArrayNewsContent = jsonObjectNewsPosts.getJSONArray("posts");
-                sharedPreferences.edit().putString("NEWSCONTENT", jsonArrayNewsContent.toString()).apply();
-                newsTitle = new String[postNumber];
-                newsExcerpt = new String[postNumber];
-                newsImage = new String[postNumber];
+                jsonObjectDesignPosts = JsonParser.readJsonFromUrl(urlPost);
+                postNumber = jsonObjectDesignPosts.getJSONArray("posts").length();
+                jsonArrayDesignContent = jsonObjectDesignPosts.getJSONArray("posts");
+                sharedPreferences.edit().putString("DESIGN", jsonArrayDesignContent.toString()).apply();
+                designTitle = new String[postNumber];
+                designExcerpt = new String[postNumber];
+                designImage = new String[postNumber];
+                designImageFull = new String[postNumber];
                 for (int i = 0; i < postNumber; i++) {
-                    newsTitle[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
-                    newsExcerpt[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
-                    newsImage[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("thumbnail")).toString();
+                    designTitle[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
+                    designExcerpt[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
+                    designImage[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("thumbnail").getString("url")).toString();
+                    designImageFull[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("full").getString("url")).toString();
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-                newsTitle = new String[0];
+                designTitle = new String[0];
                 error = true;
             }
             return null;
@@ -121,26 +120,26 @@ public class FragmentNews extends Fragment {
         @Override
         protected void onPostExecute(String result) {
 
-            newses = new ArrayList<>();
+            designs = new ArrayList<>();
 
             //Data set used by the adapter. This data will be displayed.
-            if (newsTitle.length != 0) {
+            if (designTitle.length != 0) {
                 for (int i = 0; i < postNumber; i++) {
-                    newses.add(new News(newsTitle[i], newsExcerpt[i], newsImage[i]));
+                    designs.add(new Design(designTitle[i], designExcerpt[i], designImage[i]));
                 }
             }
             if (error) {
                 Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_LONG).show();
             }
             // Create the adapter
-            adapter = new NewsAdapter(getActivity(), newses);
+            adapter = new DesignAdapter(getActivity(), designs);
             recyclerView.setAdapter(adapter);
-
-            ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.GONE);
 
             swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
             swipeRefreshLayout.setRefreshing(false);
+
+            ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.GONE);
         }
     }
     private void swipeToRefresh(View view) {
@@ -156,7 +155,6 @@ public class FragmentNews extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
                 new AsyncTaskNewsParseJson().execute(urlPost);
             }
         });

@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -43,13 +42,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.javier.MaterialDesignApp.Fragments.FragmentNews;
+import com.example.javier.MaterialDesignApp.Fragments.FragmentDesign;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DrawerAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.DrawerItem;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.NewsAdapter;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.News;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DesignAdapter;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemSelectionSupport;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransformWhite;
 
@@ -100,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
     int postNumber = 99;
     JSONObject jsonObjectNewsPosts;
     JSONArray jsonArrayNewsContent;
-    ArrayList<News> newses;
+    ArrayList<Design> newses;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView.Adapter adapterDrawer;
     private RecyclerView.LayoutManager layoutManagerDrawer;
@@ -124,8 +122,8 @@ public class MainActivity extends ActionBarActivity {
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        FragmentNews fragmentNews = new FragmentNews();
-        fragmentTransaction.add(R.id.fragmentNews, fragmentNews);
+        FragmentDesign fragmentDesign = new FragmentDesign();
+        fragmentTransaction.add(R.id.fragmentNews, fragmentDesign);
         fragmentTransaction.commit();
 
         //Setup Navigation Drawer
@@ -281,17 +279,35 @@ public class MainActivity extends ActionBarActivity {
         recyclerViewDrawer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(0).findViewById(R.id.imageViewDrawerIcon);
-                TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(0).findViewById(R.id.textViewDrawerItemTitle);
-                imageViewDrawerIcon.setColorFilter(color);
-                if (Build.VERSION.SDK_INT > 15) {
-                    imageViewDrawerIcon.setImageAlpha(255);
-                } else {
-                    imageViewDrawerIcon.setAlpha(255);
+
+                for (int i = 0; i < drawerTitles.length; i++) {
+                    if (i == 0) {
+                        ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
+                        TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
+                        imageViewDrawerIcon.setColorFilter(color);
+                        if (Build.VERSION.SDK_INT > 15) {
+                            imageViewDrawerIcon.setImageAlpha(255);
+                        } else {
+                            imageViewDrawerIcon.setAlpha(255);
+                        }
+                        textViewDrawerTitle.setTextColor(color);
+                        RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
+                        relativeLayoutDrawerItem.setFocusableInTouchMode(true);
+                    } else {
+                        ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
+                        TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
+                        imageViewDrawerIcon.setColorFilter(getResources().getColor(R.color.md_text));
+                        if (Build.VERSION.SDK_INT > 15) {
+                            imageViewDrawerIcon.setImageAlpha(138);
+                        } else {
+                            imageViewDrawerIcon.setAlpha(138);
+                        }
+                        textViewDrawerTitle.setTextColor(getResources().getColor(R.color.md_text));
+                        RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
+                        relativeLayoutDrawerItem.setFocusableInTouchMode(false);
+                    }
                 }
-                textViewDrawerTitle.setTextColor(color);
-                RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(0).findViewById(R.id.relativeLayoutDrawerItem);
-                relativeLayoutDrawerItem.setFocusableInTouchMode(true);
+
                 // unregister listener (this is important)
                 recyclerViewDrawer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
             }
@@ -647,14 +663,14 @@ public class MainActivity extends ActionBarActivity {
             //Data set used by the adapter. This data will be displayed.
             if (newsTitle.length != 0) {
                 for (int i = 0; i < postNumber; i++) {
-                    newses.add(new News(newsTitle[i], newsExcerpt[i], newsImage[i]));
+                    newses.add(new Design(newsTitle[i], newsExcerpt[i], newsImage[i]));
                 }
             }
             if (error) {
                 Toast.makeText(MainActivity.this, "Error de conexión", Toast.LENGTH_LONG).show();
             }
             // Create the adapter
-            adapter = new NewsAdapter(MainActivity.this, newses);
+            adapter = new DesignAdapter(MainActivity.this, newses);
             recyclerView.setAdapter(adapter);
 
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
