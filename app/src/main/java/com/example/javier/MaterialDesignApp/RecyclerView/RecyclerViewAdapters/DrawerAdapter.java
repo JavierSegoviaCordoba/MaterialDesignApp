@@ -1,22 +1,17 @@
-package com.example.javier.MaterialDesignApp.ListViews.ListViewAdapters;
+package com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters;
 
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.javier.MaterialDesignApp.ListViews.ListViewClasses.DrawerItem;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.DrawerItem;
 import com.example.javier.MaterialDesignApp.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
 
@@ -62,7 +57,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     public int getItemCount() {
         return drawerItems.size();
     }
-
 }
 
 

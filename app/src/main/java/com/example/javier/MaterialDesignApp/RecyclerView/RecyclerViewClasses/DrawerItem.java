@@ -1,4 +1,4 @@
-package com.example.javier.MaterialDesignApp.ListViews.ListViewClasses;
+package com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses;
 
 
 import android.graphics.drawable.Drawable;

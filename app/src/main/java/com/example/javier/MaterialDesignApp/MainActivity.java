@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -30,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -42,11 +44,12 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.javier.MaterialDesignApp.Fragments.FragmentNews;
-import com.example.javier.MaterialDesignApp.ListViews.ListViewAdapters.DrawerAdapter;
-import com.example.javier.MaterialDesignApp.ListViews.ListViewClasses.DrawerItem;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DrawerAdapter;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.DrawerItem;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.NewsAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.News;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemSelectionSupport;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransformWhite;
 
@@ -271,30 +274,60 @@ public class MainActivity extends ActionBarActivity {
         drawerIcons.recycle();
         adapterDrawer = new DrawerAdapter(drawerItems);
         recyclerViewDrawer.setAdapter(adapterDrawer);
+        TypedValue typedValue = new TypedValue();
+        MainActivity.this.getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
+        final int color = typedValue.data;
+
+        recyclerViewDrawer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(0).findViewById(R.id.imageViewDrawerIcon);
+                TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(0).findViewById(R.id.textViewDrawerItemTitle);
+                imageViewDrawerIcon.setColorFilter(color);
+                if (Build.VERSION.SDK_INT > 15) {
+                    imageViewDrawerIcon.setImageAlpha(255);
+                } else {
+                    imageViewDrawerIcon.setAlpha(255);
+                }
+                textViewDrawerTitle.setTextColor(color);
+                RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(0).findViewById(R.id.relativeLayoutDrawerItem);
+                relativeLayoutDrawerItem.setFocusableInTouchMode(true);
+                // unregister listener (this is important)
+                recyclerViewDrawer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+            }
+        });
+
 
         // RecyclerView item listener.
         ItemClickSupport itemClickSupport = ItemClickSupport.addTo(recyclerViewDrawer);
         itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position, long id) {
-                TypedValue typedValue = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
-                final int color = typedValue.data;
 
                 //TODO Icon and text colors
 
-                for (int i = 0; i < drawerTitles.length; i++){
-                    if (i == position){
+                for (int i = 0; i < drawerTitles.length; i++) {
+                    if (i == position) {
                         ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
                         TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
                         imageViewDrawerIcon.setColorFilter(color);
+                        if (Build.VERSION.SDK_INT > 15) {
+                            imageViewDrawerIcon.setImageAlpha(255);
+                        } else {
+                            imageViewDrawerIcon.setAlpha(255);
+                        }
                         textViewDrawerTitle.setTextColor(color);
                         RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
                         relativeLayoutDrawerItem.setFocusableInTouchMode(true);
-                    }else{
+                    } else {
                         ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
                         TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
                         imageViewDrawerIcon.setColorFilter(getResources().getColor(R.color.md_text));
+                        if (Build.VERSION.SDK_INT > 15) {
+                            imageViewDrawerIcon.setImageAlpha(138);
+                        } else {
+                            imageViewDrawerIcon.setAlpha(138);
+                        }
                         textViewDrawerTitle.setTextColor(getResources().getColor(R.color.md_text));
                         RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
                         relativeLayoutDrawerItem.setFocusableInTouchMode(false);
@@ -411,7 +444,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
-
 
 
     @Override
