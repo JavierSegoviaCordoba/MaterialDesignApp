@@ -23,7 +23,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -35,7 +34,6 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -43,14 +41,12 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.javier.MaterialDesignApp.Fragments.FragmentDesign;
+import com.example.javier.MaterialDesignApp.Fragments.FragmentDevelop;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DrawerAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.DrawerItem;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DesignAdapter;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransformWhite;
-
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -98,7 +94,6 @@ public class MainActivity extends ActionBarActivity {
     int postNumber = 99;
     JSONObject jsonObjectNewsPosts;
     JSONArray jsonArrayNewsContent;
-    ArrayList<Design> newses;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView.Adapter adapterDrawer;
     private RecyclerView.LayoutManager layoutManagerDrawer;
@@ -117,14 +112,8 @@ public class MainActivity extends ActionBarActivity {
         //Setup Status Bar and Toolbar
         toolbarStatusBar();
 
-        // Setup RecyclerView News
-        //recyclerViewNews();
-
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        FragmentDesign fragmentDesign = new FragmentDesign();
-        fragmentTransaction.add(R.id.fragmentNews, fragmentDesign);
-        fragmentTransaction.commit();
+        // Setup Fragments
+        setFragment(0);
 
         //Setup Navigation Drawer
         navigationDrawer();
@@ -138,8 +127,6 @@ public class MainActivity extends ActionBarActivity {
         // Open settings method
         openSettings();
 
-        // Setup swipe to refresh
-        //swipeToRefresh();
     }
 
     @Override
@@ -151,7 +138,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item_news clicks here. The action bar will
+        // Handle action bar item_post clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -318,7 +305,7 @@ public class MainActivity extends ActionBarActivity {
         ItemClickSupport itemClickSupport = ItemClickSupport.addTo(recyclerViewDrawer);
         itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
-            public void onItemClick(RecyclerView parent, View view, int position, long id) {
+            public void onItemClick(RecyclerView parent, View view, final int position, long id) {
 
                 //TODO Icon and text colors
 
@@ -356,7 +343,7 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void run() {
                         // Do something after some time
-
+                        setFragment(position);
                     }
                 }, 250);
                 mDrawerLayout.closeDrawers();
@@ -516,7 +503,7 @@ public class MainActivity extends ActionBarActivity {
                 jsonObjectPicture = JsonParser.readJsonFromUrl(urlPicture);
                 jsonObjectCover = JsonParser.readJsonFromUrl(urlCover);
 
-                // Storing each json item_news in variable
+                // Storing each json item_post in variable
                 name = jsonObjectProfile.getString("name");
                 username = "Facebook ID: " + jsonObjectProfile.getString("username");
                 picture = jsonObjectPicture.getJSONObject("data").getString("url");
@@ -621,63 +608,24 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
-
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        // get JSON Object
-        @Override
-        protected String doInBackground(String... url) {
-
-            urlPost = url[0];
-            try {
-                jsonObjectNewsPosts = JsonParser.readJsonFromUrl(urlPost);
-                postNumber = jsonObjectNewsPosts.getJSONArray("posts").length();
-                jsonArrayNewsContent = jsonObjectNewsPosts.getJSONArray("posts");
-                sharedPreferences.edit().putString("NEWSCONTENT", jsonArrayNewsContent.toString()).apply();
-                newsTitle = new String[postNumber];
-                newsExcerpt = new String[postNumber];
-                newsImage = new String[postNumber];
-                for (int i = 0; i < postNumber; i++) {
-                    newsTitle[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
-                    newsExcerpt[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
-                    newsImage[i] = Html.fromHtml(jsonObjectNewsPosts.getJSONArray("posts").getJSONObject(i).getString("thumbnail")).toString();
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                newsTitle = new String[0];
-                error = true;
-            }
-            return null;
-        }
-
-        // Set facebook items to the textviews and imageviews
-        @Override
-        protected void onPostExecute(String result) {
-
-            newses = new ArrayList<>();
-
-            //Data set used by the adapter. This data will be displayed.
-            if (newsTitle.length != 0) {
-                for (int i = 0; i < postNumber; i++) {
-                    newses.add(new Design(newsTitle[i], newsExcerpt[i], newsImage[i]));
-                }
-            }
-            if (error) {
-                Toast.makeText(MainActivity.this, "Error de conexión", Toast.LENGTH_LONG).show();
-            }
-            // Create the adapter
-            adapter = new DesignAdapter(MainActivity.this, newses);
-            recyclerView.setAdapter(adapter);
-
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.GONE);
-
-            swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) findViewById(R.id.swipe_container);
-            swipeRefreshLayout.setRefreshing(false);
+    public void setFragment(int position) {
+        FragmentManager fragmentManager;
+        FragmentTransaction fragmentTransaction;
+        switch (position) {
+            case 0:
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                FragmentDesign fragmentDesign = new FragmentDesign();
+                fragmentTransaction.replace(R.id.fragment, fragmentDesign);
+                fragmentTransaction.commit();
+                break;
+            case 1:
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                FragmentDevelop fragmentDevelop = new FragmentDevelop();
+                fragmentTransaction.replace(R.id.fragment, fragmentDevelop);
+                fragmentTransaction.commit();
+                break;
         }
     }
 

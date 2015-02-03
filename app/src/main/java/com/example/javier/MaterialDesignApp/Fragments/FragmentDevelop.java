@@ -18,8 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.javier.MaterialDesignApp.R;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DesignAdapter;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DevelopAdapter;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Develop;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 
@@ -30,14 +30,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FragmentDesign extends Fragment {
+public class FragmentDevelop extends Fragment {
 
     String urlPost;
-    JSONObject jsonObjectDesignPosts;
-    JSONArray jsonArrayDesignContent;
-    ArrayList<Design> designs;
+    JSONObject jsonObjectDevelopPosts;
+    JSONArray jsonArrayDevelopContent;
+    ArrayList<Develop> develop;
     SwipeRefreshLayout swipeRefreshLayout;
-    String[] designTitle, designExcerpt, designImage, designImageFull;
+    String[] developTitle, developExcerpt, developImage, developImageFull;
     int postNumber = 99;
     SharedPreferences sharedPreferences;
     Boolean error = false;
@@ -49,11 +49,11 @@ public class FragmentDesign extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_design, container, false);
+        view = inflater.inflate(R.layout.fragment_develop, container, false);
         sharedPreferences = getActivity().getSharedPreferences("VALUES", Context.MODE_PRIVATE);
 
         // Setup RecyclerView News
-        recyclerViewDesign(view);
+        recyclerViewDevelop(view);
 
         // Setup swipe to refresh
         swipeToRefresh(view);
@@ -61,9 +61,9 @@ public class FragmentDesign extends Fragment {
         return view;
     }
 
-    private void recyclerViewDesign(View view) {
+    private void recyclerViewDevelop(View view) {
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewDesign);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewDevelop);
 
         // Divider
         recyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(android.R.drawable.divider_horizontal_bright)));
@@ -76,7 +76,7 @@ public class FragmentDesign extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/diseno?json=1";
+        urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/desarrollar?json=1";
         new AsyncTaskNewsParseJson().execute(urlPost);
 
     }
@@ -94,23 +94,23 @@ public class FragmentDesign extends Fragment {
 
             urlPost = url[0];
             try {
-                jsonObjectDesignPosts = JsonParser.readJsonFromUrl(urlPost);
-                postNumber = jsonObjectDesignPosts.getJSONArray("posts").length();
-                jsonArrayDesignContent = jsonObjectDesignPosts.getJSONArray("posts");
-                sharedPreferences.edit().putString("DESIGN", jsonArrayDesignContent.toString()).apply();
-                designTitle = new String[postNumber];
-                designExcerpt = new String[postNumber];
-                designImage = new String[postNumber];
-                designImageFull = new String[postNumber];
+                jsonObjectDevelopPosts = JsonParser.readJsonFromUrl(urlPost);
+                postNumber = jsonObjectDevelopPosts.getJSONArray("posts").length();
+                jsonArrayDevelopContent = jsonObjectDevelopPosts.getJSONArray("posts");
+                sharedPreferences.edit().putString("DEVELOP", jsonArrayDevelopContent.toString()).apply();
+                developTitle = new String[postNumber];
+                developExcerpt = new String[postNumber];
+                developImage = new String[postNumber];
+                developImageFull = new String[postNumber];
                 for (int i = 0; i < postNumber; i++) {
-                    designTitle[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
-                    designExcerpt[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
-                    designImage[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("thumbnail").getString("url")).toString();
-                    designImageFull[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("full").getString("url")).toString();
+                    developTitle[i] = Html.fromHtml(jsonObjectDevelopPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
+                    developExcerpt[i] = Html.fromHtml(jsonObjectDevelopPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
+                    developImage[i] = Html.fromHtml(jsonObjectDevelopPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("thumbnail").getString("url")).toString();
+                    developImageFull[i] = Html.fromHtml(jsonObjectDevelopPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("full").getString("url")).toString();
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-                designTitle = new String[0];
+                developTitle = new String[0];
                 error = true;
             }
             return null;
@@ -120,22 +120,22 @@ public class FragmentDesign extends Fragment {
         @Override
         protected void onPostExecute(String result) {
 
-            designs = new ArrayList<>();
+            develop = new ArrayList<>();
 
             //Data set used by the adapter. This data will be displayed.
-            if (designTitle.length != 0) {
+            if (developTitle.length != 0) {
                 for (int i = 0; i < postNumber; i++) {
-                    designs.add(new Design(designTitle[i], designExcerpt[i], designImage[i]));
+                    develop.add(new Develop(developTitle[i], developExcerpt[i], developImage[i]));
                 }
             }
             if (error) {
                 Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_LONG).show();
             }
             // Create the adapter
-            adapter = new DesignAdapter(getActivity(), designs);
+            adapter = new DevelopAdapter(getActivity(), develop);
             recyclerView.setAdapter(adapter);
 
-            swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+            swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
             swipeRefreshLayout.setRefreshing(false);
 
             ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
@@ -143,7 +143,7 @@ public class FragmentDesign extends Fragment {
         }
     }
     private void swipeToRefresh(View view) {
-        swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
 
         TypedValue typedValueColorPrimary = new TypedValue();
         TypedValue typedValueColorAccent = new TypedValue();
@@ -152,7 +152,7 @@ public class FragmentDesign extends Fragment {
         final int colorPrimary = typedValueColorPrimary.data, colorAccent = typedValueColorAccent.data;
         swipeRefreshLayout.setColorSchemeColors(colorPrimary,colorAccent);
 
-        swipeRefreshLayout.setOnRefreshListener(new android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new AsyncTaskNewsParseJson().execute(urlPost);

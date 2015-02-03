@@ -130,7 +130,7 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item_news clicks here. The action bar will
+        // Handle action bar item_post clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();

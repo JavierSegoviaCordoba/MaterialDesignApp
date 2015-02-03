@@ -27,16 +27,16 @@
     <string name="title_activity_news_detail">NewsDetail</string>
 
     <string-array name="drawer">
-        <item>@string/news</item>
-        <item>@string/todo</item>
+        <item>@string/design</item>
+        <item>@string/develop</item>
     </string-array>
 
-    <string name="news">News</string>
-    <string name="todo">TODO fragments</string>
+    <string name="design">Design</string>
+    <string name="develop">Develop</string>
 
     <array name="drawerIcons">
-        <item>@drawable/ic_action_home</item>
-        <item>@drawable/ic_action_content_inbox</item>
+        <item>@drawable/ic_action_design</item>
+        <item>@drawable/ic_action_develop</item>
     </array>
 
 </resources>

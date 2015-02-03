@@ -31,11 +31,10 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        <fragment
-            android:name="com.example.javier.MaterialDesignApp.Fragments.FragmentDesign"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/fragmentNews"/>
+            android:id="@+id/fragment"/>
 
     </LinearLayout>
 
