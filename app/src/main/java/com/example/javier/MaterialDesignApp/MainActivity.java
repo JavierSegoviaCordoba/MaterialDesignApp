@@ -2,10 +2,13 @@ package com.example.javier.MaterialDesignApp;
 
 import android.app.ActivityOptions;
 import android.app.Dialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -17,7 +20,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -39,11 +41,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.javier.MaterialDesignApp.Fragments.FragmentNews;
+import com.example.javier.MaterialDesignApp.ListViews.ListViewAdapters.DrawerAdapter;
+import com.example.javier.MaterialDesignApp.ListViews.ListViewClasses.DrawerItem;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.NewsAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.News;
-import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransformWhite;
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
+import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransformWhite;
+
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -86,12 +92,16 @@ public class MainActivity extends ActionBarActivity {
     Boolean downloaded, error = false;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    String[] newsTitle, newsExcerpt, newsImage, newsContent;
+    String[] newsTitle, newsExcerpt, newsImage, newsContent, drawerArray;
+    RecyclerView recyclerViewDrawer;
     int postNumber = 99;
     JSONObject jsonObjectNewsPosts;
     JSONArray jsonArrayNewsContent;
     ArrayList<News> newses;
     SwipeRefreshLayout swipeRefreshLayout;
+    RecyclerView.Adapter adapterDrawer;
+    private RecyclerView.LayoutManager layoutManagerDrawer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +117,13 @@ public class MainActivity extends ActionBarActivity {
         toolbarStatusBar();
 
         // Setup RecyclerView News
-        recyclerViewNews();
+        //recyclerViewNews();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentNews fragmentNews = new FragmentNews();
+        fragmentTransaction.add(R.id.fragmentNews, fragmentNews);
+        fragmentTransaction.commit();
 
         //Setup Navigation Drawer
         navigationDrawer();
@@ -121,44 +137,9 @@ public class MainActivity extends ActionBarActivity {
         // Open settings method
         openSettings();
 
-        swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) findViewById(R.id.swipe_container);
-
-        TypedValue typedValueColorPrimary = new TypedValue();
-        TypedValue typedValueColorAccent = new TypedValue();
-        MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValueColorPrimary, true);
-        MainActivity.this.getTheme().resolveAttribute(R.attr.colorAccent, typedValueColorAccent, true);
-        final int colorPrimary = typedValueColorPrimary.data, colorAccent = typedValueColorAccent.data;
-        swipeRefreshLayout.setColorSchemeColors(colorPrimary,colorAccent);
-
-        swipeRefreshLayout.setOnRefreshListener(new android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
-                new AsyncTaskNewsParseJson().execute(urlPost);
-            }
-        });
+        // Setup swipe to refresh
+        //swipeToRefresh();
     }
-
-    private void recyclerViewNews() {
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewNews);
-
-        // Divider
-        recyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(android.R.drawable.divider_horizontal_bright)));
-
-        // improve performance if you know that changes in content
-        // do not change the size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        urlPost = "http://wordpressdesarrolladorandroid.hol.es/?json=1";
-        new AsyncTaskNewsParseJson().execute(urlPost);
-
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -275,6 +256,63 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
+
+        // Setup RecyclerView inside drawer
+        recyclerViewDrawer = (RecyclerView) findViewById(R.id.recyclerViewDrawer);
+        recyclerViewDrawer.setHasFixedSize(true);
+        recyclerViewDrawer.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+        ArrayList<DrawerItem> drawerItems = new ArrayList<>();
+        final String[] drawerTitles = getResources().getStringArray(R.array.drawer);
+        final TypedArray drawerIcons = getResources().obtainTypedArray(R.array.drawerIcons);
+        for (int i = 0; i < drawerTitles.length; i++) {
+            drawerItems.add(new DrawerItem(drawerTitles[i], drawerIcons.getDrawable(i)));
+        }
+        drawerIcons.recycle();
+        adapterDrawer = new DrawerAdapter(drawerItems);
+        recyclerViewDrawer.setAdapter(adapterDrawer);
+
+        // RecyclerView item listener.
+        ItemClickSupport itemClickSupport = ItemClickSupport.addTo(recyclerViewDrawer);
+        itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView parent, View view, int position, long id) {
+                TypedValue typedValue = new TypedValue();
+                MainActivity.this.getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
+                final int color = typedValue.data;
+
+                //TODO Icon and text colors
+
+                for (int i = 0; i < drawerTitles.length; i++){
+                    if (i == position){
+                        ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
+                        TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
+                        imageViewDrawerIcon.setColorFilter(color);
+                        textViewDrawerTitle.setTextColor(color);
+                        RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
+                        relativeLayoutDrawerItem.setFocusableInTouchMode(true);
+                    }else{
+                        ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
+                        TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
+                        imageViewDrawerIcon.setColorFilter(getResources().getColor(R.color.md_text));
+                        textViewDrawerTitle.setTextColor(getResources().getColor(R.color.md_text));
+                        RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
+                        relativeLayoutDrawerItem.setFocusableInTouchMode(false);
+                    }
+                }
+
+                //TODO Fragments (closedrawers before setfragment)
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after some time
+
+                    }
+                }, 250);
+                mDrawerLayout.closeDrawers();
+            }
+        });
     }
 
     public void navigationBarStatusBar() {
@@ -374,63 +412,7 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-    /*@Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-            //editor.putInt("POSITION", 0).apply();
-            editor.putBoolean("DOWNLOAD", false);
-            editor.apply();
 
-            Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
-            Toast.makeText(this, "Destroy " + prueba.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }*/
-
-    /*@Override protected void onStart() {
-        super.onStart();
-        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override protected void onResume() {
-        super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override protected void onPause() {
-        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
-        super.onPause();
-    }
-
-    @Override protected void onStop() {
-        super.onStop();
-        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override protected void onRestart() {
-        super.onRestart();
-        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
-    }*/
-
-    /*public void settingTransition() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT >= 21) {
-                    LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
-                    contentLayout.setTransitionName("LAYOUT");
-                    options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
-                            Pair.create(findViewById(R.id.contentLayout), "LAYOUT"));
-                    startActivity(intent, options.toBundle());
-
-                } else {
-                    startActivity(intent);
-                }
-            }
-        }, 300);
-    }*/
 
     @Override
     protected void onUserLeaveHint() {
@@ -650,4 +632,62 @@ public class MainActivity extends ActionBarActivity {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
+
+    /*@Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            sharedPreferences = getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+            //editor.putInt("POSITION", 0).apply();
+            editor.putBoolean("DOWNLOAD", false);
+            editor.apply();
+
+            Boolean prueba = sharedPreferences.getBoolean("DOWNLOAD", false);
+            Toast.makeText(this, "Destroy " + prueba.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+    /*@Override protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override protected void onPause() {
+        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+        super.onPause();
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override protected void onRestart() {
+        super.onRestart();
+        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+    }*/
+
+    /*public void settingTransition() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
+                    contentLayout.setTransitionName("LAYOUT");
+                    options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
+                            Pair.create(findViewById(R.id.contentLayout), "LAYOUT"));
+                    startActivity(intent, options.toBundle());
+
+                } else {
+                    startActivity(intent);
+                }
+            }
+        }, 300);
+    }*/
 }

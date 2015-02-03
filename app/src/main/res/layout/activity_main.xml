@@ -31,35 +31,11 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:indeterminate="true" />
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/swipe_container"
+        <fragment
+            android:name="com.example.javier.MaterialDesignApp.Fragments.FragmentNews"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerViewNews"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="@dimen/space"
-                android:paddingLeft="1dp"
-                android:paddingRight="1dp"
-                android:scrollbarSize="3dp"
-                android:scrollbarStyle="insideOverlay"
-                android:scrollbarThumbVertical="?attr/colorAccent"
-                android:scrollbars="vertical" />
-
-        </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent"
+            android:id="@+id/fragmentNews"/>
 
     </LinearLayout>
 

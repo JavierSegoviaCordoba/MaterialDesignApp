@@ -134,9 +134,9 @@
                 android:layout_marginStart="72dp"
                 android:singleLine="true"
                 android:text="Add account"
-                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                android:fontFamily="sans-serif-medium"
                 android:textColor="@color/md_text"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -167,9 +167,9 @@
                 android:layout_marginStart="72dp"
                 android:singleLine="true"
                 android:text="Manage accounts"
-                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                android:fontFamily="sans-serif-medium"
                 android:textColor="@color/md_text"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -183,39 +183,12 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <RelativeLayout
-            android:id="@+id/relativeLayoutInbox"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewDrawer"
             android:layout_marginTop="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:gravity="start">
-
-            <ImageView
-                android:id="@+id/imageViewInbox"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_action_content_inbox" />
-
-            <TextView
-                android:id="@+id/textViewInbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="72dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="72dp"
-                android:singleLine="true"
-                android:text="Inbox (TODO fragments-listView)"
-                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
-                android:textColor="@color/md_text"
-                android:textSize="16sp" />
-        </RelativeLayout>
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:overScrollMode="never" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -253,9 +226,9 @@
                 android:layout_marginStart="72dp"
                 android:singleLine="true"
                 android:text="Settings"
-                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                android:fontFamily="sans-serif-medium"
                 android:textColor="@color/md_text"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
         </RelativeLayout>
 
