@@ -123,7 +123,7 @@ public class MainActivity extends ActionBarActivity {
         toolbarStatusBar();
 
         // Setup Fragments
-        setFragment(0);
+        setFragment(sharedPreferences.getInt("FRAGMENT",0));
 
         //Setup Navigation Drawer
         navigationDrawer();
@@ -278,7 +278,7 @@ public class MainActivity extends ActionBarActivity {
             public void onGlobalLayout() {
 
                 for (int i = 0; i < drawerTitles.length; i++) {
-                    if (i == 0) {
+                    if (i == sharedPreferences.getInt("FRAGMENT",0)) {
                         ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
                         TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
                         imageViewDrawerIcon.setColorFilter(color);
@@ -623,6 +623,7 @@ public class MainActivity extends ActionBarActivity {
         FragmentTransaction fragmentTransaction;
         switch (position) {
             case 0:
+                sharedPreferences.edit().putInt("FRAGMENT",0).apply();
                 fragmentManager = getFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 FragmentDesign fragmentDesign = new FragmentDesign();
@@ -630,6 +631,7 @@ public class MainActivity extends ActionBarActivity {
                 fragmentTransaction.commit();
                 break;
             case 1:
+                sharedPreferences.edit().putInt("FRAGMENT",1).apply();
                 fragmentManager = getFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 FragmentDevelop fragmentDevelop = new FragmentDevelop();
