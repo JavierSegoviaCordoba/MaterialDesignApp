@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.javier.MaterialDesignApp.DetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/md_white_1000"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/statusBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/topMargin"
+            android:background="?attr/colorPrimaryDark"
+            android:translationZ="4dp" />
+
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?colorPrimary"
+            android:translationZ="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
+            android:scrollbarSize="3dp"
+            android:scrollbarThumbVertical="?attr/color">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/imageViewImageImageDetail"
+                    android:isScrollContainer="true"
+                    android:orientation="vertical"
+                    android:scrollbars="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageViewImageImageDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="225dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/drawer_header" />
+
+                    <TextView
+                        android:id="@+id/textViewDetailTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginTop="32dp"
+                        android:text="Title"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColor="@color/md_text" />
+
+                    <TextView
+                        android:id="@+id/textViewDetailPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dp"
+                        android:text="Price"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textColor="@color/md_secondary_text_icons" />
+
+                    <WebView
+                        android:id="@+id/webViewDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="56dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@android:color/transparent" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>

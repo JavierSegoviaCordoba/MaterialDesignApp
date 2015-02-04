@@ -16,7 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -28,11 +32,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 
 
-public class NewsDetail extends ActionBarActivity {
+public class DetailActivity extends ActionBarActivity {
 
     final Context context = this;
     Toolbar toolbar;
@@ -67,17 +72,32 @@ public class NewsDetail extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Get shared preferences
+        sharedPreferences = getSharedPreferences("VALUES", MODE_PRIVATE);
+
         // Select theme saved by user (always before setContentView)
         theme();
 
         // Set content to the view
-        setContentView(R.layout.detail_news);
+        setContentView(R.layout.activity_detail);
 
         //Setup Status Bar and Toolbar
         toolbarStatusBar();
 
         // Fix issues for each version and modes (check method at end of this file)
         navigationBarStatusBar();
+
+        // Set elements
+        TextView textViewDetailTitle = (TextView) findViewById(R.id.textViewDetailTitle);
+        TextView textViewDetailPrize = (TextView) findViewById(R.id.textViewDetailPrice);
+        ImageView imageViewImageDetail = (ImageView) findViewById(R.id.imageViewImageImageDetail);
+        imageViewImageDetail.setColorFilter(getResources().getColor(R.color.md_black_1000_10));
+        WebView webViewDetail = (WebView) findViewById(R.id.webViewDetail);
+
+        textViewDetailTitle.setText(sharedPreferences.getString("TITLE", ""));
+        Picasso.with(context).load(sharedPreferences.getString("IMAGE", "")).into(imageViewImageDetail);
+        webViewDetail.loadDataWithBaseURL(null, "<style>img{display: inline;height: auto;max-width: 100%;}</style>" + sharedPreferences.getString("CONTENT", ""), "text/html", "UTF-8", null);
+
     }
 
     @Override
@@ -116,7 +136,7 @@ public class NewsDetail extends ActionBarActivity {
 
         // Get support to the toolbar and change its title
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Settings");
+        getSupportActionBar().setTitle("Detail");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -127,7 +147,7 @@ public class NewsDetail extends ActionBarActivity {
             // Fix issues for KitKat setting Status Bar color primary
             if (Build.VERSION.SDK_INT >= 19) {
                 TypedValue typedValue19 = new TypedValue();
-                NewsDetail.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
+                DetailActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
                 final int color = typedValue19.data;
                 FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
                 statusBar.setBackgroundColor(color);
@@ -136,7 +156,7 @@ public class NewsDetail extends ActionBarActivity {
             // Fix issues for Lollipop, setting Status Bar color primary dark
             if (Build.VERSION.SDK_INT >= 21) {
                 TypedValue typedValue21 = new TypedValue();
-                NewsDetail.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue21, true);
+                DetailActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue21, true);
                 final int color = typedValue21.data;
                 FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
                 statusBar.setBackgroundColor(color);
@@ -148,14 +168,14 @@ public class NewsDetail extends ActionBarActivity {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (Build.VERSION.SDK_INT >= 19) {
                 TypedValue typedValue19 = new TypedValue();
-                NewsDetail.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
+                DetailActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
                 final int color = typedValue19.data;
                 FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
                 statusBar.setBackgroundColor(color);
             }
             if (Build.VERSION.SDK_INT >= 21) {
                 TypedValue typedValue = new TypedValue();
-                NewsDetail.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+                DetailActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
                 final int color = typedValue.data;
                 getWindow().setStatusBarColor(color);
             }

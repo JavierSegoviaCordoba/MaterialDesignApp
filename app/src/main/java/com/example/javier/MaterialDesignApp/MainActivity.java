@@ -31,11 +31,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Interpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -97,6 +102,11 @@ public class MainActivity extends ActionBarActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView.Adapter adapterDrawer;
     private RecyclerView.LayoutManager layoutManagerDrawer;
+    private boolean mActionBarAutoHideEnabled = false;
+    private int mActionBarAutoHideSensivity = 0;
+    private int mActionBarAutoHideMinY = 0;
+    private int mActionBarAutoHideSignal = 0;
+    private boolean mActionBarShown = true;
 
 
     @Override

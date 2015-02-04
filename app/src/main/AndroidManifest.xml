@@ -34,8 +34,11 @@
                 android:value="com.example.javier.MaterialDesignApp.MainActivity" />
         </activity>
         <activity
-            android:name=".NewsDetail"
+            android:name=".DetailActivity"
             android:label="@string/title_activity_news_detail" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.javier.MaterialDesignApp.MainActivity" />
         </activity>
     </application>
 

@@ -2,6 +2,7 @@ package com.example.javier.MaterialDesignApp.Fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,10 +18,12 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.javier.MaterialDesignApp.DetailActivity;
 import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DesignAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 
 import org.json.JSONArray;
@@ -37,7 +40,7 @@ public class FragmentDesign extends Fragment {
     JSONArray jsonArrayDesignContent;
     ArrayList<Design> designs;
     SwipeRefreshLayout swipeRefreshLayout;
-    String[] designTitle, designExcerpt, designImage, designImageFull;
+    String[] designTitle, designExcerpt, designImage, designImageFull, designContent;
     int postNumber = 99;
     SharedPreferences sharedPreferences;
     Boolean error = false;
@@ -48,9 +51,12 @@ public class FragmentDesign extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // Get shared preferences
+        sharedPreferences = getActivity().getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_design, container, false);
-        sharedPreferences = getActivity().getSharedPreferences("VALUES", Context.MODE_PRIVATE);
 
         // Setup RecyclerView News
         recyclerViewDesign(view);
@@ -79,6 +85,19 @@ public class FragmentDesign extends Fragment {
         urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/diseno?json=1";
         new AsyncTaskNewsParseJson().execute(urlPost);
 
+        ItemClickSupport itemClickSupport = ItemClickSupport.addTo(recyclerView);
+        itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView parent, View view, int position, long id) {
+                sharedPreferences.edit().putString("TITLE", designTitle[position]).apply();
+                sharedPreferences.edit().putString("CONTENT", designContent[position]).apply();
+                sharedPreferences.edit().putString("EXCERPT", designExcerpt[position]).apply();
+                sharedPreferences.edit().putString("IMAGE", designImageFull[position]).apply();
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
@@ -100,11 +119,13 @@ public class FragmentDesign extends Fragment {
                 sharedPreferences.edit().putString("DESIGN", jsonArrayDesignContent.toString()).apply();
                 designTitle = new String[postNumber];
                 designExcerpt = new String[postNumber];
+                designContent = new String[postNumber];
                 designImage = new String[postNumber];
                 designImageFull = new String[postNumber];
                 for (int i = 0; i < postNumber; i++) {
                     designTitle[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
                     designExcerpt[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
+                    designContent[i] = jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("content");
                     designImage[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("thumbnail").getString("url")).toString();
                     designImageFull[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("full").getString("url")).toString();
                 }
