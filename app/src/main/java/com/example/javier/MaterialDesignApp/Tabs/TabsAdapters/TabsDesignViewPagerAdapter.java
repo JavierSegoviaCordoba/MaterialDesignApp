@@ -9,12 +9,10 @@ import com.example.javier.MaterialDesignApp.Tabs.TabsViews.TabDesignMaterialDesi
 import com.example.javier.MaterialDesignApp.Tabs.TabsViews.TabDesignPattern;
 import com.example.javier.MaterialDesignApp.Tabs.TabsViews.TabDesignStyle;
 
-
 public class TabsDesignViewPagerAdapter extends FragmentStatePagerAdapter {
 
     CharSequence titles[];
     int tabNumber;
-
 
     // Constructor
     public TabsDesignViewPagerAdapter (FragmentManager fragmentManager, CharSequence titles[], int tabNumber) {

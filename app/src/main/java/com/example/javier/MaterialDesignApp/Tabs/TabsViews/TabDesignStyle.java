@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.De
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
+import com.example.javier.MaterialDesignApp.Tabs.TabsUtils.SlidingTabLayout;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 
 import org.json.JSONArray;
@@ -47,6 +49,8 @@ public class TabDesignStyle extends Fragment {
     RecyclerView.Adapter recyclerViewAdapter;
     View view;
     SharedPreferences sharedPreferences;
+    SlidingTabLayout tabs;
+    Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +66,20 @@ public class TabDesignStyle extends Fragment {
 
         // Setup swipe to refresh
         swipeToRefresh(view);
+
+        /*// Setup toolbar
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        tabs = (SlidingTabLayout) getActivity().findViewById(R.id.tabs);
+        tabs.post(new Runnable() {
+            @Override
+            public void run() {
+                ScrollManager manager = new ScrollManager();
+                manager.attach(recyclerView);
+                manager.addView(toolbar, ScrollManager.Direction.UP);
+                manager.addView(tabs, ScrollManager.Direction.UP);
+                manager.setInitialOffset(tabs.getHeight());
+            }
+        });*/
 
         return view;
     }

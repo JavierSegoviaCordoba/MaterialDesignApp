@@ -2,7 +2,7 @@
 <resources>
     <bool name="fitsSystemWindows">false</bool>
     <bool name="translucentNavigationBar">true</bool>
-    <dimen name="topMargin">25dp</dimen>
+    <dimen name="statusBarHeight">25dp</dimen>
     <dimen name="space">48dp</dimen>
     <color name="inset">#4000</color>
     </resources>

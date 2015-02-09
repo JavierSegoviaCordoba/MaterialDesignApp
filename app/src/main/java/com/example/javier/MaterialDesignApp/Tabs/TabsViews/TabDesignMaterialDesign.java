@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class TabDesignMaterialDesign extends Fragment {
     RecyclerView.Adapter recyclerViewAdapter;
     View view;
     SharedPreferences sharedPreferences;
+    Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

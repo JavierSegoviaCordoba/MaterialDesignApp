@@ -10,7 +10,7 @@
     <FrameLayout
         android:id="@+id/statusBar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/topMargin"
+        android:layout_height="@dimen/statusBarHeight"
         android:background="?colorPrimaryDark"
         android:translationZ="4dp" />
 

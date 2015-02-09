@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.javier.MaterialDesignApp.MainActivity;
 import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.Tabs.TabsAdapters.TabsDesignViewPagerAdapter;
@@ -39,6 +41,7 @@ public class FragmentDesign extends Fragment {
     SlidingTabLayout tabs;
     CharSequence titles[]={"Get Started","Material Design","Style","Patterns"};
     int tabNumber = titles.length;
+    Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,7 +49,16 @@ public class FragmentDesign extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_design, container, false);
 
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Design");
+
+
         //  Setup tabs
+        setupTabs();
+
+        return view;
+    }
+
+    public void setupTabs (){
         tabsDesignViewPagerAdapter =  new TabsDesignViewPagerAdapter(getFragmentManager(),titles,tabNumber);
         pager = (ViewPager) view.findViewById(R.id.pager);
         pager.setAdapter(tabsDesignViewPagerAdapter);
@@ -65,8 +77,6 @@ public class FragmentDesign extends Fragment {
             }
         });
         tabs.setViewPager(pager);
-
-        return view;
     }
 
 

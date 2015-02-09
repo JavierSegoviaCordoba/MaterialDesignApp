@@ -38,7 +38,7 @@
         <attr name="pstsTextSelectedAlpha" format="float" />
     </declare-styleable>
     <bool name="fitsSystemWindows">false</bool>
-    <dimen name="topMargin">0dp</dimen>
+    <dimen name="statusBarHeight">0dp</dimen>
     <dimen name="space">0dp</dimen>
     <color name="inset">#0000</color>
 </resources>

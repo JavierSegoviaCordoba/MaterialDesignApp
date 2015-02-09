@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.DrawerItem;
 import com.example.javier.MaterialDesignApp.R;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.DrawerItem;
 
 import java.util.ArrayList;
 

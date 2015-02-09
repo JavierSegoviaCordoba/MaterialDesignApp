@@ -14,7 +14,7 @@
         <FrameLayout
             android:id="@+id/statusBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/topMargin"
+            android:layout_height="@dimen/statusBarHeight"
             android:background="?attr/colorPrimaryDark"
             android:translationZ="4dp" />
 

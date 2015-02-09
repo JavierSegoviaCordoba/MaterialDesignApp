@@ -6,6 +6,7 @@
 
     <com.example.javier.MaterialDesignApp.Tabs.TabsUtils.SlidingTabLayout
         android:clipToPadding="false"
+        android:paddingTop="?attr/actionBarSize"
         android:paddingLeft="72dp"
         android:paddingRight="16dp"
         android:id="@+id/tabs"

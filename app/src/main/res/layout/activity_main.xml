@@ -18,10 +18,19 @@
         <FrameLayout
             android:id="@+id/statusBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/topMargin"
+            android:layout_height="@dimen/statusBarHeight"
             android:background="?colorPrimaryDark"
-            android:translationZ="4dp"/>
+            android:translationZ="0dp"/>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:elevation="4dp"
+                android:id="@+id/fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/toolbar"
@@ -32,11 +41,7 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-            <FrameLayout
-                android:elevation="4dp"
-                android:id="@+id/fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            </FrameLayout>
 
     </LinearLayout>
 

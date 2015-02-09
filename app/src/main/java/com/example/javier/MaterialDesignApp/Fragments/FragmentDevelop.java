@@ -1,27 +1,33 @@
 package com.example.javier.MaterialDesignApp.Fragments;
 
-import android.support.v4.app.Fragment;
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.javier.MaterialDesignApp.MainActivity;
 import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DevelopAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Develop;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
+import com.example.javier.MaterialDesignApp.Utilitis.ScrollManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,17 +51,28 @@ public class FragmentDevelop extends Fragment {
     RecyclerView.Adapter adapter;
     View view;
 
+    Toolbar toolbar;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_develop, container, false);
+
         sharedPreferences = getActivity().getSharedPreferences("VALUES", Context.MODE_PRIVATE);
+
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Develop");
 
         // Setup RecyclerView News
         recyclerViewDevelop(view);
 
         // Setup swipe to refresh
         swipeToRefresh(view);
+
+        // Hide and show toolbar on scroll
+        toolbarHideShow();
 
         return view;
     }
@@ -81,8 +98,6 @@ public class FragmentDevelop extends Fragment {
     }
 
     public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
-
-
         @Override
         protected void onPreExecute() {
         }
@@ -119,6 +134,8 @@ public class FragmentDevelop extends Fragment {
         @Override
         protected void onPostExecute(String result) {
 
+            toolbar.setTranslationY(0);
+
             develop = new ArrayList<>();
 
             //Data set used by the recyclerViewAdapter. This data will be displayed.
@@ -135,21 +152,24 @@ public class FragmentDevelop extends Fragment {
             recyclerView.setAdapter(adapter);
 
             swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+
             swipeRefreshLayout.setRefreshing(false);
 
             ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
             progressBar.setVisibility(View.GONE);
         }
     }
+
     private void swipeToRefresh(View view) {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-
+        int start = convertToPx(0), end = convertToPx(72);
+        swipeRefreshLayout.setProgressViewOffset(true, start, end);
         TypedValue typedValueColorPrimary = new TypedValue();
         TypedValue typedValueColorAccent = new TypedValue();
         getActivity().getTheme().resolveAttribute(R.attr.colorPrimary, typedValueColorPrimary, true);
         getActivity().getTheme().resolveAttribute(R.attr.colorAccent, typedValueColorAccent, true);
         final int colorPrimary = typedValueColorPrimary.data, colorAccent = typedValueColorAccent.data;
-        swipeRefreshLayout.setColorSchemeColors(colorPrimary,colorAccent);
+        swipeRefreshLayout.setColorSchemeColors(colorPrimary, colorAccent);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -157,6 +177,33 @@ public class FragmentDevelop extends Fragment {
                 new AsyncTaskNewsParseJson().execute(urlPost);
             }
         });
+    }
+
+    public void toolbarHideShow(){
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.post(new Runnable() {
+            @Override
+            public void run() {
+                ScrollManager manager = new ScrollManager();
+                manager.attach(recyclerView);
+                manager.addView(toolbar, ScrollManager.Direction.UP);
+                manager.setInitialOffset(toolbar.getHeight());
+            }
+        });
+    }
+
+    public int convertToPx(int dp) {
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (dp * scale + 0.5f);
+    }
+
+    public void animationTranslationY(View view, int duration, int interpolator, int translationY){
+        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translationY);
+        slideInAnimation.setDuration(duration);
+        slideInAnimation.setInterpolator(new AccelerateInterpolator(interpolator));
+        slideInAnimation.start();
     }
 }
 

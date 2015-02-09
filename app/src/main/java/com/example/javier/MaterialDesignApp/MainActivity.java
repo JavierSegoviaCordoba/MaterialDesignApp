@@ -311,8 +311,6 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onItemClick(RecyclerView parent, View view, final int position, long id) {
 
-                //TODO Icon and text colors
-
                 for (int i = 0; i < drawerTitles.length; i++) {
                     if (i == position) {
                         ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
@@ -341,7 +339,6 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
 
-                //TODO Fragments (closedrawers before setfragment)
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
