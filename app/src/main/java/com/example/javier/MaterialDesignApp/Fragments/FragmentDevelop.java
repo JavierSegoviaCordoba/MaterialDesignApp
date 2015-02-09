@@ -45,7 +45,6 @@ public class FragmentDevelop extends Fragment {
     RecyclerView.Adapter adapter;
     View view;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
