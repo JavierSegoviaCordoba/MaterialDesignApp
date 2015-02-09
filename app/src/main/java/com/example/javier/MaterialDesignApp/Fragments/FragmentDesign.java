@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-// Javier Segovia
+// Javier Segovia Córdoba
 
 public class FragmentDesign extends Fragment {
 
