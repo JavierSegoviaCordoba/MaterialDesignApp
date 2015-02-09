@@ -1,6 +1,6 @@
 package com.example.javier.MaterialDesignApp.Fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -122,7 +122,7 @@ public class FragmentDevelop extends Fragment {
 
             develop = new ArrayList<>();
 
-            //Data set used by the adapter. This data will be displayed.
+            //Data set used by the recyclerViewAdapter. This data will be displayed.
             if (developTitle.length != 0) {
                 for (int i = 0; i < postNumber; i++) {
                     develop.add(new Develop(developTitle[i], developExcerpt[i], developImage[i]));
@@ -131,7 +131,7 @@ public class FragmentDevelop extends Fragment {
             if (error) {
                 Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_LONG).show();
             }
-            // Create the adapter
+            // Create the recyclerViewAdapter
             adapter = new DevelopAdapter(getActivity(), develop);
             recyclerView.setAdapter(adapter);
 

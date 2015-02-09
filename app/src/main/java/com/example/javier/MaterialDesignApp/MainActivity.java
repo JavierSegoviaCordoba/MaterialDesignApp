@@ -2,8 +2,6 @@ package com.example.javier.MaterialDesignApp;
 
 import android.app.ActivityOptions;
 import android.app.Dialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -31,16 +31,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Interpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -108,7 +103,6 @@ public class MainActivity extends ActionBarActivity {
     private int mActionBarAutoHideSignal = 0;
     private boolean mActionBarShown = true;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +117,7 @@ public class MainActivity extends ActionBarActivity {
         toolbarStatusBar();
 
         // Setup Fragments
-        setFragment(sharedPreferences.getInt("FRAGMENT",0));
+        setFragment(sharedPreferences.getInt("FRAGMENT", 0));
 
         //Setup Navigation Drawer
         navigationDrawer();
@@ -278,7 +272,7 @@ public class MainActivity extends ActionBarActivity {
             public void onGlobalLayout() {
 
                 for (int i = 0; i < drawerTitles.length; i++) {
-                    if (i == sharedPreferences.getInt("FRAGMENT",0)) {
+                    if (i == sharedPreferences.getInt("FRAGMENT", 0)) {
                         ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
                         TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
                         imageViewDrawerIcon.setColorFilter(color);
@@ -623,16 +617,16 @@ public class MainActivity extends ActionBarActivity {
         FragmentTransaction fragmentTransaction;
         switch (position) {
             case 0:
-                sharedPreferences.edit().putInt("FRAGMENT",0).apply();
-                fragmentManager = getFragmentManager();
+                sharedPreferences.edit().putInt("FRAGMENT", 0).apply();
+                fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 FragmentDesign fragmentDesign = new FragmentDesign();
                 fragmentTransaction.replace(R.id.fragment, fragmentDesign);
                 fragmentTransaction.commit();
                 break;
             case 1:
-                sharedPreferences.edit().putInt("FRAGMENT",1).apply();
-                fragmentManager = getFragmentManager();
+                sharedPreferences.edit().putInt("FRAGMENT", 1).apply();
+                fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 FragmentDevelop fragmentDevelop = new FragmentDevelop();
                 fragmentTransaction.replace(R.id.fragment, fragmentDevelop);

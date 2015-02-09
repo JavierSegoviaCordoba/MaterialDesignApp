@@ -1,30 +1,39 @@
-package com.example.javier.MaterialDesignApp.Fragments;
+package com.example.javier.MaterialDesignApp.Tabs.TabsViews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.javier.MaterialDesignApp.DetailActivity;
 import com.example.javier.MaterialDesignApp.R;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DesignAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
-import com.example.javier.MaterialDesignApp.Tabs.TabsAdapters.TabsDesignViewPagerAdapter;
-import com.example.javier.MaterialDesignApp.Tabs.TabsUtils.SlidingTabLayout;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
+import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
+import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class FragmentDesign extends Fragment {
+public class TabDesignMaterialDesign extends Fragment {
 
     String urlPost;
     JSONObject jsonObjectDesignPosts;
@@ -38,45 +47,61 @@ public class FragmentDesign extends Fragment {
     RecyclerView.Adapter recyclerViewAdapter;
     View view;
     SharedPreferences sharedPreferences;
-    ViewPager pager;
-    TabsDesignViewPagerAdapter tabsDesignViewPagerAdapter;
-    SlidingTabLayout tabs;
-    CharSequence titles[]={"Get Started","Material Design","Style","Patterns"};
-    int tabNumber = titles.length;
-
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_design, container, false);
+        view = inflater.inflate(R.layout.tab_design, container, false);
 
-        //  Setup tabs
-        tabsDesignViewPagerAdapter =  new TabsDesignViewPagerAdapter(getFragmentManager(),titles,tabNumber);
-        pager = (ViewPager) view.findViewById(R.id.pager);
-        pager.setAdapter(tabsDesignViewPagerAdapter);
-        tabs = (SlidingTabLayout) view.findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(false);
+        // Get shared preferences
+        sharedPreferences = getActivity().getSharedPreferences("VALUES", Context.MODE_PRIVATE);
 
+        // Setup RecyclerView News
+        recyclerViewDesign(view);
 
-        // Tab indicator color
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                //TypedValue typedValue = new TypedValue();
-                //getActivity().getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
-                //final int color = typedValue.data;
-                return getResources().getColor(R.color.md_white_1000);
-            }
-        });
-        tabs.setViewPager(pager);
+        // Setup swipe to refresh
+        swipeToRefresh(view);
 
         return view;
     }
 
+    private void recyclerViewDesign(View view) {
 
-    /*public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewDesign);
+
+        // Divider
+        recyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(android.R.drawable.divider_horizontal_bright)));
+
+        // improve performance if you know that changes in content
+        // do not change the size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/diseno/material-design/?json=1";
+
+        new AsyncTaskNewsParseJson().execute(urlPost);
+
+        ItemClickSupport itemClickSupport = ItemClickSupport.addTo(recyclerView);
+        itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView parent, View view, int position, long id) {
+                sharedPreferences.edit().putString("TITLE", designTitle[position]).apply();
+                sharedPreferences.edit().putString("CONTENT", designContent[position]).apply();
+                sharedPreferences.edit().putString("EXCERPT", designExcerpt[position]).apply();
+                sharedPreferences.edit().putString("IMAGE", designImageFull[position]).apply();
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
 
 
         @Override
@@ -121,7 +146,7 @@ public class FragmentDesign extends Fragment {
 
             //Data set used by the recyclerViewAdapter. This data will be displayed.
             if (designTitle.length != 0) {
-                for (int i = 0; i < postNumber; i++) {
+                for (int i = postNumber-1; i >= 0; i--) {
                     designs.add(new Design(designTitle[i], designExcerpt[i], designImage[i]));
                 }
             }
@@ -155,6 +180,6 @@ public class FragmentDesign extends Fragment {
                 new AsyncTaskNewsParseJson().execute(urlPost);
             }
         });
-    }*/
+    }
 }
 

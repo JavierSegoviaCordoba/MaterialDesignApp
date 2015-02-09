@@ -606,6 +606,7 @@
     <color name="md_white_1000_20">#33ffffff</color>
     <color name="md_white_1000_25">#40ffffff</color>
     <color name="md_white_1000_50">#80ffffff</color>
+    <color name="md_white_1000_60">#99ffffff</color>
     <color name="md_white_1000_75">#c0ffffff</color>
     <color name="md_black_1000_10">#1a000000</color>
     <color name="md_black_1000_15">#26000000</color>

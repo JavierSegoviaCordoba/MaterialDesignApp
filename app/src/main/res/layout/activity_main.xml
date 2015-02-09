@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/topMargin"
             android:background="?colorPrimaryDark"
-            android:translationZ="4dp" />
+            android:translationZ="4dp"/>
 
 
             <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,7 +33,7 @@
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
             <FrameLayout
-                android:animateLayoutChanges="true"
+                android:elevation="4dp"
                 android:id="@+id/fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
