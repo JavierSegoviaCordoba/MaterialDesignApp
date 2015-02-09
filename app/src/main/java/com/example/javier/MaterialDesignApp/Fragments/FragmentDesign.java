@@ -20,8 +20,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-// Javier Segovia Córdoba
-
 public class FragmentDesign extends Fragment {
 
     String urlPost;
@@ -41,8 +39,6 @@ public class FragmentDesign extends Fragment {
     SlidingTabLayout tabs;
     CharSequence titles[]={"Get Started","Material Design","Style","Patterns"};
     int tabNumber = titles.length;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
