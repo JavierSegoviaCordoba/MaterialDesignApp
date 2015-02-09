@@ -20,6 +20,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+// Javier Segovia
+
 public class FragmentDesign extends Fragment {
 
     String urlPost;
