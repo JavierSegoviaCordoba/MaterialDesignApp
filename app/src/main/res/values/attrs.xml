@@ -41,4 +41,9 @@
     <dimen name="statusBarHeight">0dp</dimen>
     <dimen name="space">0dp</dimen>
     <color name="inset">#0000</color>
+
+    <style name="statusBarVisibility">
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>

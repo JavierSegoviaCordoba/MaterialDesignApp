@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -50,9 +52,10 @@ public class FragmentDevelop extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     View view;
-
+    int recyclerViewPaddingTop;
+    TypedValue typedValueToolbarHeight = new TypedValue();
     Toolbar toolbar;
-
+    FrameLayout statusBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,7 +66,11 @@ public class FragmentDevelop extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences("VALUES", Context.MODE_PRIVATE);
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Develop");
+        statusBar = (FrameLayout) getActivity().findViewById(R.id.statusBar);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Develop");
+
+        // Hide and show toolbar on scroll
+        toolbarHideShow();
 
         // Setup RecyclerView News
         recyclerViewDevelop(view);
@@ -71,8 +78,6 @@ public class FragmentDevelop extends Fragment {
         // Setup swipe to refresh
         swipeToRefresh(view);
 
-        // Hide and show toolbar on scroll
-        toolbarHideShow();
 
         return view;
     }
@@ -91,6 +96,16 @@ public class FragmentDevelop extends Fragment {
         // use a linear layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValueToolbarHeight, true);
+
+        if (Build.VERSION.SDK_INT >= 19) {
+            recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(25);
+        } else {
+            recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+        }
+
+        recyclerView.setPadding(0, recyclerViewPaddingTop, 0, 0);
 
         urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/desarrollar?json=1";
         new AsyncTaskNewsParseJson().execute(urlPost);
@@ -162,7 +177,7 @@ public class FragmentDevelop extends Fragment {
 
     private void swipeToRefresh(View view) {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        int start = convertToPx(0), end = convertToPx(72);
+        int start = convertToPx(0), end = recyclerViewPaddingTop + convertToPx(16);
         swipeRefreshLayout.setProgressViewOffset(true, start, end);
         TypedValue typedValueColorPrimary = new TypedValue();
         TypedValue typedValueColorAccent = new TypedValue();
@@ -179,14 +194,15 @@ public class FragmentDevelop extends Fragment {
         });
     }
 
-    public void toolbarHideShow(){
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+    public void toolbarHideShow() {
         toolbar.post(new Runnable() {
             @Override
             public void run() {
-                ScrollManager manager = new ScrollManager();
+                ScrollManager manager = new ScrollManager(getActivity());
                 manager.attach(recyclerView);
                 manager.addView(toolbar, ScrollManager.Direction.UP);
+                //TODO fix scrollmanager to hide statusbar and toolbar
+                //manager.addView(statusBar, ScrollManager.Direction.UP);
                 manager.setInitialOffset(toolbar.getHeight());
             }
         });
@@ -199,7 +215,7 @@ public class FragmentDevelop extends Fragment {
         return (int) (dp * scale + 0.5f);
     }
 
-    public void animationTranslationY(View view, int duration, int interpolator, int translationY){
+    public void animationTranslationY(View view, int duration, int interpolator, int translationY) {
         Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translationY);
         slideInAnimation.setDuration(duration);
         slideInAnimation.setInterpolator(new AccelerateInterpolator(interpolator));

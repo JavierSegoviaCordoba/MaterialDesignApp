@@ -1,15 +1,18 @@
 package com.example.javier.MaterialDesignApp.Fragments;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.example.javier.MaterialDesignApp.MainActivity;
 import com.example.javier.MaterialDesignApp.R;
@@ -39,9 +42,10 @@ public class FragmentDesign extends Fragment {
     ViewPager pager;
     TabsDesignViewPagerAdapter tabsDesignViewPagerAdapter;
     SlidingTabLayout tabs;
-    CharSequence titles[]={"Get Started","Material Design","Style","Patterns"};
+    CharSequence titles[] = {"Get Started", "Material Design", "Style", "Patterns"};
     int tabNumber = titles.length;
-    Toolbar toolbar;
+    int tabsPaddingTop;
+    TypedValue typedValueToolbarHeight = new TypedValue();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,8 +53,7 @@ public class FragmentDesign extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_design, container, false);
 
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Design");
-
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Design");
 
         //  Setup tabs
         setupTabs();
@@ -58,13 +61,12 @@ public class FragmentDesign extends Fragment {
         return view;
     }
 
-    public void setupTabs (){
-        tabsDesignViewPagerAdapter =  new TabsDesignViewPagerAdapter(getFragmentManager(),titles,tabNumber);
+    public void setupTabs() {
+        tabsDesignViewPagerAdapter = new TabsDesignViewPagerAdapter(getFragmentManager(), titles, tabNumber);
         pager = (ViewPager) view.findViewById(R.id.pager);
         pager.setAdapter(tabsDesignViewPagerAdapter);
         tabs = (SlidingTabLayout) view.findViewById(R.id.tabs);
         tabs.setDistributeEvenly(false);
-
 
         // Tab indicator color
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -76,6 +78,17 @@ public class FragmentDesign extends Fragment {
                 return getResources().getColor(R.color.md_white_1000);
             }
         });
+
+        getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValueToolbarHeight, true);
+
+        if (Build.VERSION.SDK_INT >= 19) {
+            tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(25);
+        }else{
+            tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+        }
+
+        tabs.setPadding(0, tabsPaddingTop, 0, 0);
+
         tabs.setViewPager(pager);
     }
 
@@ -160,5 +173,12 @@ public class FragmentDesign extends Fragment {
             }
         });
     }*/
+
+    public int convertToPx(int dp) {
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (dp * scale + 0.5f);
+    }
 }
 
