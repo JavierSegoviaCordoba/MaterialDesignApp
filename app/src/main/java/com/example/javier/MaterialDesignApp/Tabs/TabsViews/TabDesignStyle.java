@@ -3,7 +3,9 @@ package com.example.javier.MaterialDesignApp.Tabs.TabsViews;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,6 +29,7 @@ import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
 import com.example.javier.MaterialDesignApp.Tabs.TabsUtils.SlidingTabLayout;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
+import com.example.javier.MaterialDesignApp.Utilitis.ScrollManagerToolbarTabs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,8 +52,10 @@ public class TabDesignStyle extends Fragment {
     RecyclerView.Adapter recyclerViewAdapter;
     View view;
     SharedPreferences sharedPreferences;
-    SlidingTabLayout tabs;
     Toolbar toolbar;
+    TypedValue typedValueToolbarHeight = new TypedValue();
+    SlidingTabLayout tabs;
+    int recyclerViewPaddingTop;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,19 +72,7 @@ public class TabDesignStyle extends Fragment {
         // Setup swipe to refresh
         swipeToRefresh(view);
 
-        /*// Setup toolbar
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        tabs = (SlidingTabLayout) getActivity().findViewById(R.id.tabs);
-        tabs.post(new Runnable() {
-            @Override
-            public void run() {
-                ScrollManager manager = new ScrollManager();
-                manager.attach(recyclerView);
-                manager.addView(toolbar, ScrollManager.Direction.UP);
-                manager.addView(tabs, ScrollManager.Direction.UP);
-                manager.setInitialOffset(tabs.getHeight());
-            }
-        });*/
+        toolbarHideShow();
 
         return view;
     }
@@ -87,6 +80,7 @@ public class TabDesignStyle extends Fragment {
     private void recyclerViewDesign(View view) {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewDesign);
+        tabs = (SlidingTabLayout) view.findViewById(R.id.tabs);
 
         // Divider
         recyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(android.R.drawable.divider_horizontal_bright)));
@@ -99,6 +93,24 @@ public class TabDesignStyle extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        // Setup RecyclerView paddingTop
+        getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValueToolbarHeight, true);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (Build.VERSION.SDK_INT >= 19) {
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48) + convertToPx(25);
+            } else {
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48);
+            }
+        }
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48) + convertToPx(25);
+            }else{
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48);
+            }
+        }
+        recyclerView.setPadding(0, recyclerViewPaddingTop, 0, 0);
 
         urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/diseno/estilo/?json=1";
 
@@ -168,11 +180,9 @@ public class TabDesignStyle extends Fragment {
                     designs.add(new Design(designTitle[i], designExcerpt[i], designImage[i]));
                 }
             }
-
             if (error) {
                 Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_LONG).show();
             }
-
             // Create the recyclerViewAdapter
             recyclerViewAdapter = new DesignAdapter(getActivity(), designs);
             recyclerView.setAdapter(recyclerViewAdapter);
@@ -185,21 +195,40 @@ public class TabDesignStyle extends Fragment {
         }
     }
     private void swipeToRefresh(View view) {
-        swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        int start = recyclerViewPaddingTop - convertToPx(48), end = recyclerViewPaddingTop + convertToPx(16);
+        swipeRefreshLayout.setProgressViewOffset(true, start, end);
         TypedValue typedValueColorPrimary = new TypedValue();
         TypedValue typedValueColorAccent = new TypedValue();
         getActivity().getTheme().resolveAttribute(R.attr.colorPrimary, typedValueColorPrimary, true);
         getActivity().getTheme().resolveAttribute(R.attr.colorAccent, typedValueColorAccent, true);
         final int colorPrimary = typedValueColorPrimary.data, colorAccent = typedValueColorAccent.data;
-        swipeRefreshLayout.setColorSchemeColors(colorPrimary,colorAccent);
+        swipeRefreshLayout.setColorSchemeColors(colorPrimary, colorAccent);
 
-        swipeRefreshLayout.setOnRefreshListener(new android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new AsyncTaskNewsParseJson().execute(urlPost);
             }
         });
     }
-}
+    public int convertToPx(int dp) {
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (dp * scale + 0.5f);
+    }
 
+    public void toolbarHideShow() {
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.post(new Runnable() {
+            @Override
+            public void run() {
+                ScrollManagerToolbarTabs manager = new ScrollManagerToolbarTabs(getActivity());
+                manager.attach(recyclerView);
+                manager.addView(toolbar, ScrollManagerToolbarTabs.Direction.UP);
+                manager.setInitialOffset(toolbar.getHeight());
+            }
+        });
+    }
+}

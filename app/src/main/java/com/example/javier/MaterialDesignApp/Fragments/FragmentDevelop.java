@@ -29,7 +29,7 @@ import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.De
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Develop;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
 import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
-import com.example.javier.MaterialDesignApp.Utilitis.ScrollManager;
+import com.example.javier.MaterialDesignApp.Utilitis.ScrollManagerToolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,7 +69,7 @@ public class FragmentDevelop extends Fragment {
         statusBar = (FrameLayout) getActivity().findViewById(R.id.statusBar);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Develop");
 
-        // Hide and show toolbar on scroll
+        // Hide and show toolbar and statusBar on scroll
         toolbarHideShow();
 
         // Setup RecyclerView News
@@ -198,9 +198,9 @@ public class FragmentDevelop extends Fragment {
         toolbar.post(new Runnable() {
             @Override
             public void run() {
-                ScrollManager manager = new ScrollManager(getActivity());
+                ScrollManagerToolbar manager = new ScrollManagerToolbar(getActivity());
                 manager.attach(recyclerView);
-                manager.addView(toolbar, ScrollManager.Direction.UP);
+                manager.addView(toolbar, ScrollManagerToolbar.Direction.UP);
                 manager.setInitialOffset(toolbar.getHeight());
             }
         });

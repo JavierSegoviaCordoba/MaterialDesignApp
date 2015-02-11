@@ -1,6 +1,7 @@
 package com.example.javier.MaterialDesignApp.Fragments;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,6 +47,8 @@ public class FragmentDesign extends Fragment {
     int tabNumber = titles.length;
     int tabsPaddingTop;
     TypedValue typedValueToolbarHeight = new TypedValue();
+    Toolbar toolbar;
+    FrameLayout statusBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,7 +70,6 @@ public class FragmentDesign extends Fragment {
         pager.setAdapter(tabsDesignViewPagerAdapter);
         tabs = (SlidingTabLayout) view.findViewById(R.id.tabs);
         tabs.setDistributeEvenly(false);
-
         // Tab indicator color
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
@@ -79,100 +81,30 @@ public class FragmentDesign extends Fragment {
             }
         });
 
+        // Setup tabs top padding
         getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValueToolbarHeight, true);
-
-        if (Build.VERSION.SDK_INT >= 19) {
-            tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(25);
-        }else{
-            tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (Build.VERSION.SDK_INT >= 19) {
+                tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(25);
+            }else{
+                tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+            }
         }
-
-        tabs.setPadding(0, tabsPaddingTop, 0, 0);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (Build.VERSION.SDK_INT >= 21) {
+                tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+            }
+            if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21){
+                tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(25);
+            }
+            if (Build.VERSION.SDK_INT < 19) {
+                tabsPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+            }
+        }
+        tabs.setPadding(convertToPx(48), tabsPaddingTop, convertToPx(16), 0);
 
         tabs.setViewPager(pager);
     }
-
-
-    /*public class AsyncTaskNewsParseJson extends AsyncTask<String, String, String> {
-
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        // get JSON Object
-        @Override
-        protected String doInBackground(String... url) {
-
-            urlPost = url[0];
-            try {
-                jsonObjectDesignPosts = JsonParser.readJsonFromUrl(urlPost);
-                postNumber = jsonObjectDesignPosts.getJSONArray("posts").length();
-                jsonArrayDesignContent = jsonObjectDesignPosts.getJSONArray("posts");
-                sharedPreferences.edit().putString("DESIGN", jsonArrayDesignContent.toString()).apply();
-                designTitle = new String[postNumber];
-                designExcerpt = new String[postNumber];
-                designContent = new String[postNumber];
-                designImage = new String[postNumber];
-                designImageFull = new String[postNumber];
-                for (int i = 0; i < postNumber; i++) {
-                    designTitle[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("title")).toString();
-                    designExcerpt[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("excerpt")).toString();
-                    designContent[i] = jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getString("content");
-                    designImage[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("thumbnail").getString("url")).toString();
-                    designImageFull[i] = Html.fromHtml(jsonObjectDesignPosts.getJSONArray("posts").getJSONObject(i).getJSONObject("thumbnail_images").getJSONObject("full").getString("url")).toString();
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                designTitle = new String[0];
-                error = true;
-            }
-            return null;
-        }
-
-        // Set facebook items to the textviews and imageviews
-        @Override
-        protected void onPostExecute(String result) {
-
-            designs = new ArrayList<>();
-
-            //Data set used by the recyclerViewAdapter. This data will be displayed.
-            if (designTitle.length != 0) {
-                for (int i = 0; i < postNumber; i++) {
-                    designs.add(new Design(designTitle[i], designExcerpt[i], designImage[i]));
-                }
-            }
-            if (error) {
-                Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_LONG).show();
-            }
-            // Create the recyclerViewAdapter
-            recyclerViewAdapter = new DesignAdapter(getActivity(), designs);
-            recyclerView.setAdapter(recyclerViewAdapter);
-
-            swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-            swipeRefreshLayout.setRefreshing(false);
-
-            ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.GONE);
-        }
-    }
-    private void swipeToRefresh(View view) {
-        swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-
-        TypedValue typedValueColorPrimary = new TypedValue();
-        TypedValue typedValueColorAccent = new TypedValue();
-        getActivity().getTheme().resolveAttribute(R.attr.colorPrimary, typedValueColorPrimary, true);
-        getActivity().getTheme().resolveAttribute(R.attr.colorAccent, typedValueColorAccent, true);
-        final int colorPrimary = typedValueColorPrimary.data, colorAccent = typedValueColorAccent.data;
-        swipeRefreshLayout.setColorSchemeColors(colorPrimary,colorAccent);
-
-        swipeRefreshLayout.setOnRefreshListener(new android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new AsyncTaskNewsParseJson().execute(urlPost);
-            }
-        });
-    }*/
 
     public int convertToPx(int dp) {
         // Get the screen's density scale
