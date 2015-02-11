@@ -2,8 +2,10 @@ package com.example.javier.MaterialDesignApp.Fragments;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -98,11 +100,23 @@ public class FragmentDevelop extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValueToolbarHeight, true);
-
-        if (Build.VERSION.SDK_INT >= 19) {
-            recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(25);
-        } else {
-            recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (Build.VERSION.SDK_INT >= 19) {
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(25);
+            }else{
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+            }
+        }
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (Build.VERSION.SDK_INT >= 21) {
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+            }
+            if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21){
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(25);
+            }
+            if (Build.VERSION.SDK_INT < 19) {
+                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics());
+            }
         }
 
         recyclerView.setPadding(0, recyclerViewPaddingTop, 0, 0);
@@ -195,10 +209,11 @@ public class FragmentDevelop extends Fragment {
     }
 
     public void toolbarHideShow() {
+        final Activity activity = getActivity();
         toolbar.post(new Runnable() {
             @Override
             public void run() {
-                ScrollManagerToolbar manager = new ScrollManagerToolbar(getActivity());
+                ScrollManagerToolbar manager = new ScrollManagerToolbar(activity);
                 manager.attach(recyclerView);
                 manager.addView(toolbar, ScrollManagerToolbar.Direction.UP);
                 manager.setInitialOffset(toolbar.getHeight());
