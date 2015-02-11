@@ -201,8 +201,6 @@ public class FragmentDevelop extends Fragment {
                 ScrollManager manager = new ScrollManager(getActivity());
                 manager.attach(recyclerView);
                 manager.addView(toolbar, ScrollManager.Direction.UP);
-                //TODO fix scrollmanager to hide statusbar and toolbar
-                //manager.addView(statusBar, ScrollManager.Direction.UP);
                 manager.setInitialOffset(toolbar.getHeight());
             }
         });

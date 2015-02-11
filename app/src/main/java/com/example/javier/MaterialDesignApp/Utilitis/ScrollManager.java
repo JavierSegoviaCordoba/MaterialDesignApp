@@ -105,7 +105,7 @@ public class ScrollManager extends RecyclerView.OnScrollListener {
         if (Build.VERSION.SDK_INT >= 21) {
             ValueAnimator colorAnimation = ValueAnimator.ofArgb(colorStatusBar21, activity.getResources().getColor(R.color.inset));
             colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_longAnimTime));
-            colorAnimation.setStartDelay(activity.getResources().getInteger(android.R.integer.config_longAnimTime));
+            colorAnimation.setStartDelay(activity.getResources().getInteger(android.R.integer.config_mediumAnimTime));
             colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animator) {
@@ -117,9 +117,9 @@ public class ScrollManager extends RecyclerView.OnScrollListener {
         }
 
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21 ) {
-            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorStatusBar19, activity.getResources().getColor(R.color.inset));
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorStatusBar19, activity.getResources().getColor(android.R.color.transparent));
             colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_longAnimTime));
-            colorAnimation.setStartDelay(activity.getResources().getInteger(android.R.integer.config_longAnimTime));
+            colorAnimation.setStartDelay(activity.getResources().getInteger(android.R.integer.config_mediumAnimTime));
             colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animator) {
@@ -150,7 +150,7 @@ public class ScrollManager extends RecyclerView.OnScrollListener {
         runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
         if (Build.VERSION.SDK_INT >= 21) {
             ValueAnimator colorAnimation = ValueAnimator.ofArgb(activity.getResources().getColor(R.color.inset), colorStatusBar21);
-            colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_shortAnimTime));
+            colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_mediumAnimTime));
             colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animator) {
@@ -162,8 +162,8 @@ public class ScrollManager extends RecyclerView.OnScrollListener {
         }
 
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21 ) {
-            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), activity.getResources().getColor(R.color.inset), colorStatusBar19);
-            colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_shortAnimTime));
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), activity.getResources().getColor(android.R.color.transparent), colorStatusBar19);
+            colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_mediumAnimTime));
             colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animator) {
