@@ -23,7 +23,6 @@
 
         <item name="color">@color/md_blue_500_50</item>
 
-
         <!-- Navigation Drawer Arrow Style. -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 

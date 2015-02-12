@@ -104,6 +104,8 @@ public class FragmentDesign extends Fragment {
         }
         tabs.setPadding(convertToPx(48), tabsPaddingTop, convertToPx(16), 0);
 
+        pager.setPadding(0,tabsPaddingTop + convertToPx(48),0,0);
+
         tabs.setViewPager(pager);
     }
 

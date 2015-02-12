@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -263,8 +265,8 @@ public class MainActivity extends ActionBarActivity {
         drawerIcons.recycle();
         adapterDrawer = new DrawerAdapter(drawerItems);
         recyclerViewDrawer.setAdapter(adapterDrawer);
-        TypedValue typedValue = new TypedValue();
-        MainActivity.this.getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
+        final TypedValue typedValue = new TypedValue();
+        MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         final int color = typedValue.data;
 
         recyclerViewDrawer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -283,7 +285,12 @@ public class MainActivity extends ActionBarActivity {
                         }
                         textViewDrawerTitle.setTextColor(color);
                         RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
-                        relativeLayoutDrawerItem.setFocusableInTouchMode(true);
+                        TypedValue typedValueDrawerSelected = new TypedValue();
+                        getTheme().resolveAttribute(R.attr.colorPrimary, typedValueDrawerSelected, true);
+                        int colorDrawerItemSelected = typedValueDrawerSelected.data;
+                        colorDrawerItemSelected = (colorDrawerItemSelected & 0x00FFFFFF) | 0x40000000;
+                        relativeLayoutDrawerItem.setBackgroundColor(colorDrawerItemSelected);
+
                     } else {
                         ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
                         TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
@@ -295,7 +302,7 @@ public class MainActivity extends ActionBarActivity {
                         }
                         textViewDrawerTitle.setTextColor(getResources().getColor(R.color.md_text));
                         RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
-                        relativeLayoutDrawerItem.setFocusableInTouchMode(false);
+                        relativeLayoutDrawerItem.setBackgroundColor(getResources().getColor(R.color.md_white_1000));
                     }
                 }
 
@@ -323,7 +330,12 @@ public class MainActivity extends ActionBarActivity {
                         }
                         textViewDrawerTitle.setTextColor(color);
                         RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
-                        relativeLayoutDrawerItem.setFocusableInTouchMode(true);
+                        TypedValue typedValueDrawerSelected = new TypedValue();
+                        getTheme().resolveAttribute(R.attr.colorPrimary, typedValueDrawerSelected, true);
+                        int colorDrawerItemSelected = typedValueDrawerSelected.data;
+                        colorDrawerItemSelected = (colorDrawerItemSelected & 0x00FFFFFF) | 0x40000000;
+                        relativeLayoutDrawerItem.setBackgroundColor(colorDrawerItemSelected);
+
                     } else {
                         ImageView imageViewDrawerIcon = (ImageView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.imageViewDrawerIcon);
                         TextView textViewDrawerTitle = (TextView) recyclerViewDrawer.getChildAt(i).findViewById(R.id.textViewDrawerItemTitle);
@@ -335,7 +347,7 @@ public class MainActivity extends ActionBarActivity {
                         }
                         textViewDrawerTitle.setTextColor(getResources().getColor(R.color.md_text));
                         RelativeLayout relativeLayoutDrawerItem = (RelativeLayout) recyclerViewDrawer.getChildAt(i).findViewById(R.id.relativeLayoutDrawerItem);
-                        relativeLayoutDrawerItem.setFocusableInTouchMode(false);
+                        relativeLayoutDrawerItem.setBackgroundColor(getResources().getColor(R.color.md_white_1000));
                     }
                 }
 
