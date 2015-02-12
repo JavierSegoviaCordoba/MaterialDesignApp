@@ -662,4 +662,18 @@
     <color name="md_secondary_text_icons">#8a000000</color>
     <color name="md_disabled_hint_text">#4c000000</color>
     <color name="md_divider">#1f000000</color>
+    <!--Falcon-->
+    <array name="falcon">
+        <item>@color/md_falcon_400</item>
+        <item>@color/md_falcon_500</item>
+        <item>@color/md_falcon_700</item>
+    </array>
+    <color name="md_falcon_400">#ff38628b</color>
+    <color name="md_falcon_500">#384e77</color>
+    <color name="md_falcon_700">#2b3e5f</color>
+    <color name="md_falcon_A400">#598bae</color>
+    <color name="md_falcon_500_25">#40384e77</color>
+    <color name="md_falcon_500_50">#80384e77</color>
+    <color name="md_falcon_500_75">#c0384e77</color>
+    <color name="md_falcon_A400_25">#40598bae</color>
 </resources>

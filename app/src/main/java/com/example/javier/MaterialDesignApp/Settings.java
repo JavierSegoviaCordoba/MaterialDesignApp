@@ -249,6 +249,14 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
                 editor = sharedPreferences.edit();
                 editor.putInt("THEME", 8).apply();
                 break;
+            case 9:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 9).apply();
+                break;
+            case 10:
+                editor = sharedPreferences.edit();
+                editor.putInt("THEME", 10).apply();
+                break;
         }
     }
 
@@ -319,6 +327,12 @@ public class Settings extends ActionBarActivity implements View.OnClickListener 
                 break;
             case 8:
                 setTheme(R.style.AppTheme8);
+                break;
+            case 9:
+                setTheme(R.style.AppTheme9);
+                break;
+            case 10:
+                setTheme(R.style.AppTheme10);
                 break;
             default:
                 setTheme(R.style.AppTheme);

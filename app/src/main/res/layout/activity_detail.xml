@@ -30,10 +30,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp"
-            android:scrollbarSize="3dp"
-            android:scrollbarThumbVertical="?attr/color">
+            android:scrollbarThumbVertical="@drawable/scrollbar">
 
             <FrameLayout
                 android:layout_width="match_parent"

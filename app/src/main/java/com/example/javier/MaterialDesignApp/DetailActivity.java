@@ -204,6 +204,12 @@ public class DetailActivity extends ActionBarActivity {
             case 8:
                 setTheme(R.style.AppTheme8);
                 break;
+            case 9:
+                setTheme(R.style.AppTheme9);
+                break;
+            case 10:
+                setTheme(R.style.AppTheme10);
+                break;
             default:
                 setTheme(R.style.AppTheme);
                 break;

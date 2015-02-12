@@ -17,7 +17,7 @@ import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.Settings;
 
 public class ColorChooserDialog extends DialogFragment implements View.OnClickListener {
-    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8;
+    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8, cardView9, cardView10;
     Button buttonDisagree, buttonAgree;
     View view;
     int currentTheme;
@@ -55,6 +55,8 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         cardView6 = (CardView) view.findViewById(R.id.card_view6);
         cardView7 = (CardView) view.findViewById(R.id.card_view7);
         cardView8 = (CardView) view.findViewById(R.id.card_view8);
+        cardView9 = (CardView) view.findViewById(R.id.card_view9);
+        cardView10 = (CardView) view.findViewById(R.id.card_view10);
         buttonDisagree = (Button) view.findViewById(R.id.buttonDisagree);
         buttonAgree = (Button) view.findViewById(R.id.buttonAgree);
 
@@ -66,6 +68,8 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         cardView6.setOnClickListener(this);
         cardView7.setOnClickListener(this);
         cardView8.setOnClickListener(this);
+        cardView9.setOnClickListener(this);
+        cardView10.setOnClickListener(this);
         buttonDisagree.setOnClickListener(this);
         buttonAgree.setOnClickListener(this);
     }
@@ -103,6 +107,14 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
             case R.id.card_view8:
                 sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
                 ((Settings) getActivity()).setThemeFragment(8);
+                break;
+            case R.id.card_view9:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
+                ((Settings) getActivity()).setThemeFragment(9);
+                break;
+            case R.id.card_view10:
+                sharedPreferences.edit().putBoolean("THEMECHANGED", true).apply();
+                ((Settings) getActivity()).setThemeFragment(10);
                 break;
             case R.id.buttonDisagree:
                 sharedPreferences.edit().putBoolean("THEMECHANGED", false).apply();
