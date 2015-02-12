@@ -288,7 +288,7 @@ public class MainActivity extends ActionBarActivity {
                         TypedValue typedValueDrawerSelected = new TypedValue();
                         getTheme().resolveAttribute(R.attr.colorPrimary, typedValueDrawerSelected, true);
                         int colorDrawerItemSelected = typedValueDrawerSelected.data;
-                        colorDrawerItemSelected = (colorDrawerItemSelected & 0x00FFFFFF) | 0x40000000;
+                        colorDrawerItemSelected = (colorDrawerItemSelected & 0x00FFFFFF) | 0x30000000;
                         relativeLayoutDrawerItem.setBackgroundColor(colorDrawerItemSelected);
 
                     } else {
@@ -333,7 +333,7 @@ public class MainActivity extends ActionBarActivity {
                         TypedValue typedValueDrawerSelected = new TypedValue();
                         getTheme().resolveAttribute(R.attr.colorPrimary, typedValueDrawerSelected, true);
                         int colorDrawerItemSelected = typedValueDrawerSelected.data;
-                        colorDrawerItemSelected = (colorDrawerItemSelected & 0x00FFFFFF) | 0x40000000;
+                        colorDrawerItemSelected = (colorDrawerItemSelected & 0x00FFFFFF) | 0x30000000;
                         relativeLayoutDrawerItem.setBackgroundColor(colorDrawerItemSelected);
 
                     } else {
