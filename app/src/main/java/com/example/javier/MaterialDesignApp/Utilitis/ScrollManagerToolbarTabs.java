@@ -2,8 +2,13 @@ package com.example.javier.MaterialDesignApp.Utilitis;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.os.Build;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,10 +106,12 @@ public class ScrollManagerToolbarTabs extends RecyclerView.OnScrollListener {
 
     private void hideView(final View view, Direction direction) {
         int height = calculateTranslation(view);
-        int translateY = direction == Direction.UP ? -height - statusBarHeight: height;
-        int translateYTabs = direction == Direction.UP ? - toolbarHeight: height;
+        int translateY = direction == Direction.UP ? -height - statusBarHeight : height;
+        int translateYTabs = direction == Direction.UP ? -toolbarHeight : height;
+        int translateYTabsViewPager = direction == Direction.UP ? -toolbarHeight : height;
         runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
         runTranslateAnimationTabs(view, translateYTabs, new AccelerateInterpolator(3));
+        runTranslateAnimationTabsViewPager(view, translateYTabsViewPager, new AccelerateInterpolator(3));
     }
 
     /**
@@ -125,6 +132,7 @@ public class ScrollManagerToolbarTabs extends RecyclerView.OnScrollListener {
     private void showView(View view) {
         runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
         runTranslateAnimationTabs(view, 0, new DecelerateInterpolator(3));
+        runTranslateAnimationTabsViewPager(view, convertToPx(56+48+25,activity), new AccelerateInterpolator(3));
     }
 
     private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
@@ -134,19 +142,21 @@ public class ScrollManagerToolbarTabs extends RecyclerView.OnScrollListener {
         slideInAnimation.setInterpolator(interpolator);
         slideInAnimation.start();
     }
+
     private void runTranslateAnimationTabs(View view, int translateYTabs, Interpolator interpolator) {
         Animator slideInAnimationTabs = ObjectAnimator.ofFloat(tabs, "translationY", translateYTabs);
         slideInAnimationTabs.setDuration(tabs.getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
         slideInAnimationTabs.setStartDelay(tabs.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
         slideInAnimationTabs.setInterpolator(interpolator);
         slideInAnimationTabs.start();
-        /*Animator slideInAnimation2 = ObjectAnimator.ofFloat(viewPager, "translationY", translateYTabs);
-        slideInAnimation2.setDuration(viewPager.getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
-        slideInAnimation2.setStartDelay(viewPager.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
-        slideInAnimation2.setInterpolator(interpolator);
-        slideInAnimation2.start();*/
     }
-
+    private void runTranslateAnimationTabsViewPager(View view, int translateYTabsViewPager, Interpolator interpolator) {
+        Animator slideInAnimationTabsViewPager = ObjectAnimator.ofFloat(viewPager, "translationY", translateYTabsViewPager);
+        slideInAnimationTabsViewPager.setDuration(viewPager.getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        slideInAnimationTabsViewPager.setStartDelay(viewPager.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
+        slideInAnimationTabsViewPager.setInterpolator(interpolator);
+        slideInAnimationTabsViewPager.start();
+    }
 
 
     public int convertToPx(int dp, Activity activity) {

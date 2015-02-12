@@ -72,8 +72,6 @@ public class TabDesignGetStarted extends Fragment {
         // Setup swipe to refresh
         swipeToRefresh(view);
 
-        toolbarHideShow();
-
         return view;
     }
 
@@ -94,26 +92,9 @@ public class TabDesignGetStarted extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // Setup RecyclerView paddingTop
-        getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValueToolbarHeight, true);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (Build.VERSION.SDK_INT >= 19) {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48) + convertToPx(25);
-            } else {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48);
-            }
-        }
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48) + convertToPx(25);
-            }else{
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48);
-            }
-        }
-        recyclerView.setPadding(0, recyclerViewPaddingTop, 0, 0);
-
         urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/diseno/empezar/?json=1";
 
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         new AsyncTaskNewsParseJson().execute(urlPost);
 
         ItemClickSupport itemClickSupport = ItemClickSupport.addTo(recyclerView);
@@ -183,6 +164,13 @@ public class TabDesignGetStarted extends Fragment {
             if (error) {
                 Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_LONG).show();
             }
+            // Create the recyclerViewAdapter
+            recyclerViewAdapter = new DesignAdapter(getActivity(), designs);
+            recyclerView.setAdapter(recyclerViewAdapter);
+
+            swipeRefreshLayout = (android.support.v4.widget.SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+            swipeRefreshLayout.setRefreshing(false);
+
             // Create the recyclerViewAdapter
             recyclerViewAdapter = new DesignAdapter(getActivity(), designs);
             recyclerView.setAdapter(recyclerViewAdapter);

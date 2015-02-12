@@ -5,6 +5,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;

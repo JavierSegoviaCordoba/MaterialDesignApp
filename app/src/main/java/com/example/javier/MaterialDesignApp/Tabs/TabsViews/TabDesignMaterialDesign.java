@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.javier.MaterialDesignApp.DetailActivity;
+import com.example.javier.MaterialDesignApp.MainActivity;
 import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DesignAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
@@ -72,8 +73,6 @@ public class TabDesignMaterialDesign extends Fragment {
         // Setup swipe to refresh
         swipeToRefresh(view);
 
-        toolbarHideShow();
-
         return view;
     }
 
@@ -94,26 +93,9 @@ public class TabDesignMaterialDesign extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // Setup RecyclerView paddingTop
-        getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValueToolbarHeight, true);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (Build.VERSION.SDK_INT >= 19) {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48) + convertToPx(25);
-            } else {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48);
-            }
-        }
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48) + convertToPx(25);
-            }else{
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48);
-            }
-        }
-        recyclerView.setPadding(0, recyclerViewPaddingTop, 0, 0);
-
         urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/diseno/material-design/?json=1";
 
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         new AsyncTaskNewsParseJson().execute(urlPost);
 
         ItemClickSupport itemClickSupport = ItemClickSupport.addTo(recyclerView);

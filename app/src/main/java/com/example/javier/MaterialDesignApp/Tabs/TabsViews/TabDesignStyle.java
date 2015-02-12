@@ -70,9 +70,6 @@ public class TabDesignStyle extends Fragment {
         recyclerViewDesign(view);
 
         // Setup swipe to refresh
-        swipeToRefresh(view);
-
-        toolbarHideShow();
 
         return view;
     }
@@ -94,24 +91,7 @@ public class TabDesignStyle extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // Setup RecyclerView paddingTop
-        getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValueToolbarHeight, true);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (Build.VERSION.SDK_INT >= 19) {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48) + convertToPx(25);
-            } else {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48);
-            }
-        }
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48) + convertToPx(25);
-            }else{
-                recyclerViewPaddingTop = TypedValue.complexToDimensionPixelSize(typedValueToolbarHeight.data, getResources().getDisplayMetrics()) + convertToPx(48);
-            }
-        }
-        recyclerView.setPadding(0, recyclerViewPaddingTop, 0, 0);
-
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         urlPost = "http://wordpressdesarrolladorandroid.hol.es/category/diseno/estilo/?json=1";
 
         new AsyncTaskNewsParseJson().execute(urlPost);
