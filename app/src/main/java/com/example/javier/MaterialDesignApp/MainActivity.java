@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,7 +20,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,8 +46,8 @@ import com.example.javier.MaterialDesignApp.Fragments.FragmentDevelop;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DrawerAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.DrawerItem;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
-import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
-import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransformWhite;
+import com.example.javier.MaterialDesignApp.Utils.JsonParser;
+import com.example.javier.MaterialDesignApp.Utils.PicassoTransform.CircleTransformWhite;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -107,10 +106,11 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        // Select theme saved by user (always before setContentView)
+        // Select theme saved by user
         theme();
+
+        super.onCreate(savedInstanceState);
 
         // Set content to the view
         setContentView(R.layout.activity_main);
@@ -123,9 +123,6 @@ public class MainActivity extends ActionBarActivity {
 
         //Setup Navigation Drawer
         navigationDrawer();
-
-        // Fix issues for each version and modes (check method at end of this file)
-        navigationBarStatusBar();
 
         // Setup drawer accounts toggle.
         toogleButtonDrawer();
@@ -251,6 +248,12 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
 
+        // statusBar color behind navigation drawer
+        TypedValue typedValueStatusBarColor = new TypedValue();
+        MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValueStatusBarColor, true);
+        final int colorStatusBar = typedValueStatusBarColor.data;
+        mDrawerLayout.setStatusBarBackgroundColor(colorStatusBar);
+
         // Setup RecyclerView inside drawer
         recyclerViewDrawer = (RecyclerView) findViewById(R.id.recyclerViewDrawer);
         recyclerViewDrawer.setHasFixedSize(true);
@@ -268,6 +271,10 @@ public class MainActivity extends ActionBarActivity {
         final TypedValue typedValue = new TypedValue();
         MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         final int color = typedValue.data;
+
+        //TODO try to get status bar translucent in landscape mode (lollipop)
+        //mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(android.R.color.transparent));
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         recyclerViewDrawer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -362,47 +369,6 @@ public class MainActivity extends ActionBarActivity {
                 mDrawerLayout.closeDrawers();
             }
         });
-    }
-
-    public void navigationBarStatusBar() {
-
-        // Fix portrait issues
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            // Fix issues for KitKat setting Status Bar color primary
-            if (Build.VERSION.SDK_INT >= 19) {
-                TypedValue typedValue19 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
-                final int color = typedValue19.data;
-                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
-                statusBar.setBackgroundColor(color);
-            }
-
-            // Fix issues for Lollipop, setting Status Bar color primary dark
-            if (Build.VERSION.SDK_INT >= 21) {
-                TypedValue typedValue21 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue21, true);
-                final int color = typedValue21.data;
-                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
-                statusBar.setBackgroundColor(color);
-            }
-        }
-
-        // Fix landscape issues (only Lollipop)
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (Build.VERSION.SDK_INT >= 19) {
-                TypedValue typedValue19 = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue19, true);
-                final int color = typedValue19.data;
-                FrameLayout statusBar = (FrameLayout) findViewById(R.id.statusBar);
-                statusBar.setBackgroundColor(color);
-            }
-            if (Build.VERSION.SDK_INT >= 21) {
-                TypedValue typedValue = new TypedValue();
-                MainActivity.this.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
-                final int color = typedValue.data;
-                mDrawerLayout.setStatusBarBackgroundColor(color);
-            }
-        }
     }
 
     public void settingTheme(int theme) {

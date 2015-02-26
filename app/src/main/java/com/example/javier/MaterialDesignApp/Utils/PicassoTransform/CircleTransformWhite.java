@@ -1,4 +1,4 @@
-package com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform;
+package com.example.javier.MaterialDesignApp.Utils.PicassoTransform;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;

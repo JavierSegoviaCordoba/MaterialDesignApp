@@ -1,4 +1,4 @@
-package com.example.javier.MaterialDesignApp.Utilitis;
+package com.example.javier.MaterialDesignApp.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

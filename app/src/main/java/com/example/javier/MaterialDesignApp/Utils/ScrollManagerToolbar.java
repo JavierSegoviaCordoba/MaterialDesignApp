@@ -1,14 +1,12 @@
-package com.example.javier.MaterialDesignApp.Utilitis;
+package com.example.javier.MaterialDesignApp.Utils;
 
 import android.animation.Animator;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Build;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +18,15 @@ import com.example.javier.MaterialDesignApp.R;
 
 import java.util.HashMap;
 
-public class ScrollManagerToolbarTabs extends RecyclerView.OnScrollListener {
+public class ScrollManagerToolbar extends RecyclerView.OnScrollListener {
 
     private static final int MIN_SCROLL_TO_HIDE = 50;
     private boolean hidden;
     private int accummulatedDy;
     private int totalDy;
     private int initialOffset;
-    int statusBarHeight, tabsHeight, toolbarHeight;
-    View statusBar, tabs, toolbar, viewPager;
+    int statusBarHeight;
+    View statusBar;
     Activity activity;
     private HashMap<View, Direction> viewsToHide = new HashMap<>();
     int colorStatusBar19, colorStatusBar21;
@@ -36,15 +34,10 @@ public class ScrollManagerToolbarTabs extends RecyclerView.OnScrollListener {
 
     public static enum Direction {UP, DOWN}
 
-    public ScrollManagerToolbarTabs(Activity activity) {
+    public ScrollManagerToolbar(Activity activity) {
         this.activity = activity;
         statusBar = activity.findViewById(R.id.statusBar);
-        toolbar = activity.findViewById(R.id.toolbar);
-        tabs = activity.findViewById(R.id.tabs);
-        viewPager = activity.findViewById(R.id.pager);
         statusBarHeight = statusBar.getHeight();
-        tabsHeight = tabs.getHeight();
-        toolbarHeight = toolbar.getHeight();
 
         activity.getTheme().resolveAttribute(R.attr.colorPrimary, typedValueStatusBarColor, true);
         colorStatusBar19 = typedValueStatusBarColor.data;
@@ -107,11 +100,35 @@ public class ScrollManagerToolbarTabs extends RecyclerView.OnScrollListener {
     private void hideView(final View view, Direction direction) {
         int height = calculateTranslation(view);
         int translateY = direction == Direction.UP ? -height - statusBarHeight : height;
-        int translateYTabs = direction == Direction.UP ? -toolbarHeight : height;
-        int translateYTabsViewPager = direction == Direction.UP ? -toolbarHeight : height;
         runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
-        runTranslateAnimationTabs(view, translateYTabs, new AccelerateInterpolator(3));
-        runTranslateAnimationTabsViewPager(view, translateYTabsViewPager, new AccelerateInterpolator(3));
+
+        /*if (Build.VERSION.SDK_INT >= 21) {
+            ValueAnimator colorAnimation = ValueAnimator.ofArgb(colorStatusBar21, activity.getResources().getColor(R.color.inset));
+            colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_longAnimTime));
+            colorAnimation.setStartDelay(activity.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    statusBar.invalidate();
+                    statusBar.setBackgroundColor((Integer) animator.getAnimatedValue());
+                }
+            });
+            colorAnimation.start();
+        }
+
+        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21 ) {
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorStatusBar19, activity.getResources().getColor(android.R.color.transparent));
+            colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_longAnimTime));
+            colorAnimation.setStartDelay(activity.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    statusBar.invalidate();
+                    statusBar.setBackgroundColor((Integer) animator.getAnimatedValue());
+                }
+            });
+            colorAnimation.start();
+        }*/
     }
 
     /**
@@ -131,8 +148,31 @@ public class ScrollManagerToolbarTabs extends RecyclerView.OnScrollListener {
 
     private void showView(View view) {
         runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
-        runTranslateAnimationTabs(view, 0, new DecelerateInterpolator(3));
-        runTranslateAnimationTabsViewPager(view, convertToPx(56+48+25,activity), new AccelerateInterpolator(3));
+        /*if (Build.VERSION.SDK_INT >= 21) {
+            ValueAnimator colorAnimation = ValueAnimator.ofArgb(activity.getResources().getColor(R.color.inset), colorStatusBar21);
+            colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    statusBar.invalidate();
+                    statusBar.setBackgroundColor((Integer) animator.getAnimatedValue());
+                }
+            });
+            colorAnimation.start();
+        }
+
+        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21 ) {
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), activity.getResources().getColor(android.R.color.transparent), colorStatusBar19);
+            colorAnimation.setDuration(activity.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    statusBar.invalidate();
+                    statusBar.setBackgroundColor((Integer) animator.getAnimatedValue());
+                }
+            });
+            colorAnimation.start();
+        }*/
     }
 
     private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
@@ -142,22 +182,6 @@ public class ScrollManagerToolbarTabs extends RecyclerView.OnScrollListener {
         slideInAnimation.setInterpolator(interpolator);
         slideInAnimation.start();
     }
-
-    private void runTranslateAnimationTabs(View view, int translateYTabs, Interpolator interpolator) {
-        Animator slideInAnimationTabs = ObjectAnimator.ofFloat(tabs, "translationY", translateYTabs);
-        slideInAnimationTabs.setDuration(tabs.getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
-        slideInAnimationTabs.setStartDelay(tabs.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
-        slideInAnimationTabs.setInterpolator(interpolator);
-        slideInAnimationTabs.start();
-    }
-    private void runTranslateAnimationTabsViewPager(View view, int translateYTabsViewPager, Interpolator interpolator) {
-        Animator slideInAnimationTabsViewPager = ObjectAnimator.ofFloat(viewPager, "translationY", translateYTabsViewPager);
-        slideInAnimationTabsViewPager.setDuration(viewPager.getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
-        slideInAnimationTabsViewPager.setStartDelay(viewPager.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
-        slideInAnimationTabsViewPager.setInterpolator(interpolator);
-        slideInAnimationTabsViewPager.start();
-    }
-
 
     public int convertToPx(int dp, Activity activity) {
         // Get the screen's density scale

@@ -3,9 +3,7 @@ package com.example.javier.MaterialDesignApp.Tabs.TabsViews;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,15 +20,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.javier.MaterialDesignApp.DetailActivity;
-import com.example.javier.MaterialDesignApp.MainActivity;
 import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DesignAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewUtils.ItemClickSupport;
 import com.example.javier.MaterialDesignApp.Tabs.TabsUtils.SlidingTabLayout;
-import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
-import com.example.javier.MaterialDesignApp.Utilitis.ScrollManagerToolbarTabs;
+import com.example.javier.MaterialDesignApp.Utils.JsonParser;
+import com.example.javier.MaterialDesignApp.Utils.ScrollManagerToolbarTabs;
 
 import org.json.JSONArray;
 import org.json.JSONException;

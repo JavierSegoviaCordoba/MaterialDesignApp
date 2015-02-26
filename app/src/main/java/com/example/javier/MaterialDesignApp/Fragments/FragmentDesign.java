@@ -20,7 +20,6 @@ import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
 import com.example.javier.MaterialDesignApp.Tabs.TabsAdapters.TabsDesignViewPagerAdapter;
 import com.example.javier.MaterialDesignApp.Tabs.TabsUtils.SlidingTabLayout;
-import com.example.javier.MaterialDesignApp.Utilitis.ScrollManagerToolbarTabs;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Design;
-import com.example.javier.MaterialDesignApp.Utilitis.PicassoTransform.CircleTransform;
+import com.example.javier.MaterialDesignApp.Utils.PicassoTransform.CircleTransform;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

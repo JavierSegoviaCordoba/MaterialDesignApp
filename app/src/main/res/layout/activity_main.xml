@@ -15,42 +15,45 @@
         android:background="@color/md_white_1000"
         android:orientation="vertical">
 
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <FrameLayout
-                android:elevation="4dp"
                 android:id="@+id/fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
+            <FrameLayout
+                android:id="@+id/statusBar4000"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/statusBarHeight"
+                android:background="@color/inset"/>
+
             <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_below="@+id/statusBar"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:layout_below="@+id/statusBar"
                 android:background="?attr/colorPrimary"
                 android:translationZ="4dp"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
             <FrameLayout
-            android:id="@+id/statusBar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/statusBarHeight"
-            android:background="?colorPrimaryDark"
-            android:translationZ="4dp"/>
+                android:id="@+id/statusBar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/statusBarHeight"
+                android:background="?colorPrimaryDark"
+                android:translationZ="4dp" />
 
-            </RelativeLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 
     <!-- The navigation drawer -->
 
-    <com.example.javier.MaterialDesignApp.Utilitis.ScrimInsetsFrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.example.javier.MaterialDesignApp.Utils.ScrimInsetsFrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/scrimInsetsFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -73,5 +76,5 @@
 
         </LinearLayout>
 
-    </com.example.javier.MaterialDesignApp.Utilitis.ScrimInsetsFrameLayout>
+    </com.example.javier.MaterialDesignApp.Utils.ScrimInsetsFrameLayout>
 </android.support.v4.widget.DrawerLayout>

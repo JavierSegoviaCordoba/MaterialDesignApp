@@ -30,8 +30,8 @@ import com.example.javier.MaterialDesignApp.R;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewAdapters.DevelopAdapter;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewClasses.Develop;
 import com.example.javier.MaterialDesignApp.RecyclerView.RecyclerViewDecorations.DividerItemDecoration;
-import com.example.javier.MaterialDesignApp.Utilitis.JsonParser;
-import com.example.javier.MaterialDesignApp.Utilitis.ScrollManagerToolbar;
+import com.example.javier.MaterialDesignApp.Utils.JsonParser;
+import com.example.javier.MaterialDesignApp.Utils.ScrollManagerToolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -216,6 +216,7 @@ public class FragmentDevelop extends Fragment {
                 ScrollManagerToolbar manager = new ScrollManagerToolbar(activity);
                 manager.attach(recyclerView);
                 manager.addView(toolbar, ScrollManagerToolbar.Direction.UP);
+                manager.addView(statusBar, ScrollManagerToolbar.Direction.UP);
                 manager.setInitialOffset(toolbar.getHeight());
             }
         });
