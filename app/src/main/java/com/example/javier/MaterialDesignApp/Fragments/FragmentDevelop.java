@@ -236,4 +236,3 @@ public class FragmentDevelop extends Fragment {
         slideInAnimation.start();
     }
 }
-
