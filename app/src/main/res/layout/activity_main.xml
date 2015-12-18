@@ -30,15 +30,23 @@
                 android:layout_height="@dimen/statusBarHeight"
                 android:background="@color/inset"/>
 
-            <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/toolbar"
+             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_below="@+id/statusBar"
-                android:background="?attr/colorPrimary"
-                android:translationZ="4dp"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                android:layout_height="wrap_content"
+               android:layout_below="@+id/statusBar"
+               app:elevation="0dp"
+               app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    android:translationZ="4dp"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.AppBarLayout>
 
             <FrameLayout
                 android:id="@+id/statusBar"
